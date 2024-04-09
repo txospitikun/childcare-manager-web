@@ -13,9 +13,53 @@
     <main>
       <div class = "main-wrapper">
         <div class = "dashboard-left-panel">
+          <div class = "dashboard-buttons">
+            <button class ="dashboard-button" id="dashboard_bttn">
+              <div class = "dashboard-button-icon"></div>
+              <div class = "dashboard-button-text">dashboard</div>
+              <!-- TODO: <div class = "dashboard-mask"></div> -->
+            </button>
+            <button class ="dashboard-button" id="profile_bttn">
+              <div class = "dashboard-button-icon"></div>
+              <div class = "dashboard-button-text">profile</div>
+            </button>
+            <button class ="dashboard-button" id="groups_bttn"> 
+              <div class = "dashboard-button-icon"></div>
+              <div class = "dashboard-button-text">groups</div>
+            </button>
+            <button class ="dashboard-button" id="charts_bttn">
+              <div class = "dashboard-button-icon"></div>
+              <div class = "dashboard-button-text">charts</div>
+            </button>
+          </div>
+        </div>
+        <div class = "dashboard-right-panel">
+          <div class = "dashboard-navbar">
+            <div class = "dashboard-search-bar">
+              <input label="search" id="search-content">
+              <button id="search-button">search</button>
+            </div>
+            <div class = "dashboard-profile-container">
+
+            </div>
+          </div>
+          <div class = "dashboard-control-panel">
+            <div class = "dashboard-children">
+              <div class = "children-object"></div>
+              <div class = "children-object"></div>
+              <div class = "children-object"></div>
+              <div class = "children-object"></div>
+              <div class = "children-object"></div>
+              <div class = "children-object"></div>
+            </div>
+            <div class = "dashboard-info">
+
+            </div>
+          </div>
         </div>
       </div>
     </main>
 	<script src="index.js"></script>
+  <script src="./dashboard.js"></script>
   </body>
 </html>
