@@ -7,59 +7,91 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="./dashboard.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
-
   </head>
   <body>
     <main>
-      <div class = "main-wrapper">
-        <div class = "dashboard-left-panel">
-          <div class = "dashboard-buttons">
-            <button class ="dashboard-button" id="dashboard_bttn">
-              <div class = "dashboard-button-icon"></div>
-              <div class = "dashboard-button-text">dashboard</div>
+      <div class="main-wrapper">
+        <div class="dashboard-left-panel">
+          <div class="dashboard-buttons">
+            <p>Childcare<br>Manager</p>
+            <button class="dashboard-button" id="dashboard_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">dashboard</div>
               <!-- TODO: <div class = "dashboard-mask"></div> -->
             </button>
-            <button class ="dashboard-button" id="profile_bttn">
-              <div class = "dashboard-button-icon"></div>
-              <div class = "dashboard-button-text">profile</div>
+            <button class="dashboard-button" id="profile_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">profile</div>
             </button>
-            <button class ="dashboard-button" id="groups_bttn"> 
-              <div class = "dashboard-button-icon"></div>
-              <div class = "dashboard-button-text">groups</div>
+            <button class="dashboard-button" id="groups_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">groups</div>
             </button>
-            <button class ="dashboard-button" id="charts_bttn">
-              <div class = "dashboard-button-icon"></div>
-              <div class = "dashboard-button-text">charts</div>
+            <button class="dashboard-button" style="margin-top: 100%;" id="charts_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">admin panel</div>
             </button>
           </div>
         </div>
-        <div class = "dashboard-right-panel">
-          <div class = "dashboard-navbar">
-            <div class = "dashboard-search-bar">
+        <div class="dashboard-right-panel">
+          <div class="dashboard-navbar">
+            <div class="dashboard-search-bar">
               <input label="search" id="search-content">
               <button id="search-button">search</button>
             </div>
-            <div class = "dashboard-profile-container">
-
-            </div>
+            <div class="dashboard-profile-container"></div>
           </div>
-          <div class = "dashboard-control-panel">
-            <div class = "dashboard-children">
-              <div class = "children-object"></div>
-              <div class = "children-object"></div>
-              <div class = "children-object"></div>
-              <div class = "children-object"></div>
-              <div class = "children-object"></div>
-              <div class = "children-object"></div>
+          <div class="dashboard-control-panel">
+            <div class="dashboard-children">
+              <p>children list</p>
+              <a class="children-container">
+                <div class="photo-container"></div>
+                <div class="info-container">
+                  <p>NIȚĂ DENNIS ALEXANDRU</p>
+                </div>
+              </a>
+              <div class="children-container">
+                <div class="photo-container"></div>
+                <div class="info-container">
+                  <p>CIOTIR MARIAN</p>
+                </div>
+              </div>
+              <div class="children-container">
+                <div class="photo-container"></div>
+                <div class="info-container">
+                  <p>BOMBICĂ SEBASTIAN</p>
+                </div>
+              </div>
+              <div class="children-container">
+                <div class="photo-container"></div>
+                <div class="info-container">
+                  <p>CAZAN RAREȘ</p>
+                </div>
+              </div>
+              <button class="children-add-button button-default" id="add-child-bttn">+</button>
             </div>
-            <div class = "dashboard-info">
+            <div class="dashboard-info">
+              <button class="delete-child-bttn button-default">Delete</button>
+              <button class="button-default feeding-child-bttn">
+                <img src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon"> Feeding </button>
+              <button class="button-default sleeping-child-bttn">
+                <img src="./assets/icons/ds_i_bed.svg" alt="Feeding Icon"> Sleeping </button>
+              <button class="images-child-bttn button-default">
+                <img src="./assets/icons/ds_i_media.svg" alt="Feeding Icon"> Media </button>
+              <button class="evolution-child-bttn button-default">
+                <img src="./assets/icons/ds_i_evolution.svg" alt="Feeding Icon"> Evolution </button>
+              <button class="medical-history-child-bttn button-default">
+                <img src="./assets/icons/ds_i_medical.svg" alt="Feeding Icon"> Medical </button>
 
+              <div class = "dashboard-content">
+                copilul trebuie hranit de 5 ori pe 
+              </div>
             </div>
           </div>
         </div>
       </div>
     </main>
-	<script src="index.js"></script>
-  <script src="./dashboard.js"></script>
+    <script src="index.js"></script>
+    <script src="./dashboard.js"></script>
   </body>
 </html>
