@@ -1,22 +1,38 @@
-let lastPressedButton = null;
+let currentDashboardButton = null;
 let currentSelectedChild = null;
+let currentSelectedAttribute = null;
 
-document.querySelectorAll('.dashboard-button').forEach(function(button) {
-    if(!lastPressedButton && button.id == 'dashboard_bttn')
+document.querySelectorAll('.attribute-button').forEach(function(button) {
+    if(!currentSelectedAttribute)
     {
-        console.log(button.id);
-        lastPressedButton = button;
-        button.style.filter = "invert(1)";
+        currentSelectedAttribute = button;
+        button.style.border = "2px solid black";
     }
 
     button.addEventListener('click', function() {
-        if(lastPressedButton)
+        if(currentSelectedAttribute)
         {
-            lastPressedButton.style.filter = "";
+            currentSelectedAttribute.style.border = "";
         }
-        lastPressedButton = this;
-        this.style.filter = "invert(1)";
-        console.log("Button pressed: " + button.id);
+        currentSelectedAttribute = this;
+        this.style.border = "2px solid black";
+    });
+});
+
+document.querySelectorAll('.dashboard-button').forEach(function(button) {
+    if(!currentDashboardButton && button.id == 'dashboard_bttn')
+    {
+        currentDashboardButton = button;
+        button.style.backgroundColor = "var(--button-color)";
+    }
+
+    button.addEventListener('click', function() {
+        if(currentDashboardButton)
+        {
+            currentDashboardButton.style.backgroundColor = "";
+        }
+        currentDashboardButton = this;
+        this.style.backgroundColor = "var(--button-color)";
     });
 });
 
@@ -26,9 +42,7 @@ document.querySelectorAll('.children-container').forEach(function(button) {
     {
         console.log("a");
         currentSelectedChild = button;
-        button.style.border = "2px solid red";
-        console.log(button.id);
-       
+        button.style.border = "2px solid gray";
     }
 
     button.addEventListener('click', function() {
@@ -37,7 +51,6 @@ document.querySelectorAll('.children-container').forEach(function(button) {
             currentSelectedChild.style.border = "";
         }
         currentSelectedChild = this;
-        this.style.border = "2px solid red";
-        console.log("Button pressed: " + button.id);
+        this.style.border = "2px solid gray";
     });
 });
