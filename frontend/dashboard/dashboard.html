@@ -17,5 +17,301 @@
       </div>
     </main>
 	<script src="index.js"></script>
+=======
+  </head>
+  <body>
+    <main>
+      <div class="main-wrapper">
+        <div class="dashboard-left-panel">
+          <div class="dashboard-buttons">
+            <p class="dashboard-logo-title">Childcare <br>Manager </p>
+            <button class="dashboard-button" id="dashboard_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">panou de control</div>
+              <!-- TODO: <div class = "dashboard-mask"></div> -->
+            </button>
+            <button class="dashboard-button" id="profile_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">profilul tău</div>
+            </button>
+            <button class="dashboard-button" id="groups_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">grupuri</div>
+            </button>
+            <button class="dashboard-button" style="margin-top: 50%;" id="charts_bttn">
+              <div class="dashboard-button-icon"></div>
+              <div class="dashboard-button-text">admin</div>
+            </button>
+            <button class="dashboard-button-ignore" id="logout_bttn">
+              <div class="dashboard-button-text">ieși</div>
+            </button>
+          </div>
+        </div>
+        <div class="dashboard-right-panel">
+          <div class="dashboard-navbar">
+            <div class="dashboard-search-bar">
+              <img src="./assets/icons/ds_i_search.svg" alt="Search Icon">
+              <input label="search" id="search-content">
+              <button id="search-button">Caută</button>
+            </div>
+            <div class="dashboard-profile-container">
+              <div class="profile-photo-container "></div>
+              <div class="profile-info-container">
+                <p class="profile-name">Niță Dennis</p>
+                <p class="profile-name-grad">Părinte</p>
+              </div>
+              <img class="profile-bell" src="./assets/icons/ds_i_bell.svg">
+            </div>
+          </div>
+          <div class="dashboard-control-panel">
+            <div class="dashboard-children">
+              <p>Copiii tăi inregistrați</p>
+              <a class="children-container">
+                <img src="../placeholders/child2.jpg" class="photo-container">
+                <div class="info-container">
+                  <p>Cozloschi Luca</p>
+                  <p>17 ani - adolescent</p>
+                </div>
+              </a>
+              <div class="children-container">
+                <img src="../placeholders/child3.jpg" class="photo-container">
+
+                <div class="info-container">
+                  <p>Ciotir Marian</p>
+                  <p>13 ani - copil</p>
+                </div>
+              </div>
+              <div class="children-container">
+                <img src="../placeholders/child4.jpg" class="photo-container">
+
+                <div class="info-container">
+                  <p>Cazan Rareș</p>
+                  <p>3 ani - infant</p>
+                </div>
+              </div>
+              <button class="children-add-button button-default" id="add-child-bttn">+</button>
+            </div>
+            <div class="dashboard-info">
+              <button class="delete-child-bttn button-default" id="delete-bttn">Șterge</button>
+              <button class="attribute-button button-default feeding-child-bttn" id="feeding-bttn">
+                <img class = "invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon"> Hrănire </button>
+              <button class="attribute-button button-default sleeping-child-bttn" id="sleeping-bttn">
+                <img class = "invert" src="./assets/icons/ds_i_bed.svg" alt="Feeding Icon"> Somn </button>
+              <button class="attribute-button images-child-bttn button-default" id="media-bttn">
+                <img class = "invert" src="./assets/icons/ds_i_media.svg" alt="Feeding Icon"> Media </button>
+              <button class="attribute-button evolution-child-bttn button-default" id="evolution-bttn">
+                <img class = "invert" src="./assets/icons/ds_i_evolution.svg" alt="Feeding Icon"> Evoluție </button>
+              <button class="attribute-button medical-history-child-bttn button-default" id="medical-bttn">
+                <img class = "invert" src="./assets/icons/ds_i_medical.svg" alt="Feeding Icon"> Sănătate </button>
+              <div class="dashboard-content">
+                <div class="feeding-calendar-container">
+                  <div class="upper-content">
+                    <div class="calendar-bttns">
+                      <button class="calendar-bttn button-default calendar-settings">Adaugă</button>
+                      <button class="calendar-bttn button-default calendar-settings">Modifică</button>
+                      <button class="calendar-bttn button-default calendar-settings">Elimină</button>
+                    </div>
+                    <div class="current-days">
+                      <div class="current-day">Lu.</div>
+                      <div class="current-day">Ma.</div>
+                      <div class="current-day">Mi.</div>
+                      <div class="current-day">Jo.</div>
+                      <div class="current-day">Vi.</div>
+                      <div class="current-day">Sâ.</div>
+                      <div class="current-day">Du.</div>
+                    </div>
+                  </div>
+                  <div class="bottom-content">
+                    <div class="feeding-calendar-container-info">
+                      <p class = "current-day-title">Sâmbătă <br>11 Aprilie </p>
+                      <div class="feeding-items">
+                          <div class="feeding-item">
+                            <p>08:00</p>
+                            <p>- 100g pastrama</p>
+                            <p>- 50g laptic</p>
+                            <p>- 100g pastrama</p>
+                          </div>
+                          <div class="feeding-item">
+                            <p>09:30</p>
+                            <p>- 80g lăptic</p>
+                          </div>
+                          <div class="feeding-item">
+                            <p>12:30</p>
+                            <p>- 50g lăptic de matcă</p>
+                          </div>
+                          <div class="feeding-item">
+                            <p>15:45</p>
+                            <p>- 100g pastrama</p>
+                            <p>- 50g laptic</p>
+                            <p>- 100g pastrama</p>
+                          </div>
+                          <div class="feeding-item">
+                            <p>19:30</p>
+                            <p>- 50g lăptic de matcă</p>
+                            <p>- 100g pastrama</p>
+                            <p>- 50g laptic</p>
+                            <p>- 100g pastrama</p>
+                          </div>
+                          <div class="feeding-item">
+                            <p>19:30</p>
+                            <p>- 50g lăptic de matcă</p>
+                            <p>- 100g pastrama</p>
+                            <p>- 50g laptic</p>
+                            <p>- 100g pastrama</p>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="feeding-calendar-dates">
+                      <div class="feeding-calendar-date not-current">
+                        <div class="feeding-calendar-date-day">30</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date not-current">
+                        <div class="feeding-calendar-date-day">31</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">1</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">2</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">3</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">4</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">5</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">6</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">7</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">8</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">9</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">10</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date current">
+                        <div class="feeding-calendar-date-day">11</div>
+                        <div class="feeding-calendar-date-feed-count">5</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">12</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">13</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">14</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">15</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">16</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">17</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">18</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">19</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">20</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">21</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">22</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">23</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">24</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">25</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">26</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">27</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">28</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">29</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">30</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date">
+                        <div class="feeding-calendar-date-day">31</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date not-current">
+                        <div class="feeding-calendar-date-day">1</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                      <div class="feeding-calendar-date not-current">
+                        <div class="feeding-calendar-date-day n">2</div>
+                        <div class="feeding-calendar-date-feed-count">5*</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="index.js"></script>
+    <script src="./dashboard.js"></script>
   </body>
 </html>
