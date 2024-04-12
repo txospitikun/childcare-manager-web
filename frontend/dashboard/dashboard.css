@@ -1,4 +1,8 @@
-/* blue: F9EBC7 */
+.main-wrapper
+{
+    display: flex;
+    flex-direction: column;
+}/* blue: F9EBC7 */
 
 
 /* 320px — 480px: Mobile devices
