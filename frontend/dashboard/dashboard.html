@@ -52,7 +52,7 @@
               <img class="profile-bell" src="./assets/icons/ds_i_bell.svg">
             </div>
           </div>
-          <div class="dashboard-control-panel">
+          <div class="dashboard-control-panel" id="dashboard-main">
             <div class="dashboard-children">
               <p>Copiii tăi inregistrați</p>
               <a class="children-container">
@@ -64,7 +64,6 @@
               </a>
               <div class="children-container">
                 <img src="../placeholders/child3.jpg" class="photo-container">
-
                 <div class="info-container">
                   <p>Ciotir Marian</p>
                   <p>13 ani - copil</p>
@@ -72,7 +71,6 @@
               </div>
               <div class="children-container">
                 <img src="../placeholders/child4.jpg" class="photo-container">
-
                 <div class="info-container">
                   <p>Cazan Rareș</p>
                   <p>3 ani - infant</p>
@@ -83,15 +81,15 @@
             <div class="dashboard-info">
               <button class="delete-child-bttn button-default" id="delete-bttn">Șterge</button>
               <button class="attribute-button button-default feeding-child-bttn" id="feeding-bttn">
-                <img class = "invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon"> Hrănire </button>
+                <img class="invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon"> Hrănire </button>
               <button class="attribute-button button-default sleeping-child-bttn" id="sleeping-bttn">
-                <img class = "invert" src="./assets/icons/ds_i_bed.svg" alt="Feeding Icon"> Somn </button>
+                <img class="invert" src="./assets/icons/ds_i_bed.svg" alt="Feeding Icon"> Somn </button>
               <button class="attribute-button images-child-bttn button-default" id="media-bttn">
-                <img class = "invert" src="./assets/icons/ds_i_media.svg" alt="Feeding Icon"> Media </button>
+                <img class="invert" src="./assets/icons/ds_i_media.svg" alt="Feeding Icon"> Media </button>
               <button class="attribute-button evolution-child-bttn button-default" id="evolution-bttn">
-                <img class = "invert" src="./assets/icons/ds_i_evolution.svg" alt="Feeding Icon"> Evoluție </button>
+                <img class="invert" src="./assets/icons/ds_i_evolution.svg" alt="Feeding Icon"> Evoluție </button>
               <button class="attribute-button medical-history-child-bttn button-default" id="medical-bttn">
-                <img class = "invert" src="./assets/icons/ds_i_medical.svg" alt="Feeding Icon"> Sănătate </button>
+                <img class="invert" src="./assets/icons/ds_i_medical.svg" alt="Feeding Icon"> Sănătate </button>
               <div class="dashboard-content">
                 <div class="feeding-calendar-container">
                   <div class="upper-content">
@@ -112,42 +110,42 @@
                   </div>
                   <div class="bottom-content">
                     <div class="feeding-calendar-container-info">
-                      <p class = "current-day-title">Sâmbătă <br>11 Aprilie </p>
+                      <p class="current-day-title">Sâmbătă <br>11 Aprilie </p>
                       <div class="feeding-items">
-                          <div class="feeding-item">
-                            <p>08:00</p>
-                            <p>- 100g pastrama</p>
-                            <p>- 50g laptic</p>
-                            <p>- 100g pastrama</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>09:30</p>
-                            <p>- 80g lăptic</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>12:30</p>
-                            <p>- 50g lăptic de matcă</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>15:45</p>
-                            <p>- 100g pastrama</p>
-                            <p>- 50g laptic</p>
-                            <p>- 100g pastrama</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>19:30</p>
-                            <p>- 50g lăptic de matcă</p>
-                            <p>- 100g pastrama</p>
-                            <p>- 50g laptic</p>
-                            <p>- 100g pastrama</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>19:30</p>
-                            <p>- 50g lăptic de matcă</p>
-                            <p>- 100g pastrama</p>
-                            <p>- 50g laptic</p>
-                            <p>- 100g pastrama</p>
-                          </div>
+                        <div class="feeding-item">
+                          <p>08:00</p>
+                          <p>- 100g pastrama</p>
+                          <p>- 50g laptic</p>
+                          <p>- 100g pastrama</p>
+                        </div>
+                        <div class="feeding-item">
+                          <p>09:30</p>
+                          <p>- 80g lăptic</p>
+                        </div>
+                        <div class="feeding-item">
+                          <p>12:30</p>
+                          <p>- 50g lăptic de matcă</p>
+                        </div>
+                        <div class="feeding-item">
+                          <p>15:45</p>
+                          <p>- 100g pastrama</p>
+                          <p>- 50g laptic</p>
+                          <p>- 100g pastrama</p>
+                        </div>
+                        <div class="feeding-item">
+                          <p>19:30</p>
+                          <p>- 50g lăptic de matcă</p>
+                          <p>- 100g pastrama</p>
+                          <p>- 50g laptic</p>
+                          <p>- 100g pastrama</p>
+                        </div>
+                        <div class="feeding-item">
+                          <p>19:30</p>
+                          <p>- 50g lăptic de matcă</p>
+                          <p>- 100g pastrama</p>
+                          <p>- 50g laptic</p>
+                          <p>- 100g pastrama</p>
+                        </div>
                       </div>
                     </div>
                     <div class="feeding-calendar-dates">
@@ -297,6 +295,55 @@
               </div>
             </div>
           </div>
+          <div class ="dashboard-control-panel" id="dashboard-profile">
+            <div class = "dashboard-info-profile">
+              <div class = "profile-buttons-category">
+                <button class="button-default" id="profile-bttn-general">General</button>
+                <button class="button-default" id="profile-bttn-security">Securitate</button>
+                <button class="button-default" id="profile-bttn-notifications">Notificări</button>
+              </div>
+              <div class = "profile-content">
+                <div class = "profile-settings-container">
+                  <h1>Niță Dennis-Alexandru</h1>
+                  <span>Părinte</span>
+                </div>
+                <div class = "profile-settings-container">
+                </div>
+                <div class = "profile-settings-container flex-end">
+                  <p>Email & Telefon</p>
+                  <p>Email: dumbchinese@gmail.com - <span class = "clickable">modifică</span></p>
+                  <p>Telefon: +40 765928114 - <span class = "clickable">modifică</span></p>
+                </div>
+                <div class = "profile-settings-container">
+                  <p>Stare civilă</p>
+                  <p>Căsătorit: Nu - <span class = "clickable">modifică</span></p>
+                </div>
+                <div class = "profile-settings-container flex-end">
+                  <p>Data nașterii & Gen</p>
+                  <p>Data nașterii: 02 Martie 2003 - <span class = "clickable">modifică</span></p>
+                  <p>Gen: Masculin - <span class = "clickable">modifică</span></p>
+                </div>
+                <div class = "profile-settings-container">
+                  <p>Tipul contului</p>
+                  <p>Tipul contului: Familie - <span class = "clickable">modifică</span></p>
+                  <h4>^(De exemplu: centru de plasament, orfelinat, familie, ș.a.m.d)</h4>
+                </div>
+                <div class = "profile-settings-container">
+                  <p>Localizare & Limbă</p>
+                  <p>Localizare: România - <span class = "clickable">modifică</span></p>
+                  <p>Limbă: Română - <span class = "clickable">modifică</span></p>
+                </div>
+                <div class = "profile-settings-container row">
+                  <p>Ștergere & Dezactivare cont</p>
+                </br>
+                <div class = "flex-column">
+                  <button class = "delete-child-bttn button-default">Șterge cont</button>
+                  <button class = "delete-child-bttn button-default">Dezactivează cont</button>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div> 
         </div>
       </div>
     </main>
