@@ -45,7 +45,7 @@ body, html,textarea,input {
     background-color: #F9F9F9;
     border-bottom: 1px solid #e9ecef;
     width:100%;
-    padding:2rem;
+    padding:1rem;
     font-size: 1.2rem;
     font-weight: 500;
     position: fixed;
@@ -313,6 +313,7 @@ h2{
     width:80%;
     height:70vh;
     padding:4rem;
+    border-radius:10px;
     h2{
         align-items:flex-start;
     }
@@ -344,6 +345,7 @@ input,textarea:focus {
 
 textarea{
     height: 12rem;
+    resize:none;
 }
 
 .submit-button{
