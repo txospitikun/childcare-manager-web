@@ -13,7 +13,6 @@
       <div class="main-wrapper">
         <div class="dashboard-left-panel">
           <div class="dashboard-buttons">
-            <p class="dashboard-logo-title">Childcare <br>Manager </p>
             <button class="dashboard-button" id="dashboard_bttn">
               <div class="dashboard-button-icon"></div>
               <div class="dashboard-button-text">panou de control</div>
@@ -27,11 +26,12 @@
               <div class="dashboard-button-icon"></div>
               <div class="dashboard-button-text">grupuri</div>
             </button>
-            <button class="dashboard-button" style="margin-top: 50%;" id="charts_bttn">
+            <button class="dashboard-button" id="dashboard_admin_bttn">
               <div class="dashboard-button-icon"></div>
               <div class="dashboard-button-text">admin</div>
             </button>
             <button class="dashboard-button-ignore" id="logout_bttn">
+              <div class="dashboard-button-icon"></div>
               <div class="dashboard-button-text">ieși</div>
             </button>
           </div>
@@ -79,17 +79,29 @@
               <button class="children-add-button button-default" id="add-child-bttn">+</button>
             </div>
             <div class="dashboard-info">
-              <button class="delete-child-bttn button-default" id="delete-bttn">Șterge</button>
+              <button class="delete-child-bttn button-default" id="delete-bttn">
+                <span>Del</span>
+              </button>
               <button class="attribute-button button-default feeding-child-bttn" id="feeding-bttn">
-                <img class="invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon"> Hrănire </button>
+                <img class="invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon">
+                <span>Hrănire</span>
+              </button>
               <button class="attribute-button button-default sleeping-child-bttn" id="sleeping-bttn">
-                <img class="invert" src="./assets/icons/ds_i_bed.svg" alt="Feeding Icon"> Somn </button>
+                <img class="invert" src="./assets/icons/ds_i_bed.svg" alt="Feeding Icon">
+                <span>Somn</span>
+              </button>
               <button class="attribute-button images-child-bttn button-default" id="media-bttn">
-                <img class="invert" src="./assets/icons/ds_i_media.svg" alt="Feeding Icon"> Media </button>
+                <img class="invert" src="./assets/icons/ds_i_media.svg" alt="Feeding Icon">
+                <span>Media</span>
+              </button>
               <button class="attribute-button evolution-child-bttn button-default" id="evolution-bttn">
-                <img class="invert" src="./assets/icons/ds_i_evolution.svg" alt="Feeding Icon"> Evoluție </button>
+                <img class="invert" src="./assets/icons/ds_i_evolution.svg" alt="Feeding Icon">
+                <span>Evoluție</span>
+              </button>
               <button class="attribute-button medical-history-child-bttn button-default" id="medical-bttn">
-                <img class="invert" src="./assets/icons/ds_i_medical.svg" alt="Feeding Icon"> Sănătate </button>
+                <img class="invert" src="./assets/icons/ds_i_medical.svg" alt="Feeding Icon">
+                <span>Sănătate</span>
+              </button>
               <div class="dashboard-content">
                 <div class="feeding-calendar-container">
                   <div class="upper-content">
@@ -295,55 +307,162 @@
               </div>
             </div>
           </div>
-          <div class ="dashboard-control-panel" id="dashboard-profile">
-            <div class = "dashboard-info-profile">
-              <div class = "profile-buttons-category">
+          <div class="dashboard-control-panel" id="dashboard-profile">
+            <div class="dashboard-info-profile">
+              <div class="profile-buttons-category">
                 <button class="button-default" id="profile-bttn-general">General</button>
                 <button class="button-default" id="profile-bttn-security">Securitate</button>
                 <button class="button-default" id="profile-bttn-notifications">Notificări</button>
               </div>
-              <div class = "profile-content">
-                <div class = "profile-settings-container">
+              <div class="grid-layout-content">
+                <div class="profile-settings-container-first-line">
                   <h1>Niță Dennis-Alexandru</h1>
-                  <span>Părinte</span>
                 </div>
-                <div class = "profile-settings-container">
-                </div>
-                <div class = "profile-settings-container flex-end">
+                <div class="profile-settings-container flex-end">
                   <p>Email & Telefon</p>
-                  <p>Email: dumbchinese@gmail.com - <span class = "clickable">modifică</span></p>
-                  <p>Telefon: +40 765928114 - <span class = "clickable">modifică</span></p>
+                  <p>Email: dumbchinese@gmail.com - <span class="clickable">modifică</span>
+                  </p>
+                  <p>Telefon: +40 765928114 - <span class="clickable">modifică</span>
+                  </p>
                 </div>
-                <div class = "profile-settings-container">
+                <div class="profile-settings-container">
                   <p>Stare civilă</p>
-                  <p>Căsătorit: Nu - <span class = "clickable">modifică</span></p>
+                  <p>Căsătorit: Nu - <span class="clickable">modifică</span>
+                  </p>
                 </div>
-                <div class = "profile-settings-container flex-end">
+                <div class="profile-settings-container flex-end">
                   <p>Data nașterii & Gen</p>
-                  <p>Data nașterii: 02 Martie 2003 - <span class = "clickable">modifică</span></p>
-                  <p>Gen: Masculin - <span class = "clickable">modifică</span></p>
+                  <p>Data nașterii: 02 Martie 2003 - <span class="clickable">modifică</span>
+                  </p>
+                  <p>Gen: Masculin - <span class="clickable">modifică</span>
+                  </p>
                 </div>
-                <div class = "profile-settings-container">
+                <div class="profile-settings-container">
                   <p>Tipul contului</p>
-                  <p>Tipul contului: Familie - <span class = "clickable">modifică</span></p>
-                  <h4>^(De exemplu: centru de plasament, orfelinat, familie, ș.a.m.d)</h4>
+                  <p>Tipul contului: Familie - <span class="clickable">modifică</span>
+                  </p>
                 </div>
-                <div class = "profile-settings-container">
+                <div class="profile-settings-container">
                   <p>Localizare & Limbă</p>
-                  <p>Localizare: România - <span class = "clickable">modifică</span></p>
-                  <p>Limbă: Română - <span class = "clickable">modifică</span></p>
+                  <p>Localizare: România - <span class="clickable">modifică</span>
+                  </p>
+                  <p>Limbă: Română - <span class="clickable">modifică</span>
+                  </p>
                 </div>
-                <div class = "profile-settings-container row">
-                  <p>Ștergere & Dezactivare cont</p>
-                </br>
-                <div class = "flex-column">
-                  <button class = "delete-child-bttn button-default">Șterge cont</button>
-                  <button class = "delete-child-bttn button-default">Dezactivează cont</button>
+                <div class="profile-settings-container row">
+                  <p>Opțiuni cont</p>
+                  </br>
+                  <div class="flex-column">
+                    <button class="delete-child-bttn button-default">Șterge cont</button>
+                    <button class="delete-child-bttn button-default">Dezactivează cont</button>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
-          </div> 
+          </div>
+          <div class="dashboard-control-panel" id="dashboard-admin-panel">
+            <div class="dashboard-info-admin">
+              <div class="grid-layout-content-admin">
+                <div class="profile-settings-container-admin">
+                  <h3>Admin Panel - Cont administator (Niță Dennis-Alexandru)</h3>
+                </div>
+                <div class="profile-settings-container-admin"></div>
+                <div class="profile-settings-container-admin"> Selectează utilizatorul pe care vrei să îl modifici. <input>Caută utilizator după nume</input>
+                  <div class="all-avalabile-users-container">
+                    <div class="found-user">
+                      <div class="found-user-photo"></div>
+                      <div class="found-user-info">
+                        <p>Merchez Raluca-Vintilă</p>
+                        <p>Părinte</p>
+                      </div>
+                    </div>
+                    <div class="found-user">
+                      <div class="found-user-photo"></div>
+                      <div class="found-user-info">
+                        <p>Niță Dennis-Alexandru</p>
+                        <p>Părinte</p>
+                      </div>
+                    </div>
+                    <div class="found-user">
+                      <div class="found-user-photo"></div>
+                      <div class="found-user-info">
+                        <p>Augustus Ionel-Valentin</p>
+                        <p>Părinte</p>
+                      </div>
+                    </div>
+                    <div class="found-user">
+                      <div class="found-user-photo"></div>
+                      <div class="found-user-info">
+                        <p>Tomești - Orfelinat copii</p>
+                        <p>Casă de plasament</p>
+                      </div>
+                    </div>
+                    <div class="found-user">
+                      <div class="found-user-photo"></div>
+                      <div class="found-user-info">
+                        <p>Niță Dennis-Alexandru</p>
+                        <p>Părinte</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="profile-settings-container-admin"> Selectează copilul pe care vrei să îl modifici. <input>Caută copilul după nume.</input>
+                  <div class="all-avalabile-users-container">
+                    <div class="found-child">
+                      <div class="found-child-photo"></div>
+                      <div class="found-child-info">
+                        <p>Cozloschi Luca</p>
+                        <p>Adolescent</p>
+                        <p>17 ani</p>
+                      </div>
+                    </div>
+                    <div class="found-child">
+                      <div class="found-child-photo"></div>
+                      <div class="found-child-info">
+                        <p>Ciotir Marian</p>
+                        <p>Copil</p>
+                        <p>13 ani</p>
+                      </div>
+                    </div>
+                    <div class="found-child">
+                      <div class="found-child-photo"></div>
+                      <div class="found-child-info">
+                        <p>Cazan Rareș</p>
+                        <p>Infant</p>
+                        <p>3 ani</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="admin-panel-settings-container">
+                  <h3>Opțiuni editare cont selectat:</h3>
+                  </br>
+                  <button class="button-default-slim red-bg">Șterge</button>
+                  <button class="button-default-slim orange-bg">Dezactivează</button>
+                  <button class="button-default-slim">Modifică data creării</button>
+                  <button class="button-default-slim">Modifică nume & prenume</button>
+                  <button class="button-default-slim">Modifică email</button>
+                  <button class="button-default-slim">Modifică telefon</button>
+                  <button class="button-default-slim">Modifică data nașterii</button>
+                  <button class="button-default-slim">Modifică genul</button>
+                  <button class="button-default-slim">Modifică localizare</button>
+                  <button class="button-default-slim">Modifică limbă</button>
+                  <button class="button-default-slim">Modifică starea civilă</button>
+                  <button class="button-default-slim">Modifică tipul contului</button>
+                </div>
+                <div class="profile-settings-container-admin">
+                  <div class="admin-panel-settings-container">
+                    <h3>Opțiuni editare copil selectat:</h3>
+                    </br>
+                    <button class="button-default-slim red-bg">Șterge</button>
+                    <button class="button-default-slim">Modifică nume & prenume</button>
+                    <button class="button-default-slim">Modifică data nașterii</button>
+                    <button class="button-default-slim">Modifică genul</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>
