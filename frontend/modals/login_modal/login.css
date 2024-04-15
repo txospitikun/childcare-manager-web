@@ -4,13 +4,6 @@
     box-sizing: border-box; 
 }
 
-@font-face {
-    font-family: 'Montserrat';
-    src:url('../../assets/fonts/Montserrat.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body, html {
     height: 100%;
     margin: 0;
@@ -23,8 +16,10 @@ body, html {
     background: linear-gradient(90deg, #A2543E, 0%, A2543E,100%);
     background-repeat: no-repeat;
     background-size: cover;
-    font-family: 'Montserrat', sans-serif;
-    
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .login{
@@ -86,6 +81,7 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content:center;
     background-color: #D9D9D9;
     width:66%;
     height: 100%;
@@ -121,6 +117,7 @@ form{
     flex-direction: column;
     align-items: center;
     width:100%;
+    margin-bottom:2rem;
 }
 
 .input {
@@ -173,4 +170,80 @@ input:focus {
     font-size: 1.2rem;
     font-weight: 700;
     cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .login {
+        width: 90%;
+        height: 90%;
+    }
+
+    .left, .right {
+        width: 100%;
+    }
+
+    .art {
+        width: 80%; 
+        height: auto; 
+    }
+
+    .icon {
+        height: 30px;
+        margin: 2%;
+    }
+
+    .right h1 {
+        font-size: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .input, .submit-button {
+        width: 90%;
+    }
+}
+
+@media (max-width: 660px) {
+    .left {
+        display: none;
+    }
+
+    .login {
+        width: 90%; 
+        height: 90%; 
+        margin: auto; 
+    }
+
+    .right {
+        width: 100%;
+        height: 100%;
+    }
+
+    .input, .submit-button {
+        width: 90%;
+    }
+}
+
+@media (max-width: 1440px) {
+    .login {
+        width: 90%;
+        height: 90%;
+    }
+    
+    .right {
+        padding: 10px;
+    }
+
+    .right h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+}
+
+@media (max-width:450px){
+    .right h4{
+        width:90%;
+        flex-direction:column;
+        align-items:center;
+    }
 }
