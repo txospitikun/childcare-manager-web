@@ -13,11 +13,10 @@ body, html {
     justify-content: center;
     background-color: #A2543E;
     background-image: url("assets/background.svg");
-    background: linear-gradient(90deg, #A2543E, 0%, A2543E,100%);
+    background: linear-gradient(90deg, #A2543E, 0%, #A2543E,100%);
     background-repeat: no-repeat;
     background-size: cover;
     font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
 }
@@ -46,18 +45,20 @@ body, html {
     width:34%;
     height: 100%;
     overflow: hidden;
-    h2{
-        display:flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        width: 100%;
-        padding-top:2rem;
-        height: 100%;
-        text-align: center;
-    
-    }
 }
+
+.left  h2{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    width: 100%;
+    padding-top:2rem;
+    height: 100%;
+    text-align: center;
+
+}
+
 .art{
     display: flex;
     align-items: center;
@@ -86,30 +87,31 @@ body, html {
     width:66%;
     height: 100%;
     border-radius: 30px;
-    
-    h1{
-        display:flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 5rem;
-        margin-top:2rem;
-        width: 70%;
-    }
+}
 
-    h4{
-        display:flex;
-        font-weight: 700;
-        margin-top:1rem;
-        width: 70%;
-        color: #838282;
-    }
-    a{
-        color:#A2543E;
-        margin-left:5px;
-        text-decoration: none;
-    }
+.right h1{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 5rem;
+    margin-top:2rem;
+    width: 70%;
+}
+
+.right h4{
+    display:flex;
+    font-weight: 700;
+    margin-top:1rem;
+    width: 70%;
+    color: #838282;
+}
+
+.right  a{
+    color:#A2543E;
+    margin-left:5px;
+    text-decoration: none;
 }
 
 form{
