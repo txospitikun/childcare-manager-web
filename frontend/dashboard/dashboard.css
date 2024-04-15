@@ -260,7 +260,6 @@ body {
 .profile-info-container {
 	display: flex;
 	flex-direction: column;
-	align-items: left;
 	justify-content: left;
 }
 
@@ -285,7 +284,6 @@ body {
 	width: 80%;
 	display: flex;
 	flex-direction: column;
-	align-items: left;
 }
 
 .info-container>p {
@@ -831,7 +829,6 @@ body {
 	}
 
 	.dashboard-buttons {
-		align-items: left;
 		margin-left: 10%;
 		margin-top: 40%;
 		margin-right: 10%;
@@ -869,7 +866,7 @@ body {
 @media only screen and (min-width: 0px) and (max-width: 768px) {
 
 	body {
-		overflow: none;
+		overflow: hidden;
 	}
 
 	.profile-settings-container-first-line {
