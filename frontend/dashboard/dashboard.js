@@ -5,29 +5,17 @@ let currentSelectedAttribute = null;
 
 const dashboardMain = document.querySelector('#dashboard-main');
 const dashboardProfile = document.querySelector('#dashboard-profile');
-
-document.querySelectorAll('.attribute-button').forEach(function(button) {
-    if(!currentSelectedAttribute)
-    {
-        currentSelectedAttribute = button;
-        button.style.border = "2px solid black";
-        dashboardProfile.style.display = "none";
-    }
-
-    button.addEventListener('click', function() {
-        if(currentSelectedAttribute)
-        {
-            currentSelectedAttribute.style.border = "";
-        }
-
-        currentSelectedAttribute = this;
-        this.style.border = "2px solid black";
-    });
-});
+const dashboardAdminPanel = document.querySelector('#dashboard-admin-panel');
 
 document.querySelectorAll('.dashboard-button').forEach(function(button) {
-    if(!currentDashboardButton && button.id == 'dashboard_bttn')
+
+    if(!currentDashboardButton && button.id == 'dashboard_admin_bttn')
     {
+        dashboardAdminPanel.style.display = "";
+        dashboardProfile.style.display = "none";
+        dashboardMain.style.display = "none";
+
+        
         currentDashboardButton = button;
         button.style.backgroundColor = "var(--button-color)";
     }
@@ -41,14 +29,42 @@ document.querySelectorAll('.dashboard-button').forEach(function(button) {
         {
             dashboardMain.style.display = "";
             dashboardProfile.style.display = "none";
+            dashboardAdminPanel.style.display = "none";
         }
         if(this.id == 'profile_bttn')
         {
             dashboardMain.style.display = "none";
             dashboardProfile.style.display = "";
+            dashboardAdminPanel.style.display = "none";
+        }
+        if(this.id == 'dashboard_admin_bttn')
+        {
+            console.log(" aaa ");
+            dashboardMain.style.display = "none";
+            dashboardProfile.style.display = "none";
+            dashboardAdminPanel.style.display = "";
         }
         currentDashboardButton = this;
         this.style.backgroundColor = "var(--button-color)";
+    });
+});
+
+
+document.querySelectorAll('.attribute-button').forEach(function(button) {
+    if(!currentSelectedAttribute)
+    {
+        currentSelectedAttribute = button;
+        button.style.border = "2px solid black";
+    }
+
+    button.addEventListener('click', function() {
+        if(currentSelectedAttribute)
+        {
+            currentSelectedAttribute.style.border = "";
+        }
+
+        currentSelectedAttribute = this;
+        this.style.border = "2px solid black";
     });
 });
 
