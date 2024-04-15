@@ -9,11 +9,11 @@ const dashboardAdminPanel = document.querySelector('#dashboard-admin-panel');
 
 document.querySelectorAll('.dashboard-button').forEach(function(button) {
 
-    if(!currentDashboardButton && button.id == 'dashboard_admin_bttn')
+    if(!currentDashboardButton && button.id == 'dashboard_bttn')
     {
-        dashboardAdminPanel.style.display = "";
+        dashboardAdminPanel.style.display = "none";
         dashboardProfile.style.display = "none";
-        dashboardMain.style.display = "none";
+        dashboardMain.style.display = "";
 
         
         currentDashboardButton = button;

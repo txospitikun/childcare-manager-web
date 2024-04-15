@@ -1,5 +1,5 @@
   <!DOCTYPE html>
-  <html lang="en">
+  <html lang="ro">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,25 +14,25 @@
           <div class="dashboard-left-panel">
             <div class="dashboard-buttons">
               <button class="dashboard-button" id="dashboard_bttn">
-                <div class="dashboard-button-icon"></div>
-                <div class="dashboard-button-text">panou de control</div>
+                <span class="dashboard-button-icon"></span>
+                <span class="dashboard-button-text">panou de control</span>
                 <!-- TODO: <div class = "dashboard-mask"></div> -->
               </button>
               <button class="dashboard-button" id="profile_bttn">
-                <div class="dashboard-button-icon"></div>
-                <div class="dashboard-button-text">profilul tău</div>
+                <span class="dashboard-button-icon"></span>
+                <span class="dashboard-button-text">profilul tău</span>
               </button>
               <button class="dashboard-button" id="groups_bttn">
-                <div class="dashboard-button-icon"></div>
-                <div class="dashboard-button-text">grupuri</div>
+                <span class="dashboard-button-icon"></span>
+                <span class="dashboard-button-text">grupuri</span>
               </button>
               <button class="dashboard-button" id="dashboard_admin_bttn">
-                <div class="dashboard-button-icon"></div>
-                <div class="dashboard-button-text">admin</div>
+                <span class="dashboard-button-icon"></span>
+                <span class="dashboard-button-text">admin</span>
               </button>
               <button class="dashboard-button-ignore" id="logout_bttn">
-                <div class="dashboard-button-icon"></div>
-                <div class="dashboard-button-text">ieși</div>
+                <span class="dashboard-button-icon"></span>
+                <span class="dashboard-button-text">ieși</span>
               </button>
             </div>
           </div>
@@ -40,7 +40,7 @@
             <div class="dashboard-navbar">
               <div class="dashboard-search-bar">
                 <img src="./assets/icons/ds_i_search.svg" alt="Search Icon">
-                <input label="search" id="search-content">
+                <input id="search-content">
                 <button id="search-button">Caută</button>
               </div>
               <div class="dashboard-profile-container">
@@ -49,28 +49,28 @@
                   <p class="profile-name">Niță Dennis</p>
                   <p class="profile-name-grad">Părinte</p>
                 </div>
-                <img class="profile-bell" src="./assets/icons/ds_i_bell.svg">
+                <img class="profile-bell" src="./assets/icons/ds_i_bell.svg" alt = "bell">
               </div>
             </div>
             <div class="dashboard-control-panel" id="dashboard-main">
               <div class="dashboard-children">
                 <p>Copiii tăi inregistrați</p>
                 <a class="children-container">
-                  <img src="../placeholders/child2.jpg" class="photo-container">
+                  <img src="../placeholders/child2.jpg" class="photo-container" alt = "child2">
                   <div class="info-container">
                     <p>Cozloschi Luca</p>
                     <p>17 ani - adolescent</p>
                   </div>
                 </a>
                 <div class="children-container">
-                  <img src="../placeholders/child3.jpg" class="photo-container">
+                  <img src="../placeholders/child3.jpg" class="photo-container" alt="no">
                   <div class="info-container">
                     <p>Ciotir Marian</p>
                     <p>13 ani - copil</p>
                   </div>
                 </div>
                 <div class="children-container">
-                  <img src="../placeholders/child4.jpg" class="photo-container">
+                  <img src="../placeholders/child4.jpg" class="photo-container" alt="n/a">
                   <div class="info-container">
                     <p>Cazan Rareș</p>
                     <p>3 ani - infant</p>
@@ -351,7 +351,7 @@
                   </div>
                   <div class="profile-settings-container row">
                     <p>Opțiuni cont</p>
-                    </br>
+                    <br>
                     <div class="flex-column">
                       <button class="delete-child-bttn button-default">Șterge cont</button>
                       <button class="delete-child-bttn button-default">Dezactivează cont</button>
@@ -367,7 +367,7 @@
                     <h3>Admin Panel - Cont administator (Niță Dennis-Alexandru)</h3>
                   </div>
                   <div class="profile-settings-container-admin"></div>
-                  <div class="profile-settings-container-admin"> Selectează utilizatorul pe care vrei să îl modifici. <input>Caută utilizator după nume</input>
+                  <div class="profile-settings-container-admin"> Selectează utilizatorul pe care vrei să îl modifici. <input>Caută utilizator după nume
                     <div class="all-avalabile-users-container">
                       <div class="found-user">
                         <div class="found-user-photo"></div>
@@ -406,7 +406,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="profile-settings-container-admin"> Selectează copilul pe care vrei să îl modifici. <input>Caută copilul după nume.</input>
+                  <div class="profile-settings-container-admin"> Selectează copilul pe care vrei să îl modifici. <input>Caută copilul după nume.
                     <div class="all-avalabile-users-container">
                       <div class="found-child">
                         <div class="found-child-photo"></div>
@@ -436,7 +436,7 @@
                   </div>
                   <div class="admin-panel-settings-container">
                     <h3>Opțiuni editare cont selectat:</h3>
-                    </br>
+                    <br>
                     <button class="button-default-slim red-bg">Șterge</button>
                     <button class="button-default-slim orange-bg">Dezactivează</button>
                     <button class="button-default-slim">Modifică data creării</button>
@@ -453,7 +453,7 @@
                   <div class="profile-settings-container-admin">
                     <div class="admin-panel-settings-container">
                       <h3>Opțiuni editare copil selectat:</h3>
-                      </br>
+                      <br>
                       <button class="button-default-slim red-bg">Șterge</button>
                       <button class="button-default-slim">Modifică nume & prenume</button>
                       <button class="button-default-slim">Modifică data nașterii</button>
