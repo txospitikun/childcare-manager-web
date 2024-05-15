@@ -1138,3 +1138,109 @@ body {
 	}
 
 }
+
+/*  
+*
+* TODO: Reformat the entire code above!
+*
+*/
+/* before the CSS code reformatation */
+
+.popup-form-wrapper {
+	position: absolute;
+	width: 30%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popup-title {
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 24px;
+  }
+  
+  .popup-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	max-width: 500px;
+	margin: 0 auto;
+  }
+  
+  .form-group {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+	width: 100%;
+  }
+  
+  label {
+	margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  select,
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  textarea {
+	box-sizing: border-box;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 100%;
+  }
+  
+  input[type="text"]:focus,
+  select:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  input[type="time"]:focus,
+  textarea:focus {
+	outline: none;
+	border-color: #4d90fe;
+	box-shadow: 0 0 2px 1px #4d90fe;
+  }
+  
+  .confirm-button {
+	padding: 10px 20px;
+	background-color: #4d90fe;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  .confirm-button:hover {
+	background-color: #3b78d9;
+  }
+  
+  .confirm-button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+  }
+
+
+  .add-child-bttn
+  {
+	display: none;
+  }
+
+  .add-table-bttn
+  {
+	display: none;
+  }
+
+  .not-resizable
+  {
+	resize: none;
+  }

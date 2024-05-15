@@ -7,6 +7,59 @@ const dashboardMain = document.querySelector('#dashboard-main');
 const dashboardProfile = document.querySelector('#dashboard-profile');
 const dashboardAdminPanel = document.querySelector('#dashboard-admin-panel');
 
+const addChildBttn = document.getElementById('add-child-bttn');
+const addChildForm = document.querySelector('.add-child-bttn');
+
+const addTableBttn = document.getElementById('add-table-bttn');
+const addTableForm = document.querySelector('.add-table-bttn');
+
+const confirmBttn = document.querySelector('.confirm-button');
+const confirmBttnTable = document.getElementById('confirm-add-table-bttn');
+
+addChildBttn.addEventListener('click', () => {
+    addChildForm.style.display = 'block';
+});
+
+addTableBttn.addEventListener('click', () => {
+    addTableForm.style.display = 'block';
+});
+  
+
+confirmBttn.addEventListener('click', (event) => {
+  event.preventDefault();
+  addChildForm.style.display = 'none';
+  document.getElementById('prenume').value = '';
+  document.getElementById('sex').value = '';
+  document.getElementById('data-nasterii').value = '';
+});
+
+
+const checkbox = document.getElementById('use-current-date-time-checkbox');
+const dataSiTimpInputs = document.getElementById('date-and-time-inputs-add-table');
+
+checkbox.addEventListener('change', () => {
+  if (checkbox.checked) {
+    dataSiTimpInputs.style.display = 'none';
+  } else {
+    dataSiTimpInputs.style.display = 'block';
+  }
+});
+
+addTableBttn.addEventListener('click', () => {
+    addTableForm.style.display = 'block';
+});
+
+confirmBttnTable.addEventListener('click', (event) => {
+  event.preventDefault();
+  addTableForm.style.display = 'none';
+  document.getElementById('data_add_table').value = '';
+  document.getElementById('time_add_table').value = '';
+  document.getElementById('text_add_table').value = '';
+});
+
+
+
+
 document.querySelectorAll('.dashboard-button').forEach(function(button) {
 
     if(!currentDashboardButton && button.id == 'dashboard_bttn')
