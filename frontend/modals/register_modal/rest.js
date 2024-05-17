@@ -2,24 +2,55 @@ const register_email = document.getElementById('register_email');
 const register_password = document.getElementById('register_password');
 const register_confirm_password = document.getElementById('register_confirm_password');
 
+const register_form = document.getElementById('registerFormId');
+
+const register_response = document.getElementById('register_response');
 const confirm_register_bttn = document.getElementById('confirm_register');
+
+register_form.addEventListener('submit', (e) =>
+{
+  e.preventDefault();
+});
 
 confirm_register_bttn.addEventListener('click', () => {
 
-  let data = '';
+  let data = {
+    email: register_email.value,
+    password: register_password.value,
+    register_confirm_password: register_confirm_password.value
+  };
 
-  fetch('/account_register', {
+  fetch('http://localhost:5000/account_register', {
+    mode: 'no-cors',
     method: 'POST',
-    body: data,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error('HTTP error ' + response.status);
+      throw new Error('Network response was not ok');
     }
     return response.json();
   })
   .then(data => {
-    console.log('Request succeeded with JSON response', data);
+    console.log(data);
+    switch(data['RegisterResponse'])
+    {
+      case 102:
+        register_response.style.color = 'red';
+        register_response.innerHTML = "There is already an user registed with this email!";
+        break;
+      case 101:
+        register_response.style.color = 'red';
+        register_response.innerHTML = "The passwords don't match!";
+        break;
+      case 100:
+        register_response.style.color = 'green';
+        register_response.innerHTML = "Register successful!";
+        break;
+    }
   })
   .catch(error => {
     console.error('Request failed', error);
