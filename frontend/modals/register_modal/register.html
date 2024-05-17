@@ -21,25 +21,30 @@
 
         <div class="right">
             <h1>Creează-ți propriul cont Childbook</h1>
-            <form>
+            <form method = "post" action = "http://localhost:5000/account_register">
                 <div class="input">
                     <label for="email" class="input-label">Email</label>
-                    <input type="email" id="email" />
+                    <input type="email" name="email" id="register_email" />
                 </div>
                 <div class="input">
                     <label for="password" class="input-label">Parola</label>
-                    <input type="text" id="password" />
+                    <input type="password" name="password" id="register_password" />
                 </div>
                 <div class="input">
                     <label for="conf_password" class="input-label">Confirmă parola</label>
-                    <input type="text" id="conf_password" />
+                    <input type="password" name="register_password" id="register_confirm_password" />
                 </div>
-                <button type="submit" class="submit-button">Creează cont</button>
+                <h3>Parola este gresita.</h3>
+                <button type="submit" class="submit-button" id="confirm_register">Creează cont</button>
                 <h4>Ai deja un cont creat? <a href="../login_modal/login.html">Loghează-te</a></h4>
             </form>
             
         </div>
     </div>
+
+
+    <script src="rest.js"></script>
+
 </body>
 
 </html>

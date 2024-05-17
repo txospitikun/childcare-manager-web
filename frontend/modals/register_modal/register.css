@@ -122,6 +122,11 @@ form{
     margin-bottom:2rem;
 }
 
+form > h3
+{
+    color: red;
+}
+
 .input {
     position: relative;
     display: flex;
