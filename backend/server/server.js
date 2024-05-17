@@ -12,10 +12,10 @@ http.createServer((req, res) =>
     {
         handle_register(req, res);
     }
-    else if(req.method === 'GET' && req.url === '/account_register')
+    else
+    if(req.method === 'POST' && req.url === '/account_login')
     {
-        res.writeHead(201, {'Content-Type': 'text/plain'});
-        res.end('User registered successfully!');
+        handle_login(req, res);
     }
 
     
@@ -39,7 +39,6 @@ async function handle_register(req, res) {
             {
                 const client = await database.connect();
                 const searchedUser = await db_logic.findUserByEmail(client, data["email"]);
-                console.log(searchedUser);
                 if(!json_worker.isEmpty(searchedUser))
                 {
                     registerResponse = 102;
@@ -60,6 +59,38 @@ async function handle_register(req, res) {
         res.writeHead(200, {'Content-Type': 'application/json',});
         res.end(JSON.stringify({RegisterResponse: registerResponse}));
     });
+}
 
-    
+async function handle_login(req, res)
+{
+    let body = '';
+    let loginResponse = 110;
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    });
+    req.on('end', async () => {
+        let data = JSON.parse(body);
+        try
+        {
+            const client = await database.connect();
+            const searchedUser = await db_logic.findUserByEmail(client, data["email"]);
+            if(json_worker.isEmpty(searchedUser))
+            {
+                loginResponse = 111;
+            }
+            else if(searchedUser[0]["password"] != data["password"])
+            {
+                loginResponse = 111;
+            }
+            
+            client.release();
+        } catch(err)
+        {
+            console.log("Error while registering user: ", err);
+            register_response = 1;
+        }
+
+        res.writeHead(200, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({LoginResponse: loginResponse}));
+    });
 }

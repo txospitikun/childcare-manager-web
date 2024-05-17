@@ -40,15 +40,15 @@ confirm_register_bttn.addEventListener('click', () => {
     {
       case 102:
         register_response.style.color = 'red';
-        register_response.innerHTML = "There is already an user registed with this email!";
+        register_response.innerHTML = "Există deja un cont inregistrat cu aceast email.";
         break;
       case 101:
         register_response.style.color = 'red';
-        register_response.innerHTML = "The passwords don't match!";
+        register_response.innerHTML = "Parolele nu coincid.";
         break;
       case 100:
         register_response.style.color = 'green';
-        register_response.innerHTML = "Register successful!";
+        register_response.innerHTML = "Înregistrat cu succes! Confirmă pe email!";
         break;
     }
   })
