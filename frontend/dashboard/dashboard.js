@@ -6,6 +6,7 @@ let currentSelectedAttribute = null;
 const dashboardMain = document.querySelector('#dashboard-main');
 const dashboardProfile = document.querySelector('#dashboard-profile');
 const dashboardAdminPanel = document.querySelector('#dashboard-admin-panel');
+const dashboardGroups = document.querySelector('#dashboard-groups');
 
 const addChildBttn = document.getElementById('add-child-bttn');
 const addChildForm = document.querySelector('.add-child-bttn');
@@ -67,8 +68,8 @@ document.querySelectorAll('.dashboard-button').forEach(function(button) {
         dashboardAdminPanel.style.display = "none";
         dashboardProfile.style.display = "none";
         dashboardMain.style.display = "";
+        dashboardGroups.style.display = "none";
 
-        
         currentDashboardButton = button;
         button.style.backgroundColor = "var(--button-color)";
     }
@@ -83,20 +84,30 @@ document.querySelectorAll('.dashboard-button').forEach(function(button) {
             dashboardMain.style.display = "";
             dashboardProfile.style.display = "none";
             dashboardAdminPanel.style.display = "none";
+            dashboardGroups.style.display = "none";
         }
         if(this.id == 'profile_bttn')
         {
             dashboardMain.style.display = "none";
             dashboardProfile.style.display = "";
             dashboardAdminPanel.style.display = "none";
+            dashboardGroups.style.display = "none";
         }
         if(this.id == 'dashboard_admin_bttn')
         {
-            console.log(" aaa ");
             dashboardMain.style.display = "none";
             dashboardProfile.style.display = "none";
             dashboardAdminPanel.style.display = "";
+            dashboardGroups.style.display = "none";
         }
+        if(this.id == 'groups_bttn')
+        {
+            dashboardMain.style.display = "none";
+            dashboardProfile.style.display = "none";
+            dashboardAdminPanel.style.display = "none";
+            dashboardGroups.style.display = "";
+        }
+
         currentDashboardButton = this;
         this.style.backgroundColor = "var(--button-color)";
     });
@@ -143,10 +154,8 @@ document.querySelectorAll('.attribute-button').forEach(function(button) {
     });
 });
 
-// Get the modal
 var modal = document.getElementById("myModal");
 
-// Get the image and insert it inside the modal - use its "alt" text as a caption
 var img = document.getElementsByClassName('modal-image');
 var modalImg = document.getElementById("img01");
 var captionText = document.getElementById("caption");
@@ -158,22 +167,16 @@ for (let i = 0; i < img.length; i++) {
   }
 }
 
-// Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() { 
   modal.style.display = "none";
 }
 
-// Get the delete button
 var deleteBtn = document.getElementById("delete");
 
-// When the user clicks on the delete button, delete the photo and close the modal
 deleteBtn.onclick = function() {
-  // Delete the photo
   modal.style.display = "none";
-  // Add your code here to delete the photo
 }
 
 
@@ -194,3 +197,17 @@ document.querySelectorAll('.children-container').forEach(function(button) {
         this.style.border = "2px solid gray";
     });
 });
+
+var modal2 = document.getElementById("myModal2");
+
+var btn = document.getElementById("addPhoto");
+
+var span = modal2.getElementsByClassName("close2")[0];
+
+btn.onclick = function() {
+  modal2.style.display = "block";
+}
+
+span.onclick = function() {
+  modal2.style.display = "none";
+}
