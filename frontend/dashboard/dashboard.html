@@ -15,42 +15,41 @@
           <div class="dashboard-left-panel">
             <div class="dashboard-buttons">
               <button class="dashboard-button" id="dashboard_bttn">
-                <span class="dashboard-button-icon"></span>
-                <span class="dashboard-button-text">panou de control</span>
-                <!-- TODO: <div class = "dashboard-mask"></div> -->
+                <img src="./assets/icons/dashboard_main_icon.svg" alt="Dashboard Icon">
+                <span class="dashboard-button-text">Panou de control</span>
               </button>
               <button class="dashboard-button" id="profile_bttn">
-                <span class="dashboard-button-icon"></span>
-                <span class="dashboard-button-text">profilul tău</span>
+                <img src="./assets/icons/dashboard_user_icon.svg" alt="Profile Icon">
+                <span class="dashboard-button-text">Profilul tău</span>
               </button>
               <button class="dashboard-button" id="groups_bttn">
-                <span class="dashboard-button-icon"></span>
-                <span class="dashboard-button-text">grupuri</span>
+                <img src="./assets/icons/dashboard_group_icon.svg" alt="Groups Icon">
+                <span class="dashboard-button-text">Grupuri</span>
               </button>
               <button class="dashboard-button" id="dashboard_admin_bttn">
-                <span class="dashboard-button-icon"></span>
-                <span class="dashboard-button-text">admin</span>
+                <img src="./assets/icons/dashboard_admin_icon.svg" alt="Admin Icon">
+                <span class="dashboard-button-text">Admin Panel</span>
               </button>
-              <button class="dashboard-button-ignore" id="logout_bttn">
-                <span class="dashboard-button-icon"></span>
-                <span class="dashboard-button-text">ieși</span>
+              <button class="dashboard-button" id="logout_bttn">
+                <img src="./assets/icons/dashboard_logout_icon.svg" alt="Logout Icon">
+                <span class="dashboard-button-text">Deloghează-te</span>
               </button>
             </div>
           </div>
           <div class="dashboard-right-panel">
             <div class="dashboard-navbar">
               <div class="dashboard-search-bar">
-                <img src="./assets/icons/ds_i_search.svg" alt="Search Icon">
+                <img src="./assets/icons/dashboard_search_icon.svg" alt="Search Icon">
                 <input id="search-content">
                 <button id="search-button">Caută</button>
               </div>
               <div class="dashboard-profile-container">
-                <div class="profile-photo-container "></div>
+                <img src="../placeholders/user1.jpg" class="profile-photo" alt="Profile Photo">
                 <div class="profile-info-container">
                   <p class="profile-name">Niță Dennis</p>
                   <p class="profile-name-grad">Părinte</p>
                 </div>
-                <img class="profile-bell" src="./assets/icons/ds_i_bell.svg" alt = "bell">
+                <img class="profile-bell" src="./assets/icons/dashboard_bell_icon.svg" alt = "Bell Icon">
               </div>
             </div>
             <div class="dashboard-control-panel" id="dashboard-main">
@@ -871,6 +870,7 @@
               <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
             </form>
           </div>
+        </div>
       </main>
       <script src="index.js"></script>
       <script src="./dashboard.js"></script>
