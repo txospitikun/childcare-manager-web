@@ -76,48 +76,55 @@
                     <p>3 ani - infant</p>
                   </div>
                 </div>
-                <button class="children-add-button button-default" id="add-child-bttn">+</button>
+                <button class="children-add-button default-button" id="add-child-bttn">+</button>
               </div>
               <div class="dashboard-info">
-                <button class="delete-child-bttn button-default" id="delete-bttn">
-                  <span>Del</span>
+                <button class="delete-child-bttn default-button" id="delete-bttn">
+                  <span>Delete</span>
                 </button>
-                <button class="attribute-button button-default feeding-child-bttn" id="feeding-bttn">
+                <button class="attribute-button default-button" id="feeding-bttn">
                   <img class="invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon">
                   <span>Hrănire</span>
                 </button>
-                <button class="attribute-button button-default sleeping-child-bttn" id="sleeping-bttn">
+                <button class="attribute-button default-button" id="sleeping-bttn">
                   <img class="invert" src="./assets/icons/ds_i_bed.svg" alt="Sleeping Icon">
                   <span>Somn</span>
                 </button>
-                <button class="attribute-button images-child-bttn button-default" id="media-bttn">
+                <button class="attribute-button default-button" id="media-bttn">
                   <img class="invert" src="./assets/icons/ds_i_media.svg" alt="Media Icon">
                   <span>Media</span>
                 </button>
-                <button class="attribute-button evolution-child-bttn button-default" id="evolution-bttn">
+                <button class="attribute-button default-button" id="evolution-bttn">
                   <img class="invert" src="./assets/icons/ds_i_evolution.svg" alt="Evolution Icon">
                   <span>Evoluție</span>
                 </button>
-                <button class="attribute-button medical-history-child-bttn button-default" id="medical-bttn">
+                <button class="attribute-button default-button" id="medical-bttn">
                   <img class="invert" src="./assets/icons/ds_i_medical.svg" alt="Medical Icon">
                   <span>Sănătate</span>
                 </button>
                 <div class="dashboard-content">
                   <div class="feeding-calendar-container" id="feedingElement" style="display:none;">
                     <div class="upper-content">
-                      <div class="calendar-bttns">
-                        <button class="calendar-bttn button-default calendar-settings" id="add-table-bttn">Adaugă</button>
-                        <button class="calendar-bttn button-default calendar-settings">Modifică</button>
-                        <button class="calendar-bttn button-default calendar-settings">Elimină</button>
+                      <div class="left-upper-content">
+                        <button class="calendar-bttn default-button" id="add-table-bttn">Adaugă</button>
+                        <button class="calendar-bttn default-button">Modifică</button>
+                        <button class="calendar-bttn default-button">Elimină</button>
                       </div>
-                      <div class="current-days">
-                        <div class="current-day">Lu.</div>
-                        <div class="current-day">Ma.</div>
-                        <div class="current-day">Mi.</div>
-                        <div class="current-day">Jo.</div>
-                        <div class="current-day">Vi.</div>
-                        <div class="current-day">Sâ.</div>
-                        <div class="current-day">Du.</div>
+                      <div class="right-upper-content">
+                        <div class="current-month">
+                          <button class="month-change-button" id="previous-month-button">&lt;</button>
+                          <span id="month-year"></span>
+                          <button class="month-change-button" id="next-month-button">&gt;</button>
+                        </div>
+                        <div class="weekdays-container">
+                          <div class="current-day">Lu.</div>
+                          <div class="current-day">Ma.</div>
+                          <div class="current-day">Mi.</div>
+                          <div class="current-day">Jo.</div>
+                          <div class="current-day">Vi.</div>
+                          <div class="current-day">Sâ.</div>
+                          <div class="current-day">Du.</div>
+                        </div>
                       </div>
                     </div>
                     <div class="bottom-content">
@@ -160,8 +167,8 @@
                           </div>
                         </div>
                       </div>
-                      <div class="feeding-calendar-dates">
-                        <div class="feeding-calendar-date not-current">
+                      <div class="feeding-calendar-dates" id="feedingCalendar">
+                        <!-- <div class="feeding-calendar-date not-current">
                           <div class="feeding-calendar-date-day">30</div>
                           <div class="feeding-calendar-date-feed-count">5*</div>
                         </div>
@@ -300,25 +307,30 @@
                         <div class="feeding-calendar-date not-current">
                           <div class="feeding-calendar-date-day n">2</div>
                           <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
                 <div class="feeding-calendar-container" id="sleepingElement" style="display: none;">
                     <div class="upper-content">
-                      <div class="calendar-bttns">
-                        <button class="calendar-bttn button-default calendar-settings" id="add-table-bttn">Adaugă</button>
-                        <button class="calendar-bttn button-default calendar-settings">Modifică</button>
-                        <button class="calendar-bttn button-default calendar-settings">Elimină</button>
+                      <div class="left-upper-content">
+                        <button class="calendar-bttn default-button" id="add-table-bttn">Adaugă</button>
+                        <button class="calendar-bttn default-button">Modifică</button>
+                        <button class="calendar-bttn default-button">Elimină</button>
                       </div>
-                      <div class="current-days">
-                        <div class="current-day">Lu.</div>
-                        <div class="current-day">Ma.</div>
-                        <div class="current-day">Mi.</div>
-                        <div class="current-day">Jo.</div>
-                        <div class="current-day">Vi.</div>
-                        <div class="current-day">Sâ.</div>
-                        <div class="current-day">Du.</div>
+                      <div class="right-upper-content">
+                        <div class="current-month">
+                          Aprilie 2024
+                        </div>
+                        <div class="weekdays-container">
+                          <div class="current-day">Lu.</div>
+                          <div class="current-day">Ma.</div>
+                          <div class="current-day">Mi.</div>
+                          <div class="current-day">Jo.</div>
+                          <div class="current-day">Vi.</div>
+                          <div class="current-day">Sâ.</div>
+                          <div class="current-day">Du.</div>
+                        </div>
                       </div>
                     </div>
                     <div class="bottom-content">
@@ -599,9 +611,9 @@
             <div class="dashboard-control-panel" id="dashboard-profile">
               <div class="dashboard-info-profile">
                 <div class="profile-buttons-category">
-                  <button class="button-default" id="profile-bttn-general">General</button>
-                  <button class="button-default" id="profile-bttn-security">Securitate</button>
-                  <button class="button-default" id="profile-bttn-notifications">Notificări</button>
+                  <button class="default-button" id="profile-bttn-general">General</button>
+                  <button class="default-button" id="profile-bttn-security">Securitate</button>
+                  <button class="default-button" id="profile-bttn-notifications">Notificări</button>
                 </div>
                 <div class="grid-layout-content">
                   <div class="profile-settings-container-first-line">
@@ -642,8 +654,8 @@
                     <p>Opțiuni cont</p>
                     <br>
                     <div class="flex-column">
-                      <button class="delete-child-bttn button-default">Șterge cont</button>
-                      <button class="delete-child-bttn button-default">Dezactivează cont</button>
+                      <button class="delete-child-bttn default-button">Șterge cont</button>
+                      <button class="delete-child-bttn default-button">Dezactivează cont</button>
                     </div>
                   </div>
                 </div>
@@ -726,27 +738,27 @@
                   <div class="admin-panel-settings-container">
                     <h3>Opțiuni editare cont selectat:</h3>
                     <br>
-                    <button class="button-default-slim red-bg">Șterge</button>
-                    <button class="button-default-slim orange-bg">Dezactivează</button>
-                    <button class="button-default-slim">Modifică data creării</button>
-                    <button class="button-default-slim">Modifică nume & prenume</button>
-                    <button class="button-default-slim">Modifică email</button>
-                    <button class="button-default-slim">Modifică telefon</button>
-                    <button class="button-default-slim">Modifică data nașterii</button>
-                    <button class="button-default-slim">Modifică genul</button>
-                    <button class="button-default-slim">Modifică localizare</button>
-                    <button class="button-default-slim">Modifică limbă</button>
-                    <button class="button-default-slim">Modifică starea civilă</button>
-                    <button class="button-default-slim">Modifică tipul contului</button>
+                    <button class="default-button-slim red-bg">Șterge</button>
+                    <button class="default-button-slim orange-bg">Dezactivează</button>
+                    <button class="default-button-slim">Modifică data creării</button>
+                    <button class="default-button-slim">Modifică nume & prenume</button>
+                    <button class="default-button-slim">Modifică email</button>
+                    <button class="default-button-slim">Modifică telefon</button>
+                    <button class="default-button-slim">Modifică data nașterii</button>
+                    <button class="default-button-slim">Modifică genul</button>
+                    <button class="default-button-slim">Modifică localizare</button>
+                    <button class="default-button-slim">Modifică limbă</button>
+                    <button class="default-button-slim">Modifică starea civilă</button>
+                    <button class="default-button-slim">Modifică tipul contului</button>
                   </div>
                   <div class="profile-settings-container-admin">
                     <div class="admin-panel-settings-container">
                       <h3>Opțiuni editare copil selectat:</h3>
                       <br>
-                      <button class="button-default-slim red-bg">Șterge</button>
-                      <button class="button-default-slim">Modifică nume & prenume</button>
-                      <button class="button-default-slim">Modifică data nașterii</button>
-                      <button class="button-default-slim">Modifică genul</button>
+                      <button class="default-button-slim red-bg">Șterge</button>
+                      <button class="default-button-slim">Modifică nume & prenume</button>
+                      <button class="default-button-slim">Modifică data nașterii</button>
+                      <button class="default-button-slim">Modifică genul</button>
                     </div>
                   </div>
                 </div>

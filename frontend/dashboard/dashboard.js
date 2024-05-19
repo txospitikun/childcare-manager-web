@@ -211,3 +211,78 @@ btn.onclick = function() {
 span.onclick = function() {
   modal2.style.display = "none";
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const calendarContainer = document.getElementById("feedingCalendar");
+    const monthYearDisplay = document.getElementById("month-year");
+    const previousMonthButton = document.getElementById("previous-month-button");
+    const nextMonthButton = document.getElementById("next-month-button");
+  
+    let currentDate = new Date();
+    
+    function updateCalendar() {
+      calendarContainer.innerHTML = "";
+  
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+  
+      monthYearDisplay.textContent = currentDate.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
+  
+      const firstDayOfMonth = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+      const prevMonthDays = (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1);
+      const prevMonthLastDate = new Date(year, month, 0).getDate();
+  
+      for (let i = prevMonthLastDate - prevMonthDays + 1; i <= prevMonthLastDate; i++) {
+        calendarContainer.appendChild(createCalendarDate(i, "not-current"));
+      }
+  
+      for (let day = 1; day <= daysInMonth; day++) {
+        calendarContainer.appendChild(createCalendarDate(day, ""));
+      }
+  
+      const nextMonthDays = (35 - prevMonthDays - daysInMonth);
+      for (let i = 1; i <= nextMonthDays; i++) {
+        calendarContainer.appendChild(createCalendarDate(i, "not-current"));
+      }
+    }
+  
+    function createCalendarDate(day, additionalClass) {
+      const dateDiv = document.createElement("div");
+      dateDiv.className = `feeding-calendar-date ${additionalClass}`;
+      
+      const dayDiv = document.createElement("div");
+      dayDiv.className = "feeding-calendar-date-day";
+      dayDiv.textContent = day;
+      
+      const feedCountDiv = document.createElement("div");
+      feedCountDiv.className = "feeding-calendar-date-feed-count";
+      feedCountDiv.textContent = "5*";
+      
+      dateDiv.appendChild(dayDiv);
+      dateDiv.appendChild(feedCountDiv);
+      
+      dateDiv.addEventListener("click", function() {
+        document.querySelectorAll('.feeding-calendar-date.current').forEach(el => {
+          el.classList.remove('current');
+        });
+        dateDiv.classList.add('current');
+      });
+      
+      return dateDiv;
+    }
+  
+    previousMonthButton.addEventListener("click", function() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      updateCalendar();
+    });
+  
+    nextMonthButton.addEventListener("click", function() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      updateCalendar();
+    });
+  
+    updateCalendar();
+  });
+  
