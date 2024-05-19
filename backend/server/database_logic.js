@@ -1,11 +1,11 @@
 const database = require('./connection.js');
 
 
-async function insertUser(client, email, password, privilege, suspended)
+async function insertUser(client, email, password, fname, lname, privilege, suspended)
 {
     const query = {
-        text: 'INSERT INTO Users (Email, Password, Privilege, Suspended) VALUES ($1, $2, $3, $4)',
-        values: [email, password, privilege, suspended]
+        text: 'INSERT INTO Users (Email, Password, FirstName, LastName, Privilege, Suspended) VALUES ($1, $2, $3, $4, $5, $6)',
+        values: [email, password, fname, lname, privilege, suspended]
     };
     const result = await client.query(query);
     return result;

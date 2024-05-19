@@ -1,6 +1,7 @@
 var db_logic = require('./database_logic.js');
 const database = require('./connection.js');
 const json_worker = require('./json_worker.js');
+const encryption_worker = require('./encryption_worker.js')('d4e5f6a1b3c4d7e8f9a2b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6');
 
 
 async function handle_register(req, res) {
@@ -25,7 +26,7 @@ async function handle_register(req, res) {
                 }
                 else
                 {
-                    console.log(await db_logic.insertUser(client, data["email"], data["password"], 0, 0));
+                    console.log(await db_logic.insertUser(client, data["email"], data["password"], data["fname"], data["lname"], 0, 0));
                 }
                 client.release();
             } catch(err)
@@ -51,6 +52,8 @@ async function handle_login(req, res)
     req.on('end', async () => {
         let data = JSON.parse(body);
         let userInfo = '';
+        let jwtToken = '';
+
         try
         {
             const client = await database.connect();
@@ -66,6 +69,8 @@ async function handle_login(req, res)
             else
             {
                 userInfo = searchedUser[0];
+                jwtToken = encryption_worker.encode(userInfo);
+                console.log(jwtToken);
             }
             
             client.release();
@@ -76,7 +81,7 @@ async function handle_login(req, res)
         }
 
         res.writeHead(200, {'Content-Type': 'application/json',});
-        res.end(JSON.stringify({LoginResponse: loginResponse, UserInfo: userInfo}));
+        res.end(JSON.stringify({LoginResponse: loginResponse, UserInfo: userInfo, JWTToken: jwtToken}));
     });
 }
 
