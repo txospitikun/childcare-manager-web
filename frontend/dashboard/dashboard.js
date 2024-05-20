@@ -180,7 +180,6 @@ deleteBtn.onclick = function() {
 document.querySelectorAll('.children-container').forEach(function(button) {
     if(!currentSelectedChild)
     {
-        console.log("a");
         currentSelectedChild = button;
         button.style.border = "2px solid gray";
     }

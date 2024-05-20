@@ -1,3 +1,5 @@
+const register_fname = document.getElementById('register_fname');
+const register_lname = document.getElementById('register_lname');
 const register_email = document.getElementById('register_email');
 const register_password = document.getElementById('register_password');
 const register_confirm_password = document.getElementById('register_confirm_password');
@@ -15,6 +17,8 @@ register_form.addEventListener('submit', (e) =>
 confirm_register_bttn.addEventListener('click', () => {
 
   let data = {
+    fname: register_fname.value,
+    lname: register_lname.value,
     email: register_email.value,
     password: register_password.value,
     register_confirm_password: register_confirm_password.value
