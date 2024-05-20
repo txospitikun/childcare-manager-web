@@ -56,6 +56,10 @@ Login:
 #112 -> contul este suspendat
 #113 -> contul nu are adresa de email verificata
 
+UserHandle:
+#200 -> Succesful JWT Authentification
+#201 -> Failed JWT Authentification
+
 #0 -> succes
 #1 -> eroare necunoscuta
 ```
