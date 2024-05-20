@@ -31,7 +31,7 @@ CREATE TABLE Childrens (
     DateOfBirth DATE NOT NULL,
     PictureRef VARCHAR,
     UserID INT NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 ```
 Relations:
