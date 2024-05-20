@@ -1,3 +1,6 @@
+import { setCookie, getCookie, deleteCookie } from '../../workers/cookie_worker.js';
+
+
 const login_email = document.getElementById('login_email');
 const login_password = document.getElementById('login_password');
 
@@ -38,8 +41,15 @@ confirm_login_bttn.addEventListener('click', () => {
     switch(data['LoginResponse'])
     {
         case 110:
+            console.log(data);
             login_response.style.color = 'green';
             login_response.innerHTML = "Te-ai logat cu succes!";
+            console.log("begin cookie set");
+            setCookie('JWT', data['JWTToken'], 1);
+            console.log("end cookie set");
+            localStorage.setItem('userInfo', JSON.stringify(data['UserInfo']));
+
+            window.location.href = 'http://localhost:5500/frontend/dashboard/dashboard.html';
             break;
         case 111:
             login_response.style.color = 'red';

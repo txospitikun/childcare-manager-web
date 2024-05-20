@@ -1,5 +1,5 @@
-var db_logic = require('./database_logic.js');
-const database = require('./connection.js');
+var db_logic = require('../database/database_logic.js');
+const database = require('../database/connection.js');
 const json_worker = require('./json_worker.js');
 const encryption_worker = require('./encryption_worker.js')('d4e5f6a1b3c4d7e8f9a2b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6');
 

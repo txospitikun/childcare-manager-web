@@ -1,7 +1,7 @@
 var http = require('http');
 var querystring = require('querystring');
 
-const authentification_worker = require('./auth_worker.js');
+const authentification_worker = require('./workers/auth_worker.js');
 
 http.createServer((req, res) =>
 {
