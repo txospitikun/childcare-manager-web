@@ -29,7 +29,9 @@ CREATE TABLE Childrens (
     LastName VARCHAR NOT NULL,
     Gender CHAR NOT NULL,
     DateOfBirth DATE NOT NULL,
-    PictureRef VARCHAR
+    PictureRef VARCHAR,
+    UserID INT NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 ```
 Relations:
