@@ -27,7 +27,7 @@ CREATE TABLE Childrens (
     ID SERIAL PRIMARY KEY,
     FirstName VARCHAR NOT NULL,
     LastName VARCHAR NOT NULL,
-    Gender CHAR NOT NULL,
+    Gender VARCHAR NOT NULL,
     DateOfBirth DATE NOT NULL,
     PictureRef VARCHAR,
     UserID INT NOT NULL,
