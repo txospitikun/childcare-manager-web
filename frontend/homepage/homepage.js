@@ -15,11 +15,13 @@ document.querySelectorAll('.navbar a').forEach(anchor => {
 
 
 
-const hamburgerMenu = document.querySelector('.hamburger-menu');
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburgerMenu = document.querySelector('.hamburger-menu');
   const navLinks = document.querySelector('.nav-links');
   const registerButton = document.querySelector('.register');
 
   hamburgerMenu.addEventListener('click', () => {
     navLinks.classList.toggle('show');
-    registerButton.style.display = navLinks.classList.contains('show') ? 'none' : 'block';
+    registerButton.style.display = navLinks.classList.contains('show') ? 'none' : 'flex';
   });
+});
