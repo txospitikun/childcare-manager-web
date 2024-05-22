@@ -9,6 +9,7 @@ const dashboardAdminPanel = document.querySelector('#dashboard-admin-panel');
 const dashboardGroups = document.querySelector('#dashboard-groups');
 
 const addChildBttn = document.getElementById('add-child-bttn');
+console.log(addChildBttn);
 const addChildForm = document.querySelector('.add-child-bttn');
 
 const addTableBttn = document.getElementById('add-table-bttn');
@@ -29,9 +30,6 @@ addTableBttn.addEventListener('click', () => {
 confirmBttn.addEventListener('click', (event) => {
   event.preventDefault();
   addChildForm.style.display = 'none';
-  document.getElementById('prenume').value = '';
-  document.getElementById('sex').value = '';
-  document.getElementById('data-nasterii').value = '';
 });
 
 

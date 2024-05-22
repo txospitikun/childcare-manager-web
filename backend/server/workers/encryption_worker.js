@@ -1,14 +1,14 @@
-var crypto = require('crypto');
+const crypto = require('crypto');
 
 module.exports = function(key) {
     this.key = key; 
     
     function encodeBase64(str) {
-        return new Buffer.from(str).toString('base64').toString("utf-8");
+        return Buffer.from(str).toString('base64');
     }
 
     function decodeBase64(str) {
-        return new Buffer.from(str, 'base64').toString("utf-8");
+        return Buffer.from(str, 'base64').toString('utf-8');
     }
     
     function stringify(obj) {
@@ -16,47 +16,44 @@ module.exports = function(key) {
     }
 
     function checkSumGen(head, body) {
-        var checkSumStr = head + "." + body; 
-        var hash = crypto.createHmac('sha256',key);
-        var checkSum = hash.update(checkSumStr)
-                .digest('base64').toString('utf8');
+        const checkSumStr = head + "." + body; 
+        const hash = crypto.createHmac('sha256', key);
+        const checkSum = hash.update(checkSumStr).digest('base64');
         return checkSum;
     }
 
-    var alg = {"alg": "HS256", "typ": "JWT"};
+    function hash(text) {
+        const hmac = crypto.createHmac('sha256', key);
+        hmac.update(text);
+        return hmac.digest('hex');
+    }
+
+    const alg = {"alg": "HS256", "typ": "JWT"};
 
     return {
         encode:(obj) => {
-            var result = "";
-            var header = encodeBase64(stringify(alg));
-            // console.log(header);
+            let result = "";
+            const header = encodeBase64(stringify(alg));
             result += header + ".";
-            var body = encodeBase64(stringify(obj));
-            // console.log(body);
+            const body = encodeBase64(stringify(obj));
             result += body + ".";
-
-            var checkSum = checkSumGen(header,body);
+            const checkSum = checkSumGen(header, body);
             result += checkSum; 
             return result;
         },
         decode:(str) => {
-            var jwtArr = str.split("."); 
-            var head = jwtArr[0];
-            var body = jwtArr[1];
-            var hash = jwtArr[2];
-            var checkSum = checkSumGen(head,body); 
+            const jwtArr = str.split("."); 
+            const head = jwtArr[0];
+            const body = jwtArr[1];
+            const hash = jwtArr[2];
+            const checkSum = checkSumGen(head, body); 
 
             if(hash === checkSum) {
-                console.log("jwt hash: " + hash);
-                console.log("gen hash: " + checkSum);
-                console.log('JWT was authenticated');
                 return JSON.parse(decodeBase64(body));
             } else {
-                console.log('JWT was not authenticated');
-                console.log("jwt hash: " + hash);
-                console.log("gen hash: " + checkSum);
                 return false;
             }
-        }
+        },
+        hash: hash
     };
 };
