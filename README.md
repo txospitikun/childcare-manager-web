@@ -27,9 +27,11 @@ CREATE TABLE Childrens (
     ID SERIAL PRIMARY KEY,
     FirstName VARCHAR NOT NULL,
     LastName VARCHAR NOT NULL,
-    Gender CHAR NOT NULL,
+    Gender VARCHAR NOT NULL,
     DateOfBirth DATE NOT NULL,
-    PictureRef VARCHAR
+    PictureRef VARCHAR,
+    UserID INT NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 ```
 Relations:
@@ -55,6 +57,10 @@ Login:
 #111 -> parola/email incorecta
 #112 -> contul este suspendat
 #113 -> contul nu are adresa de email verificata
+
+UserHandle:
+#200 -> Succesful JWT Authentification
+#201 -> Failed JWT Authentification
 
 #0 -> succes
 #1 -> eroare necunoscuta
