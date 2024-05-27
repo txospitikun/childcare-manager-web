@@ -83,18 +83,18 @@ Payload:
 }
 
 Response:
-(User registered succesfully)
+(User registered succesfully - Status: 200)
 {
     "RegisterResponse": 100,
     "JWT": "eyJhbGciOiJIUzI1NiIs...(the token is longer and should be saved as cookie)CN6gaHppkJCyjU="
 }
 
-(Email already exists)
+(Email already exists - Status: 401)
 {
     "RegisterResponse": 101
 }
 
-(Password mismatch)
+(Password mismatch - Status: 401)
 {
     "RegisterResponse": 102
 }
