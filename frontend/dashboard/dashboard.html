@@ -53,7 +53,7 @@
               </div>
             </div>
             <div class="dashboard-control-panel" id="dashboard-main">
-              <div class="dashboard-children">
+              <div class="dashboard-children" id="user-children-id">
                 <p>Copiii tăi inregistrați</p>
                 <a class="children-container">
                   <img src="../placeholders/child2.jpg" class="photo-container" alt = "child2">
@@ -62,22 +62,10 @@
                     <p>17 ani - adolescent</p>
                   </div>
                 </a>
-                <div class="children-container">
-                  <img src="../placeholders/child3.jpg" class="photo-container" alt="no">
-                  <div class="info-container">
-                    <p>Ciotir Marian</p>
-                    <p>13 ani - copil</p>
-                  </div>
-                </div>
-                <div class="children-container">
-                  <img src="../placeholders/child4.jpg" class="photo-container" alt="n/a">
-                  <div class="info-container">
-                    <p>Cazan Rareș</p>
-                    <p>3 ani - infant</p>
-                  </div>
-                </div>
-                <button class="children-add-button default-button" id="add-child-bttn">+</button>
+              <button class="children-add-button default-button" id="add-child-bttn">+</button>
+
               </div>
+              
               <div class="dashboard-info">
                 <button class="delete-child-bttn default-button" id="delete-bttn">
                   <span>Delete</span>
@@ -814,21 +802,25 @@
             <h2 class="popup-title">Adaugă un copil nou</h2>
             <form class="popup-form">
               <div class="form-group">
+                <label for="prenume">Nume:</label>
+                <input type="text" id="add_child_input_fname" name="nume" placeholder="Ex: Popescu" required>
+              </div>
+              <div class="form-group">
                 <label for="prenume">Prenume:</label>
-                <input type="text" id="prenume" name="prenume" placeholder="Ex: Ion" required>
+                <input type="text" id="add_child_input_lname" name="prenume" placeholder="Ex: Ion" required>
               </div>
               <div class="form-group">
                 <label for="sex">Sex:</label>
-                <select id="sex" name="sex" required>
+                <select id="add_child_input_sex" name="sex" required>
                   <option value="male">Bărbat</option>
                   <option value="female">Femeie</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="data-nasterii">Data nasterii:</label>
-                <input type="date" id="data-nasterii" name="data-nasterii" required>
+                <input type="date" id="add_child_input_birthdate" name="data-nasterii" required>
               </div>
-              <button type="submit" class="confirm-button">Confirm</button>
+              <button type="submit" class="confirm-button" id="confirm-add-child">Confirm</button>
             </form>
           </div>
 
@@ -884,7 +876,6 @@
           </div>
         </div>
       </main>
-      <script src="index.js"></script>
       <script src="./dashboard.js"></script>
       <script type = "module" src="./dashboard_logic.js"></script>
     </body>

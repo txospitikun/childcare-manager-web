@@ -1,13 +1,18 @@
 export function setCookie(name, value, days) 
 {
-    console.log('cookie set');
     let expires = '';
     if (days) {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    console.log('cookie set');
+
+    const cookie_value = name + "=" + (value || "") + expires + "; path=/";
+    console.log(cookie_value);
+    document.cookie = cookie_value;
+    console.log('cookie set2');
+
 }
 
 export function getCookie(name)

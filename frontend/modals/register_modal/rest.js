@@ -1,3 +1,6 @@
+import config from './../../../config.js';
+import { sha256 } from './../../workers/crypto_worker.js';
+
 const register_fname = document.getElementById('register_fname');
 const register_lname = document.getElementById('register_lname');
 const register_email = document.getElementById('register_email');
@@ -20,11 +23,11 @@ confirm_register_bttn.addEventListener('click', () => {
     fname: register_fname.value,
     lname: register_lname.value,
     email: register_email.value,
-    password: register_password.value,
-    register_confirm_password: register_confirm_password.value
+    password: sha256(register_password.value),
+    register_confirm_password: sha256(register_confirm_password.value)
   };
 
-  fetch('http://localhost:5000/account_register', {
+  fetch(`${config.apiUrl}/account_register`, {
     mode: 'no-cors',
     method: 'POST',
     headers: {

@@ -1,5 +1,12 @@
+import { sha256 } from './../../workers/crypto_worker.js';
 import { setCookie, getCookie, deleteCookie } from '../../workers/cookie_worker.js';
+import config from './../../../config.js';
 
+function hash(text) {
+  const hmac = crypto.createHmac('sha256', key);
+  hmac.update(text);
+  return hmac.digest('hex');
+}
 
 const login_email = document.getElementById('login_email');
 const login_password = document.getElementById('login_password');
@@ -18,11 +25,11 @@ confirm_login_bttn.addEventListener('click', () => {
 
   let data = {
     email: login_email.value,
-    password: login_password.value,
+    password: sha256(login_password.value),
   };
 
 
-  fetch('http://localhost:5000/account_login', {
+  fetch(`${config.apiUrl}/account_login`, {
     mode: 'no-cors',
     method: 'POST',
     headers: {
@@ -44,12 +51,12 @@ confirm_login_bttn.addEventListener('click', () => {
             console.log(data);
             login_response.style.color = 'green';
             login_response.innerHTML = "Te-ai logat cu succes!";
-            console.log("begin cookie set");
+            console.log("begin cookie set1");
             setCookie('JWT', data['JWTToken'], 1);
             console.log("end cookie set");
             localStorage.setItem('userInfo', JSON.stringify(data['UserInfo']));
 
-            window.location.href = 'http://localhost:5500/frontend/dashboard/dashboard.html';
+            window.location.href = '/frontend/dashboard/dashboard.html';
             break;
         case 111:
             login_response.style.color = 'red';

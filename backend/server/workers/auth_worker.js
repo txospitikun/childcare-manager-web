@@ -70,7 +70,6 @@ async function handle_login(req, res)
             {
                 userInfo = searchedUser[0];
                 jwtToken = encryption_worker.encode(userInfo);
-                console.log(jwtToken);
             }
             
             client.release();
