@@ -86,7 +86,7 @@ Response:
 (User registered succesfully)
 {
     "RegisterResponse": 100,
-    "JWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImQxMjQxMjQyMTI0MmUyMm5uaXNAaGFsZmZsdXguY29tIiwiaWF0IjoiMjAyNC0wNS0yN1QyMDowNTo1OS44MDBaIn0=.i0GvYhd7Xv+G8DBHM+5fAh1rBaDHJCN6gaHppkJCyjU="
+    "JWT": "eyJhbGciOiJIUzI1NiIs...(the token is longer and should be saved as cookie)CN6gaHppkJCyjU="
 }
 
 (Email already exists)
