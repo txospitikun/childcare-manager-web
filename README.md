@@ -68,3 +68,39 @@ UserHandle:
 #1 -> eroare necunoscuta
 ```
 
+# RESTAPI
+
+# POSTS
+/api/register
+```
+Payload:
+{
+    "name":"dennis",
+    "prename":"alexandru",
+    "email":"dennis@hotmail.com",
+    "password":"parolamea",
+    "confirm_password":"parolamea"
+}
+
+Response:
+(User registered succesfully)
+{
+    "RegisterResponse": 100,
+    "JWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImQxMjQxMjQyMTI0MmUyMm5uaXNAaGFsZmZsdXguY29tIiwiaWF0IjoiMjAyNC0wNS0yN1QyMDowNTo1OS44MDBaIn0=.i0GvYhd7Xv+G8DBHM+5fAh1rBaDHJCN6gaHppkJCyjU="
+}
+
+(Email already exists)
+{
+    "RegisterResponse": 101
+}
+
+(Password mismatch)
+{
+    "RegisterResponse": 102
+}
+```
+
+/api/login
+```
+```
+
