@@ -86,7 +86,7 @@ Response:
 (User registered succesfully - Status: 200)
 {
     "RegisterResponse": 100,
-    "JWT": "eyJhbGciOiJIUzI1NiIs...(the token is longer and should be saved as cookie)CN6gaHppkJCyjU="
+    "JWT": "eyJ... (the token is longer and should be saved as cookie) ...ppkJCyjU="
 }
 
 (Email already exists - Status: 401)
@@ -102,5 +102,23 @@ Response:
 
 /api/login
 ```
+Payload:
+{
+    {
+    "email":"dennis@hotmail.com",
+    "password":"parolamea"
+}
+
+Response:
+(User authentificated sucessfully - Status: 200)
+{
+    "LoginResponse": 200,
+    "JWT": "eyJ... (the token is longer and should be saved as cookie) ...ppkJCyjU="
+}
+
+(User not found or password wrong - Status: 401)
+{
+    "LoginResponse": 201
+}
 ```
 
