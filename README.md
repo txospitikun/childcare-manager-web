@@ -71,7 +71,7 @@ UserHandle:
 # RESTAPI
 
 # POSTS
-/api/register
+##/api/register
 ```
 Payload:
 {
