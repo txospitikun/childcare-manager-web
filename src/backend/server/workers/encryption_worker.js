@@ -52,9 +52,15 @@ function decode(str) {
 
     if (hash === checkSum) {
         const payload = JSON.parse(decodeBase64(body));
+
+        const date = new Date(payload.iat);
+        const time_difference = date - new Date();
+
+        if(time_difference / (24 * 60 * 60 * 1000) > 5)
+            return false;
+        
         return {
             payload: payload,
-            issuedAt: payload.iat
         };
     } else {
         return false;

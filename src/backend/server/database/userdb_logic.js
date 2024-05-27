@@ -1,18 +1,17 @@
 const pool = require('./../database/connection.js');
 const User = require('./../modals/user_modal.js')
-const Register = require('./../modals/register_modal.js')
 
 const encryption_worker = require('./../workers/encryption_worker.js');
 
 
-async function insertUser(register) {
+async function insertUser(registerform) {
     try {
 
-        const encrypted_password = encryption_worker.hash(register.password);
+        const encrypted_password = encryption_worker.hash(registerform.password);
 
         const connection = await pool.getConnection();
         const query = 'INSERT INTO Users (Email, Password, FirstName, LastName, Privilege, Suspended) VALUES (?, ?, ?, ?, ?, ?)';
-        const [result] = await connection.query(query, [register.email, encrypted_password, register.firstname, register.lastname, 0, 0]);
+        const [result] = await connection.query(query, [registerform.email, encrypted_password, registerform.firstname, registerform.lastname, 0, 0]);
         connection.release();
         return result;
     } catch (error) {

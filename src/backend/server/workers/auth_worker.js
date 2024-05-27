@@ -8,8 +8,8 @@ const fetch_worker = require('./fetch_worker.js');
 const encryption_worker = require('./../workers/encryption_worker.js');
 
 // modals
-const Register = require('./../modals/register_modal.js');
-const Login = require('./../modals/login_modal.js');
+const Register = require('../request_modals/registerform_modal.js');
+const Login = require('../request_modals/loginform_modal.js');
 
 async function handle_register(req, res) 
 {

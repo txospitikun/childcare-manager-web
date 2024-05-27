@@ -1,60 +1,69 @@
 const encryption_worker = require('./encryption_worker');
 const db_logic = require('./../database/database_logic');
+const childrendb_logic = require('./../database/childrendb_logic');
+const userdb_logic = require('./../database/userdb_logic');
 const database = require('./../database/connection');
 
-async function loadUser(req, res)
-{
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-    req.on('end', async () => {
-        let data = JSON.parse(body);
-        let decodedToken = encryption_worker.decode(data);
-        if(decodedToken === false)
-        {
-            console.log("JWT couldn't be authentificated.");
-            res.writeHead(200, {'Content-Type': 'application/json',});
-            res.end(JSON.stringify({Response: 201, UserInfo: null}));
-        }
-        else
-        {
-            res.writeHead(200, {'Content-Type': 'application/json',});
-            res.end(JSON.stringify({Response: 200, UserInfo: decodedToken}));
-        }
+const fetch_worker = require('./fetch_worker');
 
-    });
-}
+const ChildrenForm = require('./../request_modals/childrenform_modal');
+
+const json_worker = require('./json_worker');
 
 async function insertChildren(req, res)
 {
-    let body = '';
-    req.on('data', (chunk) => 
+    try
     {
-        body += chunk.toString();
-    });
+        const parsedData = await fetch_worker.handle_request(req);
 
-    req.on('end', async () =>
-    {
-        const data = JSON.parse(body);
-        let decodedJWTToken = encryption_worker.decode(data["JWT"]);
+        const decoded_jwt_token = encryption_worker.decode(parsedData.JWT);
 
-        if(decodedJWTToken === false)
+        if(decoded_jwt_token === false)
         {
-            console.log("JWT couldn't be authentificated.");
             res.writeHead(200, {'Content-Type': 'application/json',});
-            res.end(JSON.stringify({Response: 201, UserInfo: null}));
+            res.end(JSON.stringify({InsertChildrenResponse: 10}));
+            return;
         }
-        else
+
+        const User = await userdb_logic.findUserByEmail(decoded_jwt_token.payload.Email);
+        console.log(User);
+
+        if(User == null)
         {
-            const client = await database.connect();
-            console.log(decodedJWTToken);
-            db_logic.insertChildrenForID(client, decodedJWTToken["id"], data["ChildrenInfo"]["FirstName"], data["ChildrenInfo"]["LastName"], data["ChildrenInfo"]["Sex"], data["ChildrenInfo"]["Birthdate"])
-            console.log(data["ChildrenInfo"]);
-            client.release();
+            throw new Error("Backend error.");
         }
+
         
-    });
+
+
+        
+
+
+        const childrenform = new ChildrenForm(parsedData);
+
+        if(json_worker.isNullOrEmpty(childrenform.FirstName) || json_worker.isNullOrEmpty(childrenform.LastName) || json_worker.isNullOrEmpty(childrenform.Gender) || json_worker.isNullOrEmpty(childrenform.DateOfBirth))
+        {
+            res.writeHead(401, {'Content-Type': 'application/json',});
+            res.end(JSON.stringify({ InsertChildrenResponse: ChildrenForm.response_invalid_form_data }));
+            return;
+        }
+
+        await childrendb_logic.insertChildren(User.ID, childrenform);
+
+        res.writeHead(200, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({ InsertChildrenResponse: ChildrenForm.response_children_added_succesfully }));
+
+
+        console.log(childrenform);
+
+    }
+    catch(err)
+    {
+        console.log("Server error: Couldn't insert children in the database! ", err);
+
+        res.writeHead(500, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({ InsertChildrenResponse: ChildrenForm.response_backend_error }));
+    }
 }
 
 async function loadChildren(req, res)
@@ -91,4 +100,4 @@ async function loadChildren(req, res)
     });
 }
 
-module.exports = {loadUser, loadChildren, insertChildren}
+module.exports = {loadChildren, insertChildren}
