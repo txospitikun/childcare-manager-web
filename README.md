@@ -4,35 +4,37 @@
 Users:
 ```
 CREATE TABLE Users (
-    ID SERIAL PRIMARY KEY,
-    Email VARCHAR NOT NULL,
-    Password VARCHAR NOT NULL,
-    RegisterDate DATE NOT NULL DEFAULT CURRENT_DATE,
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Email VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    RegisterDate DATE NOT NULL DEFAULT (CURRENT_DATE),
     Privilege INT NOT NULL,
     Suspended BOOLEAN NOT NULL,
-    FirstName VARCHAR NOT NULL,
-    LastName VARCHAR NOT NULL,
-    PhoneNo VARCHAR,
-    Location VARCHAR,
-    Language VARCHAR,
-    CivilState BOOL,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    PhoneNo VARCHAR(20),
+    Location VARCHAR(255),
+    Language VARCHAR(255),
+    CivilState BOOLEAN,
     CivilPartner INT,
     AccountType INT,
-    PictureRef VARCHAR
+    PictureRef VARCHAR(255)
 );
+
 ```
 Children:
 ```
 CREATE TABLE Childrens (
-    ID SERIAL PRIMARY KEY,
-    FirstName VARCHAR NOT NULL,
-    LastName VARCHAR NOT NULL,
-    Gender VARCHAR NOT NULL,
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(255) NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    Gender VARCHAR(255) NOT NULL,
     DateOfBirth DATE NOT NULL,
-    PictureRef VARCHAR,
+    PictureRef VARCHAR(255),
     UserID INT NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
+
 ```
 Relations:
 ```
