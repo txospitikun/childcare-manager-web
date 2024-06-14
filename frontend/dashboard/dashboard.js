@@ -114,58 +114,56 @@ document.querySelectorAll('.dashboard-button').forEach(function(button) {
 });
 
 var buttonDisplayMap = {
-    "feeding-bttn": document.getElementById('feedingElement'),
-    "sleeping-bttn": document.getElementById('sleepingElement'),
+    "feeding-bttn": document.getElementById('feeding_items'),
+    "sleeping-bttn": document.getElementById('sleeping_items'),
     "media-bttn": document.getElementById('mediaElement'),
     "evolution-bttn": document.getElementById('evolutionElement'),
     "medical-bttn": document.getElementById('medicalElement')
 };
 
-currentSelectedAttribute = document.getElementById('evolution-bttn');
+currentSelectedAttribute = document.getElementById('feeding-bttn');
 
 if (currentSelectedAttribute) {
     currentSelectedAttribute.style.border = "2px solid black";
 }
 
-if (buttonDisplayMap['evolution-bttn']) {
-    buttonDisplayMap['evolution-bttn'].style.display = "";
+if (buttonDisplayMap['feeding-bttn']) {
+    buttonDisplayMap['feeding-bttn'].style.display = "";
 }
 
 document.querySelectorAll('.attribute-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-        if(currentSelectedAttribute)
-        {
-            currentSelectedAttribute.style.border = "";
-        }
+  button.addEventListener('click', function() {
+      if(currentSelectedAttribute)
+      {
+          currentSelectedAttribute.style.border = "";
+      }
 
-        
-        for (var key in buttonDisplayMap) {
-            if (buttonDisplayMap[key]) { 
-                buttonDisplayMap[key].style.display = "none";
-            }
-        }
+      for (var key in buttonDisplayMap) {
+          if (buttonDisplayMap[key]) { 
+              buttonDisplayMap[key].style.display = "none";
+          }
+      }
 
-        if (this.id in buttonDisplayMap && buttonDisplayMap[this.id]) {
-            buttonDisplayMap[this.id].style.display = "";
-        }
+      if (this.id in buttonDisplayMap && buttonDisplayMap[this.id]) {
+          buttonDisplayMap[this.id].style.display = "";
+      }
 
-        currentSelectedAttribute = this;
-        this.style.border = "2px solid black";
-    });
+      // If the clicked button is either 'feeding-bttn' or 'sleeping-bttn', display the 'calendarContainer'
+      if (this.id === 'feeding-bttn' || this.id === 'sleeping-bttn') {
+          document.getElementById('calendarContainer').style.display = "";
+      } else {
+          // If the clicked button is not 'feeding-bttn' or 'sleeping-bttn', hide the 'calendarContainer'
+          document.getElementById('calendarContainer').style.display = "none";
+      }
+
+      currentSelectedAttribute = this;
+      this.style.border = "2px solid black";
+  });
 });
 
-var modal = document.getElementById("myModal");
+document.getElementById('feeding-bttn').click();
 
-var img = document.getElementsByClassName('modal-image');
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
-for (let i = 0; i < img.length; i++) {
-  img[i].onclick = function(){
-    modal.style.display = "block";
-    modalImg.src = this.src;
-    captionText.innerHTML = this.nextElementSibling.innerHTML;
-  }
-}
+var modal = document.getElementById("myModal");
 
 var span = document.getElementsByClassName("close")[0];
 
@@ -212,76 +210,164 @@ span.onclick = function() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const calendarContainer = document.getElementById("feedingCalendar");
-    const monthYearDisplay = document.getElementById("month-year");
-    const previousMonthButton = document.getElementById("previous-month-button");
-    const nextMonthButton = document.getElementById("next-month-button");
-  
-    let currentDate = new Date();
-    
-    function updateCalendar() {
+  const calendarContainer = document.getElementById("calendarElement");
+  const monthYearDisplay = document.getElementById("month-year");
+  const previousMonthButton = document.getElementById("previous-month-button");
+  const nextMonthButton = document.getElementById("next-month-button");
+  const currentDayTitle = document.getElementById("current-day-title");
+
+  let currentDate = new Date();
+  let today = new Date();
+  let selectedDate = null;
+
+  function updateCalendar() {
       calendarContainer.innerHTML = "";
-  
+
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
-  
-      monthYearDisplay.textContent = currentDate.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
-  
+
+      let dateString = currentDate.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
+      dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+      monthYearDisplay.textContent = dateString;
+
       const firstDayOfMonth = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
-  
+
       const prevMonthDays = (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1);
       const prevMonthLastDate = new Date(year, month, 0).getDate();
-  
+
+      // Add previous month's days
       for (let i = prevMonthLastDate - prevMonthDays + 1; i <= prevMonthLastDate; i++) {
-        calendarContainer.appendChild(createCalendarDate(i, "not-current"));
+          calendarContainer.appendChild(createCalendarDate(i, "not-current", new Date(year, month - 1, i)));
       }
-  
+
+      // Add current month's days
       for (let day = 1; day <= daysInMonth; day++) {
-        calendarContainer.appendChild(createCalendarDate(day, ""));
+          const date = new Date(year, month, day);
+          const isToday = date.toDateString() === today.toDateString();
+          const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+          calendarContainer.appendChild(createCalendarDate(day, isToday || isSelected ? "current" : "", date));
+          if (isToday && !selectedDate) {
+              updateCurrentDayTitle(date);
+          }
       }
-  
-      const nextMonthDays = (35 - prevMonthDays - daysInMonth);
+
+      // Calculate the number of days to add from the next month
+      const totalDays = prevMonthDays + daysInMonth;
+      let nextMonthDays = 35 - totalDays;
+      if (nextMonthDays < 0) {
+          nextMonthDays = 42 - totalDays;
+      }
+
+      // Add next month's days
       for (let i = 1; i <= nextMonthDays; i++) {
-        calendarContainer.appendChild(createCalendarDate(i, "not-current"));
+          const date = new Date(year, month + 1, i);
+          const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+          calendarContainer.appendChild(createCalendarDate(i, "not-current", date));
+          if (isSelected && date.getMonth() === month + 1) {
+              const dateDiv = calendarContainer.lastChild;
+              dateDiv.classList.add('current');
+          }
       }
-    }
-  
-    function createCalendarDate(day, additionalClass) {
+
+      // Calculate the number of rows needed for the current month
+      const numRows = Math.ceil((prevMonthDays + daysInMonth + nextMonthDays) / 7);
+
+      // Update the CSS for the calendar container
+      calendarContainer.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
+  }
+
+  function createCalendarDate(day, additionalClass, date) {
       const dateDiv = document.createElement("div");
-      dateDiv.className = `feeding-calendar-date ${additionalClass}`;
+      dateDiv.className = `calendar-date ${additionalClass}`;
       
       const dayDiv = document.createElement("div");
-      dayDiv.className = "feeding-calendar-date-day";
+      dayDiv.className = "calendar-date-day";
       dayDiv.textContent = day;
       
       const feedCountDiv = document.createElement("div");
-      feedCountDiv.className = "feeding-calendar-date-feed-count";
+      feedCountDiv.className = "calendar-date-feed-count";
       feedCountDiv.textContent = "5*";
       
       dateDiv.appendChild(dayDiv);
       dateDiv.appendChild(feedCountDiv);
       
       dateDiv.addEventListener("click", function() {
-        document.querySelectorAll('.feeding-calendar-date.current').forEach(el => {
-          el.classList.remove('current');
-        });
-        dateDiv.classList.add('current');
+          document.querySelectorAll('.calendar-date.current').forEach(el => {
+              el.classList.remove('current');
+          });
+          dateDiv.classList.add('current');
+          
+          // Update the current-day-title div
+          updateCurrentDayTitle(date);
+          if (selectedDate && date.toDateString() !== selectedDate.toDateString()) {
+              selectedDate = date;
+          } else if (!selectedDate) {
+              selectedDate = date;
+          }
       });
       
       return dateDiv;
-    }
-  
-    previousMonthButton.addEventListener("click", function() {
+  }
+
+  function updateCurrentDayTitle(date) {
+      const dayOfWeek = date.toLocaleDateString('ro-RO', { weekday: 'long' });
+      const dayAndMonth = date.toLocaleDateString('ro-RO', { day: 'numeric', month: 'long' });
+      currentDayTitle.innerHTML = `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)}<br>${dayAndMonth.charAt(0).toUpperCase() + dayAndMonth.slice(1)}`;
+  }
+
+  previousMonthButton.addEventListener("click", function() {
       currentDate.setMonth(currentDate.getMonth() - 1);
       updateCalendar();
-    });
-  
-    nextMonthButton.addEventListener("click", function() {
+  });
+
+  nextMonthButton.addEventListener("click", function() {
       currentDate.setMonth(currentDate.getMonth() + 1);
       updateCalendar();
-    });
-  
-    updateCalendar();
   });
-  
+
+  updateCalendar();
+});
+
+const figures = [
+  { src: '../placeholders/child1.jpg', caption: '17 Mai 2024' },
+  { src: '../placeholders/child2.jpg', caption: '23 aprilie 2023' },
+  { src: '../placeholders/child3.jpg', caption: '19 decembrie 2022' },
+  { src: '../placeholders/child4.jpg', caption: '14 mai 2024' },
+  { src: '../placeholders/user1.jpg', caption: '23 august 2005' },
+  { src: '../placeholders/user1.jpg', caption: '3 martie 2024' },
+  { src: '../placeholders/user1.jpg', caption: '8 martie 2023' },
+  { src: '../placeholders/user1.jpg', caption: '29 februarie 2020' },
+  { src: '../placeholders/child1.jpg', caption: '30 iulie 2023' },
+  { src: '../placeholders/child2.jpg', caption: '1 iunie 2022' },
+  { src: '../placeholders/child3.jpg', caption: '26 septembrie 2022' },
+  { src: '../placeholders/child4.jpg', caption: '2 octombrie 2023' },
+];
+
+const gallery = document.querySelector('.gallery');
+
+for (const figure of figures) {
+  const figureElement = document.createElement('figure');
+
+  const img = document.createElement('img');
+  img.src = figure.src;
+  img.classList.add('modal-image');
+  figureElement.appendChild(img);
+
+  const figcaption = document.createElement('figcaption');
+  figcaption.textContent = figure.caption;
+  figureElement.appendChild(figcaption);
+
+  gallery.appendChild(figureElement);
+}
+
+var img = document.getElementsByClassName('modal-image');
+var modalImg = document.getElementById("img01");
+var captionText = document.getElementById("caption");
+for (let i = 0; i < img.length; i++) {
+  img[i].onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    captionText.innerHTML = this.nextElementSibling.innerHTML;
+  }
+}

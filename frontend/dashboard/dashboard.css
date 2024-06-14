@@ -25,7 +25,12 @@ body {
 
 @font-face {
 	font-family: Montreal;
-	src: url(../assets/fonts/Montreal-Regular.ttf);
+	src: url(../assets/fonts/Montreal-Regular.ttf);	
+}
+
+@font-face {
+	font-family: Montserrat;
+	src:url(../assets/fonts/Montserrat-Regular.ttf);
 }
 
 .main-wrapper {
@@ -341,7 +346,7 @@ body {
 	grid-column: 2 / 40;
 }
 
-.feeding-calendar-container {
+.calendar-container {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
@@ -432,14 +437,14 @@ body {
 	height: 100%;
 	width: 100%;
 	padding:1rem;
+	overflow:auto;
 }
 
-.feeding-calendar-container-info {
+.calendar-container-info {
 	height: 100%;
 	width: 30%;
 	display: flex;
 	flex-direction: column;
-	overflow-y: auto;
 	gap:1rem;
 }
 
@@ -448,42 +453,37 @@ body {
 	font-weight: 500;
 }
 
-.feeding-items {
+.calendar-items {
 	display: flex;
 	flex-direction: column;
+	overflow-y: auto;
 	gap:0.5rem;
 }
 
-/* .feeding-items>p {
-	font-size: 3em;
-	font-weight: 500;
-	margin: 5%;
-} */
-
-.feeding-item {
+.calendar-item {
 	display: flex;
 	flex-direction: column;
 	width:90%;
 }
 
-.feeding-item:hover {
+.calendar-item:hover {
 	background-color: #C95934;
 }
 
-.feeding-item p {
+.calendar-item p {
 	font-size: 1rem;
 	font-weight: 300;
 }
 
-.feeding-calendar-dates {
+.calendar-dates {
 	height: 100%;
 	width: 70%;
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
-	grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(auto-fill, minmax(20%, 1fr));
 }
 
-.feeding-calendar-date {
+.calendar-date {
 	border-radius: 1rem;
 	display: flex;
 	justify-content: space-evenly;
@@ -492,19 +492,19 @@ body {
 	padding:0.5rem;
 }
 
-.feeding-calendar-date:hover {
+.calendar-date:hover {
 	background-color: #D1BB9E;
 	cursor: pointer;
 	user-select: none;
 }
 
-.feeding-calendar-date-feed-count {
+.calendar-date-feed-count {
 	font-size: 1.2em;
 	font-weight: 300;
 }
 
 @media only screen and (min-width: 1001px) {
-	.feeding-calendar-date-day {
+	.calendar-date-day {
 		font-size: 2.5em;
 		font-weight: 500;
 	}
@@ -706,7 +706,7 @@ body {
 		padding-left: 5%;
 	}
 
-	.feeding-calendar-date-day {
+	.calendar-date-day {
 		font-size: 1.6em;
 		font-weight: 500;
 		margin: 5%;
@@ -880,7 +880,7 @@ body {
 		padding-left: 5%;
 	}
 
-	.feeding-calendar-container-info {
+	.calendar-container-info {
 		height: 100%;
 		width: 500%;
 		display: flex;
@@ -888,7 +888,7 @@ body {
 		overflow-y: auto;
 	}
 
-	.feeding-calendar-dates {
+	.calendar-dates {
 		height: 100%;
 		width: 70%;
 		display: grid;
@@ -898,13 +898,13 @@ body {
 		overflow: auto;
 	}
 
-	.feeding-calendar-date-day {
+	.calendar-date-day {
 		font-size: 1.5em;
 		font-weight: 500;
 		margin: 3%;
 	}
 
-	.feeding-calendar-date-feed-count {
+	.calendar-date-feed-count {
 		font-size: 0.6em;
 		font-weight: 200;
 		margin: 3%;

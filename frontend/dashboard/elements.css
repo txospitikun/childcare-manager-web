@@ -1,4 +1,4 @@
-.mediaContainer{
+.media-container{
     height:100%;
     width:100%;
     padding:16px;
@@ -8,12 +8,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    width: 95%;
+    width: 100%;
     margin: auto;
     box-sizing: border-box;
     justify-content: space-between;
     padding: 0 16px;
-    height: 95%; 
+    height: 100%; 
     overflow-y: auto;
 }
 
