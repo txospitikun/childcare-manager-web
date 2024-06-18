@@ -17,9 +17,20 @@ async function insertChildren(ID, childrenform)
     }
 }
 
-async function getAllChildren(ID) 
+async function getChildrensByID(ID) 
 {
-    
+    try 
+    {
+        console.log(ID);
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM Childrens WHERE UserID = ?';
+        const [result] = await connection.query(query, [ID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error fetching children:', error);
+        throw error;
+    }
 }
 
-module.exports = {insertChildren, getAllChildren};
+module.exports = {insertChildren, getChildrensByID};

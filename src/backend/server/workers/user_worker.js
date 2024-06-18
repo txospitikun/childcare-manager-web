@@ -3,20 +3,20 @@ const db_logic = require('./../database/database_logic');
 const childrendb_logic = require('./../database/childrendb_logic');
 const userdb_logic = require('./../database/userdb_logic');
 const database = require('./../database/connection');
-
 const fetch_worker = require('./fetch_worker');
 
 const ChildrenForm = require('./../request_modals/childrenform_modal');
-
 const json_worker = require('./json_worker');
+const cookie_worker = require('./cookie_worker');
 
 async function insertChildren(req, res)
 {
     try
     {
         const parsedData = await fetch_worker.handle_request(req);
+        const cookies = await cookie_worker.parseCookies(req);
 
-        const decoded_jwt_token = encryption_worker.decode(parsedData.JWT);
+        const decoded_jwt_token = encryption_worker.decode(cookies['JWT']);
 
         if(decoded_jwt_token === false)
         {
@@ -25,19 +25,12 @@ async function insertChildren(req, res)
             return;
         }
 
-        const User = await userdb_logic.findUserByEmail(decoded_jwt_token.payload.Email);
-        console.log(User);
+        const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
 
         if(User == null)
         {
             throw new Error("Backend error.");
         }
-
-        
-
-
-        
-
 
         const childrenform = new ChildrenForm(parsedData);
 
@@ -66,38 +59,24 @@ async function insertChildren(req, res)
     }
 }
 
-async function loadChildren(req, res)
+async function loadSelfChildren(req, res)
 {
-    let body = '';
-    req.on('data', (chunk) => 
+    const cookies = await cookie_worker.parseCookies(req);
+    const decoded_jwt_token = encryption_worker.decode(cookies['JWT']);
+    if(decoded_jwt_token === false)
     {
-        body += chunk.toString();
-    });
-
-    req.on('end', async () =>
+        console.log("JWT couldn't be authentificated.");
+        res.writeHead(200, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({Response: 201, UserInfo: null}));
+    }
+    else
     {
-        let data = JSON.parse(body);
-        let decodedJWTToken = encryption_worker.decode(data);
-
-        if(decodedJWTToken === false)
-            {
-                console.log("JWT couldn't be authentificated.");
-                res.writeHead(200, {'Content-Type': 'application/json',});
-                res.end(JSON.stringify({Response: 201, UserInfo: null}));
-            }
-            else
-            {
-                const client = await database.connect();
-                console.log(decodedJWTToken["id"]);
-                let childrenInfo = await db_logic.findChildrensByID(client, decodedJWTToken["id"]);
-                console.log(childrenInfo);
-                res.writeHead(200, {'Content-Type': 'application/json',});
-
-                res.end(JSON.stringify({Response: 202, ChildrenInfo: childrenInfo}));
-                client.release();
-            }
         
-    });
+        let childrenInfo = await childrendb_logic.getChildrensByID(decoded_jwt_token.payload.UserID);
+        console.log(childrenInfo);
+        res.writeHead(200, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({Response: 202, ChildrenInfo: childrenInfo}));
+    }
 }
 
-module.exports = {loadChildren, insertChildren}
+module.exports = {loadSelfChildren, insertChildren}

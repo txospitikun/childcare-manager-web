@@ -34,9 +34,9 @@ async function handle_register(req, res)
         }
         else
         {
-            await userdb_logic.insertUser(register);
+            const registered_user = await userdb_logic.insertUser(register);
             
-            const jwt_token = encryption_worker.encode({Email: register.email});
+            const jwt_token = encryption_worker.encode({Email: registered_user.ID});
 
             res.writeHead(200, {'Content-Type': 'application/json',});
             res.end(JSON.stringify({ RegisterResponse: Register.response_register_succesful, JWT: jwt_token}));
@@ -77,7 +77,7 @@ async function handle_login(req, res)
             return;
         }
 
-        const jwt_token = encryption_worker.encode({Email: login.email});
+        const jwt_token = encryption_worker.encode({UserID: foundUser.ID});
 
         res.writeHead(200, {'Content-Type': 'application/json',});
         res.end(JSON.stringify({ LoginResponse: Login.response_login_succesful, JWT: jwt_token}));

@@ -12,22 +12,25 @@ async function insertUser(registerform) {
         const connection = await pool.getConnection();
         const query = 'INSERT INTO Users (Email, Password, FirstName, LastName, Privilege, Suspended) VALUES (?, ?, ?, ?, ?, ?)';
         const [result] = await connection.query(query, [registerform.email, encrypted_password, registerform.firstname, registerform.lastname, 0, 0]);
+        const userId = result.insertId;
+        const [rows] = await connection.query('SELECT * FROM Users WHERE ID = ?', [userId]);
         connection.release();
-        return result;
+        return new User(rows[0]);
     } catch (error) {
         console.error('Error inserting user:', error);
         throw error;
     }
 }
 
-async function findUserByID(client, ID) {
+async function findUserByID(ID) {
     try 
     {
         const connection = await pool.getConnection();
         const query = 'SELECT * FROM Users WHERE ID = ?';
         const [result] = await connection.query(query, [ID]);
+        console.log(result);
+        const user = new User(result[0]); 
         connection.release();
-        const user = new User(result); 
         return user;
     } 
     catch (error) 
