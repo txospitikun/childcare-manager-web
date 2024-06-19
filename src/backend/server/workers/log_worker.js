@@ -7,6 +7,5 @@ class logger
         if(!IS_ENABLED)
             return;
 
-        console.log(message);
     }
 }

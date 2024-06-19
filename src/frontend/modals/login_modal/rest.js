@@ -44,7 +44,6 @@ confirm_login_bttn.addEventListener('click', () => {
     return response.json();
   })
   .then(data => {
-    console.log(data);
     switch(data['LoginResponse'])
     {
         case 110:

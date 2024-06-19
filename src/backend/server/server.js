@@ -36,6 +36,9 @@ http.createServer((req, res) =>
                 case '/insert_children':
                     user_worker.insertChildren(req, res);
                     break;
+                case '/insert_feeding_entry':
+                    user_worker.insertFeedingEntry(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -47,6 +50,12 @@ http.createServer((req, res) =>
                 case '/get_user_children':
                     user_worker.loadSelfChildren(req, res);
                     break;
+                case '/get_feeding_entry':
+                    user_worker.getFeedingEntry(req, res);
+                    break;
+                case '/get_feeding_entries_by_date':
+                    user_worker.getFeedingEntriesByDate(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -55,6 +64,9 @@ http.createServer((req, res) =>
         case 'PUT':
             switch(parsedUrl.pathname)
             {
+                case '/edit_feeding_entry':
+                    user_worker.editFeedingEntry(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -64,6 +76,9 @@ http.createServer((req, res) =>
         case 'DELETE':
             switch(parsedUrl.pathname)
             {
+                case '/delete_feeding_entry':
+                    user_worker.deleteFeedingEntry(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');

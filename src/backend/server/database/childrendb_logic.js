@@ -21,7 +21,6 @@ async function getChildrensByID(ID)
 {
     try 
     {
-        console.log(ID);
         const connection = await pool.getConnection();
         const query = 'SELECT * FROM Childrens WHERE UserID = ?';
         const [result] = await connection.query(query, [ID]);

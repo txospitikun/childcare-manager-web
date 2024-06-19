@@ -28,8 +28,7 @@ async function findUserByID(ID) {
         const connection = await pool.getConnection();
         const query = 'SELECT * FROM Users WHERE ID = ?';
         const [result] = await connection.query(query, [ID]);
-        console.log(result);
-        const user = new User(result[0]); 
+        const user = new User(result[0]);
         connection.release();
         return user;
     } 
