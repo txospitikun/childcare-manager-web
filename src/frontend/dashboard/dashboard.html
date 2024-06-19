@@ -62,8 +62,45 @@
                     <p>17 ani - adolescent</p>
                   </div>
                 </a>
-              <button class="children-add-button default-button" id="add-child-bttn">+</button>
-
+                <div class="children-container">
+                  <img src="../placeholders/child3.jpg" class="photo-container" alt="no">
+                  <div class="info-container">
+                    <p>Ciotir Marian</p>
+                    <p>13 ani - copil</p>
+                  </div>
+                </div>
+                <div class="children-container">
+                  <img src="../placeholders/child4.jpg" class="photo-container" alt="n/a">
+                  <div class="info-container">
+                    <p>Cazan Rareș</p>
+                    <p>3 ani - infant</p>
+                  </div>
+                </div>
+                <button class="children-add-button default-button" id="add-child-bttn">+</button>
+                <div class="main-modal" id="add-child-modal">
+                  <div class="popup-form-wrapper">
+                    <button class="close-button">&times;</button>
+                    <h2 class="popup-title">Adaugă un copil nou</h2>
+                    <form class="popup-form">
+                      <div class="form-group">
+                        <label for="prenume">Prenume:</label>
+                        <input type="text" id="prenume" name="prenume" placeholder="Ex: Ion" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="sex">Sex:</label>
+                        <select id="sex" name="sex" required>
+                          <option value="male">Bărbat</option>
+                          <option value="female">Femeie</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="data-nasterii">Data nasterii:</label>
+                        <input type="date" id="data-nasterii" name="data-nasterii" required>
+                      </div>
+                      <button type="submit" class="confirm-button">Confirm</button>
+                    </form>
+                  </div>
+                </div>
               </div>
               
               <div class="dashboard-info">
@@ -91,10 +128,63 @@
                   <span>Sănătate</span>
                 </button>
                 <div class="dashboard-content">
-                  <div class="feeding-calendar-container" id="feedingElement" style="display:none;">
+                  <div class="calendar-container" id="calendarContainer" style="display:none;">
                     <div class="upper-content">
                       <div class="left-upper-content">
                         <button class="calendar-bttn default-button" id="add-table-bttn">Adaugă</button>
+                        <div class="main-modal" id="add-meal-modal">
+                          <div class="popup-form-wrapper">
+                            <button class="close-button">&times;</button>
+                            <h2 class="popup-title">Adauga o noua masa</h2>
+                            <form class="popup-form">
+                              <div class="form-group"> 
+                                <div > 
+                                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
+                                </div> 
+                              </div>
+                              <div class="form-group" id="date-and-time-inputs-add-table" style="display: none;">
+                                <label for="data">Data:</label>
+                                <input type="date" id="data_add_table" name="data">
+                                <label for="timp">Timp:</label> <br>
+                                <input type="time" id="time_add_table" name="timp">
+                              </div>
+                              <div class="form-group">
+                                <label for="mass-selector">Unitate de cântărire:</label>
+                                <select id="mass-selector" name="mass-selector">
+                                  <option value="grame">Grame</option>
+                                  <option value="miligrame">Miligrame</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label for="mass-input">Cantitate:</label>
+                                <input type="number" id="mass-input" name="mass-input" min="0" required>
+                              </div>
+                              <div class="form-group">
+                                <button type="button" class="add-selected-food-button confirm-button">Crează un aliment nou.</button>
+                              </div>
+                              <div class="form-group">
+                                <label for="food-selector">Aliment:</label>
+                                <select id="food-selector" name="food-selector">
+                                  <option value="carrots">Morcov</option>
+                                  <option value="milk">Lapte</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <button type="button" class="add-selected-food-button confirm-button">Adaugă alimentul selectat.</button>
+                              </div>
+                              
+                              <div class="form-group" id="custom-food-inputs" style="display: none;">
+                                <label for="custom-food-name">Nume:</label>
+                                <input type="text" id="custom-food-name" name="custom-food-name" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="text">Text:</label>
+                                <textarea id="text_add_table" name="text" maxlength="300" required></textarea>
+                              </div>
+                              <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
+                            </form>
+                          </div>
+                        </div>
                         <button class="calendar-bttn default-button">Modifică</button>
                         <button class="calendar-bttn default-button">Elimină</button>
                       </div>
@@ -116,37 +206,37 @@
                       </div>
                     </div>
                     <div class="bottom-content">
-                      <div class="feeding-calendar-container-info">
-                        <p class="current-day-title">Sâmbătă <br>11 Aprilie </p>
-                        <div class="feeding-items">
-                          <div class="feeding-item">
+                      <div class="calendar-container-info">
+                        <div class="current-day-title" id="current-day-title"> </div>
+                        <div class="calendar-items" id="feeding_items">
+                          <div class="calendar-item">
                             <p>08:00</p>
                             <p>- 100g pastrama</p>
                             <p>- 50g laptic</p>
                             <p>- 100g pastrama</p>
                           </div>
-                          <div class="feeding-item">
+                          <div class="calendar-item">
                             <p>09:30</p>
                             <p>- 80g lăptic</p>
                           </div>
-                          <div class="feeding-item">
+                          <div class="calendar-item">
                             <p>12:30</p>
                             <p>- 50g lăptic de matcă</p>
                           </div>
-                          <div class="feeding-item">
+                          <div class="calendar-item">
                             <p>15:45</p>
                             <p>- 100g pastrama</p>
                             <p>- 50g laptic</p>
                             <p>- 100g pastrama</p>
                           </div>
-                          <div class="feeding-item">
+                          <div class="calendar-item">
                             <p>19:30</p>
                             <p>- 50g lăptic de matcă</p>
                             <p>- 100g pastrama</p>
                             <p>- 50g laptic</p>
                             <p>- 100g pastrama</p>
                           </div>
-                          <div class="feeding-item">
+                          <div class="calendar-item">
                             <p>19:30</p>
                             <p>- 50g lăptic de matcă</p>
                             <p>- 100g pastrama</p>
@@ -154,398 +244,28 @@
                             <p>- 100g pastrama</p>
                           </div>
                         </div>
+                        <div class="calendar-items" id="sleeping_items" style="display: none;">
+                          <div class="calendar-item">
+                            <p>22:00</p>
+                            <p>- Slept for 8 hours</p>
+                          </div>
+                        </div>
                       </div>
-                      <div class="feeding-calendar-dates" id="feedingCalendar">
-                        <!-- <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day">30</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day">31</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">1</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">2</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">3</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">4</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">5</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">6</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">7</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">8</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">9</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">10</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date current">
-                          <div class="feeding-calendar-date-day">11</div>
-                          <div class="feeding-calendar-date-feed-count">5</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">12</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">13</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">14</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">15</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">16</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">17</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">18</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">19</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">20</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">21</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">22</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">23</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">24</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">25</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">26</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">27</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">28</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">29</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">30</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">31</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day">1</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day n">2</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div> -->
-                      </div>
+                      <div class="calendar-dates" id="calendarElement"></div>
                     </div>
                   </div>
-                <div class="feeding-calendar-container" id="sleepingElement" style="display: none;">
-                    <div class="upper-content">
-                      <div class="left-upper-content">
-                        <button class="calendar-bttn default-button" id="add-table-bttn">Adaugă</button>
-                        <button class="calendar-bttn default-button">Modifică</button>
-                        <button class="calendar-bttn default-button">Elimină</button>
-                      </div>
-                      <div class="right-upper-content">
-                        <div class="current-month">
-                          Aprilie 2024
-                        </div>
-                        <div class="weekdays-container">
-                          <div class="current-day">Lu.</div>
-                          <div class="current-day">Ma.</div>
-                          <div class="current-day">Mi.</div>
-                          <div class="current-day">Jo.</div>
-                          <div class="current-day">Vi.</div>
-                          <div class="current-day">Sâ.</div>
-                          <div class="current-day">Du.</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="bottom-content">
-                      <div class="feeding-calendar-container-info">
-                        <p class="current-day-title">Vineri <br>17 Mai </p>
-                        <div class="feeding-items">
-                          <div class="feeding-item">
-                            <p>Somn 1</p>
-                            <p>23:00 - 08:00</p>
-                            <p>9 ore de somn</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>Somn 2</p>
-                            <p>15:00 - 17:00</p>
-                            <p>2 ore de somn</p>
-                          </div>
-                          <div class="feeding-item">
-                            <p>Total somn</p>
-                            <p>11 ore de somn</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="feeding-calendar-dates">
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day">30</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day">31</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">1</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">2</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">3</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">4</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">5</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">6</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">7</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">8</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">9</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">10</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">11</div>
-                          <div class="feeding-calendar-date-feed-count">5</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">12</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">13</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">14</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">15</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">16</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date current">
-                          <div class="feeding-calendar-date-day">17</div>
-                          <div class="feeding-calendar-date-feed-count">5</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">18</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">19</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">20</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">21</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">22</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">23</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">24</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">25</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">26</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">27</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">28</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">29</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">30</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date">
-                          <div class="feeding-calendar-date-day">31</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day">1</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                        <div class="feeding-calendar-date not-current">
-                          <div class="feeding-calendar-date-day n">2</div>
-                          <div class="feeding-calendar-date-feed-count">5*</div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
                 
-                <div class="mediaContainer" id="mediaElement" style="display: none;">
-                  <div class="gallery">
-                    <figure>
-                      <img src="../placeholders/child1.jpg" class="modal-image">
-                      <figcaption>17 Mai 2024</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child2.jpg" class="modal-image">
-                      <figcaption>23 aprilie 2023</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child3.jpg" class="modal-image">
-                      <figcaption>19 decembrie 2022</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child4.jpg" class="modal-image">
-                      <figcaption>14 mai 2024</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/user1.jpg" class="modal-image">
-                      <figcaption>23 august 2005</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/user1.jpg" class="modal-image">
-                      <figcaption>3 martie 2024</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/user1.jpg" class="modal-image">
-                      <figcaption>8 martie 2023</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/user1.jpg" class="modal-image">
-                      <figcaption>29 februarie 2020</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child1.jpg" class="modal-image">
-                      <figcaption>30 iulie 2023</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child2.jpg" class="modal-image">
-                      <figcaption>1 iunie 2022</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child3.jpg" class="modal-image">
-                      <figcaption>26 septembrie 2022</figcaption>
-                    </figure>
-                    <figure>
-                      <img src="../placeholders/child4.jpg" class="modal-image">
-                      <figcaption>2 octombrie 2023</figcaption>
-                    </figure>
-                  </div>
+                  <div class="media-container" id="mediaElement" style="display: none;">
+                  <div class="gallery"></div>
                   <div id="myModal" class="modal">
                     <span class="close">&times;</span>
                     <img class="modal-content" id="img01">
                     <div id="caption"></div>
                     <button id="delete">Delete Photo</button>
                   </div>
-                </div>
+                  </div>
                 
-                <div class="evolutionContainer" id="evolutionElement" style="display: none;">
+                  <div class="evolutionContainer" id="evolutionElement" style="display: none;">
                   <div class="timeline" id="timeline">
                     <div class="timeline-content">
                     <div class="container left">
@@ -587,12 +307,12 @@
                       </div>
                     </div>
                   </div>
-                </div>
-                </div>
+                  </div>
+                  </div>
                 
-                <div id="medicalElement" style="display: none;">
+                  <div id="medicalElement" style="display: none;">
                     Sanatate
-                </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -604,47 +324,105 @@
                   <button class="default-button" id="profile-bttn-notifications">Notificări</button>
                 </div>
                 <div class="grid-layout-content">
-                  <div class="profile-settings-container-first-line">
+                  <div class="profile-settings-container">
                     <h1>Niță Dennis-Alexandru</h1>
                   </div>
-                  <div class="profile-settings-container flex-end">
+                  <div class="profile-settings-container">
                     <p>Email & Telefon</p>
-                    <p>Email: dumbchinese@gmail.com - <span class="clickable">modifică</span>
+                    <p>Email: dumbchinese@gmail.com
                     </p>
-                    <p>Telefon: +40 765928114 - <span class="clickable">modifică</span>
+                    <p>Telefon: +40 765928114
                     </p>
                   </div>
                   <div class="profile-settings-container">
                     <p>Stare civilă</p>
-                    <p>Căsătorit: Nu - <span class="clickable">modifică</span>
-                    </p>
-                  </div>
-                  <div class="profile-settings-container flex-end">
-                    <p>Data nașterii & Gen</p>
-                    <p>Data nașterii: 02 Martie 2003 - <span class="clickable">modifică</span>
-                    </p>
-                    <p>Gen: Masculin - <span class="clickable">modifică</span>
+                    <p>Căsătorit: Nu
                     </p>
                   </div>
                   <div class="profile-settings-container">
-                    <p>Tipul contului</p>
-                    <p>Tipul contului: Familie - <span class="clickable">modifică</span>
+                    <p>Data nașterii & Gen</p>
+                    <p>Data nașterii: 02 Martie 2003
                     </p>
+                    <p>Gen: Masculin
+                    </p>
+                  </div>
+                  <div class="profile-settings-container">
+                      <button class="orange-bg" id="edit-account-bttn">Modifică cont</button>
+                  </div>
+                  <div class="main-modal" id="edit-account-modal">
+                    <div class="popup-form-wrapper">
+                      <button class="close-button">&times;</button>
+                      <h2 class="popup-title">Modifică cont</h2>
+                      <form class="popup-form">
+                        <div class="form-group">
+                          <label for="nume">Nume:</label>
+                          <input type="text" id="nume" name="nume" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email:</label>
+                          <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="telefon">Telefon:</label>
+                          <input type="tel" id="telefon" name="telefon" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="data-nasterii">Data nașterii:</label>
+                          <input type="date" id="data-nasterii" name="data-nasterii" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="gen">Gen:</label>
+                          <select id="gen" name="gen" required>
+                            <option value="male">Bărbat</option>
+                            <option value="female">Femeie</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="localizare">Localizare:</label>
+                          <input type="text" id="localizare" name="localizare" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="limba">Limbă:</label>
+                          <input type="text" id="limba" name="limba" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="tip-cont">Tipul contului:</label>
+                          <select id="tip-cont" name="tip-cont" required>
+                            <option value="familie">Familie</option>
+                            <option value="individual">Individual</option>
+                            <option value="casa-de-copii">Casa de copii</option>
+                          </select>
+                        </div>
+                        <div class="form-group checkbox-group">
+                          <input type="checkbox" id="casatorit" name="casatorit">
+                          <label for="casatorit">Căsătorit</label>
+                        </div>
+                        
+                        <div class="form-group" id="nume-partener-group" style="display: none;">
+                          <label for="nume-partener">Nume partener:</label>
+                          <input type="text" id="nume-partener" name="nume-partener">
+                        </div>
+                        <button type="submit" class="confirm-button">Confirm</button>
+                      </form>
+                    </div>
                   </div>
                   <div class="profile-settings-container">
                     <p>Localizare & Limbă</p>
-                    <p>Localizare: România - <span class="clickable">modifică</span>
+                    <p>Localizare: România
                     </p>
-                    <p>Limbă: Română - <span class="clickable">modifică</span>
+                    <p>Limbă: Română
                     </p>
                   </div>
-                  <div class="profile-settings-container row">
-                    <p>Opțiuni cont</p>
-                    <br>
-                    <div class="flex-column">
-                      <button class="delete-child-bttn default-button">Șterge cont</button>
-                      <button class="delete-child-bttn default-button">Dezactivează cont</button>
-                    </div>
+                  <div class="profile-settings-container">
+                      <button class="red-bg">Șterge cont</button>
+                  </div>
+                  <div class="profile-settings-container">
+                    <p>Tipul contului</p>
+                    <p>Tipul contului: Familie
+                    </p>
+                  </div>
+                  <div class="profile-settings-container">
+                      <button class="red-bg">Dezactivează cont</button>
                   </div>
                 </div>
               </div>
@@ -756,125 +534,51 @@
               <div class="dashboard-groups">
                 <div class="gallery">
                   <figure>
-                    <img src="assets/family.webp">
+                    <img src="assets/family.webp" alt="family">
                     <figcaption>Familie</figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/school.jpg">
+                    <img src="assets/school.jpg" alt="school">
                     <figcaption>Scoala</figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/prieteni.jpg">
+                    <img src="assets/prieteni.jpg" alt="friends">
                     <figcaption>Prieteni</figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/gradinita.jpeg">
+                    <img src="assets/gradinita.jpeg" alt="kindergarten">
                     <figcaption>Gradinita</figcaption>
                   </figure>
-                  <figure class="add-photo" id="addPhoto">
-                    <img src="assets/icons/ds_add_group.svg">
+                  <figure class="add-photo" id="add-group-bttn">
+                    <img src="assets/icons/ds_add_group.svg" alt="addGroup">
                   </figure>
-                  
-                  <div id="myModal2" class="modal2">
-                    <div class="modal2-content">
-                      <span class="close2">&times;</span>
-                      <h2>Add a new group</h2>
-                      <form>
-                        <div class="form-group">
-                          <label for="groupName">Group Name:</label>
-                          <input type="text" id="groupName" name="groupName" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="groupPhoto">Group Photo:</label>
-                          <input type="file" id="groupPhoto" name="groupPhoto" required>
-                        </div>
-                        <div class="form-group">
-                          <button type="submit">Add Group</button>
-                        </div>
-                      </form>
+        
+                  <div class="main-modal" id="add-group-modal">
+                    <div class="popup-form-wrapper">
+                        <button class="close-button">&times;</button>
+                        <h2 class="popup-title">Add a new group</h2>
+                        <form class="popup-form">
+                            <div class="form-group">
+                                <label for="groupName">Group Name:</label>
+                                <input type="text" id="groupName" name="groupName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="groupPhoto">Group Photo:</label>
+                                <input type="file" id="groupPhoto" name="groupPhoto" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="confirm-button">Add Group</button>
+                            </div>
+                        </form>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="popup-form-wrapper add-child-bttn">
-            <h2 class="popup-title">Adaugă un copil nou</h2>
-            <form class="popup-form">
-              <div class="form-group">
-                <label for="prenume">Nume:</label>
-                <input type="text" id="add_child_input_fname" name="nume" placeholder="Ex: Popescu" required>
-              </div>
-              <div class="form-group">
-                <label for="prenume">Prenume:</label>
-                <input type="text" id="add_child_input_lname" name="prenume" placeholder="Ex: Ion" required>
-              </div>
-              <div class="form-group">
-                <label for="sex">Sex:</label>
-                <select id="add_child_input_sex" name="sex" required>
-                  <option value="male">Bărbat</option>
-                  <option value="female">Femeie</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="data-nasterii">Data nasterii:</label>
-                <input type="date" id="add_child_input_birthdate" name="data-nasterii" required>
-              </div>
-              <button type="submit" class="confirm-button" id="confirm-add-child">Confirm</button>
-            </form>
-          </div>
-
-          <div class="popup-form-wrapper add-table-bttn">
-            <h2 class="popup-title">Adauga o noua masa</h2>
-            <form class="popup-form">
-              <div class="form-group"> 
-                <div style="display: flex; align-items: center;"> 
-                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
-                </div> 
-              </div>
-              <div class="form-group" id="date-and-time-inputs-add-table" style="display: none;">
-                <label for="data">Data:</label>
-                <input type="date" id="data_add_table" name="data">
-                <label for="timp">Timp:</label> <br>
-                <input type="time" id="time_add_table" name="timp">
-              </div>
-              <div class="form-group">
-                <label for="mass-selector">Unitate de cântărire:</label>
-                <select id="mass-selector" name="mass-selector">
-                  <option value="grame">Grame</option>
-                  <option value="miligrame">Miligrame</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="mass-input">Cantitate:</label>
-                <input type="number" id="mass-input" name="mass-input" min="0" required>
-              </div>
-              <div class="form-group">
-                <button type="button" class="add-selected-food-button confirm-button">Crează un aliment nou.</button>
-              </div>
-              <div class="form-group">
-                <label for="food-selector">Aliment:</label>
-                <select id="food-selector" name="food-selector">
-                  <option value="carrots">Morcov</option>
-                  <option value="milk">Lapte</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <button type="button" class="add-selected-food-button confirm-button">Adaugă alimentul selectat.</button>
-              </div>
-              
-              <div class="form-group" id="custom-food-inputs" style="display: none;">
-                <label for="custom-food-name">Nume:</label>
-                <input type="text" id="custom-food-name" name="custom-food-name" required>
-              </div>
-              <div class="form-group">
-                <label for="text">Text:</label>
-                <textarea class="not-resizable" id="text_add_table" name="text" maxlength="300" required></textarea>
-              </div>
-              <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
-            </form>
-          </div>
-        </div>
+          
+        
+      </div>
       </main>
       <script src="./dashboard.js"></script>
       <script type = "module" src="./dashboard_logic.js"></script>
