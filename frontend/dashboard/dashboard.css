@@ -23,6 +23,10 @@ body {
 	font-family: Montreal;
 }
 
+textarea{
+	resize: none;
+}
+
 @font-face {
 	font-family: Montreal;
 	src: url(../assets/fonts/Montreal-Regular.ttf);	
@@ -554,11 +558,8 @@ body {
 	border: 1px solid #A3966A;
 	border-radius: 0.5vw;
 	box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
-	display: grid;
-	height: calc(99% - 2%);
-	width: calc(100% - 2%);
-	margin: 1%;
-
+	height:100%;
+	width:100%;
 	display: flex;
 	flex-direction: column;
 }
@@ -569,11 +570,8 @@ body {
 	border: 1px solid #A3966A;
 	border-radius: 0.5vw;
 	box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
-	display: grid;
-	height: calc(99% - 2%);
-	width: calc(100% - 2%);
-	margin: 1%;
-
+	height:100%;
+	width:100%;
 	display: flex;
 	flex-direction: column;
 }
@@ -582,22 +580,66 @@ body {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	gap: 1%;
-	height: 5%;
-	margin-top: 1%;
-	width: 100%;
+	gap: 1rem;
+	padding-top: 1rem;
 }
 
-.profile-grid-layout {
+.grid-layout-content {
 	width: 100%;
 	height: 70%;
-	margin-top: 3%;
+	margin-top: 2rem;
 	display: grid;
-	grid-template-rows: repeat(4, 1fr);
+	grid-template-rows: repeat(5, 1fr);
 	grid-template-columns: repeat(2, 1fr);
-	gap: 3%;
+	gap: 2rem;
 }
 
+.profile-settings-container {
+	border-radius: .5vw;
+	display: grid;
+	padding-left:5rem;
+}
+
+.profile-settings-container:first-child {
+	grid-column: span 2;
+}
+
+.profile-settings-container button{
+	display: flex;
+	color: white;
+	cursor: pointer;
+	border-radius: 0.5rem;
+	font-size: 1.1rem;
+	border: none;
+	padding: 10px 20px;
+	justify-content: center;
+	align-items: center;
+	transition: transform 0.3s ease, background-color 0.3s ease;
+	height:75%;
+	width:35%;
+}
+
+.main-wrapper {
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
+	width: 100vw;
+}
+
+.profile-settings-container>p {
+	font-size: 1.2em;
+}
+
+.profile-settings-container>p:first-child {
+	font-size: 2em;
+	font-weight: 500;
+}
+
+.admin-panel-container {
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+}
 
 .grid-layout-content-admin {
 	width: 100%;
@@ -610,13 +652,6 @@ body {
 }
 
 
-.admin-panel-container {
-	border-radius: 5px;
-	display: flex;
-	flex-direction: column;
-}
-
-
 .admin-panel-settings-container {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -625,6 +660,16 @@ body {
 	margin-left: 5%;
 	margin-right: 5%;
 	gap: 2%;
+}
+
+.profile-settings-container-admin {
+	border-radius: .5vw;
+	display: grid;
+	flex-direction: column;
+	min-height: 0;
+	margin-left: 5%;
+	margin-right: 5%;
+	gap: 1%;
 }
 
 .all-avalabile-users-container {
@@ -710,62 +755,6 @@ body {
 		font-size: 1.6em;
 		font-weight: 500;
 		margin: 5%;
-	}
-}
-
-@media only screen and (min-width: 768px) and (max-width: 2560px) {
-	.profile-settings-container {
-		border-radius: .5vw;
-		display: grid;
-		flex-direction: column;
-		min-height: 0;
-		margin-left: 5%;
-		margin-right: 5%;
-		gap: 1%;
-	}
-
-	.profile-settings-container-admin {
-		border-radius: .5vw;
-		display: grid;
-		flex-direction: column;
-		min-height: 0;
-		margin-left: 5%;
-		margin-right: 5%;
-		gap: 1%;
-	}
-
-	.profile-settings-container-first-line {
-		grid-column: span 2;
-	}
-
-	.profile-settings-container-first-line>h1 {
-		margin-left: 5%;
-	}
-
-	.grid-layout-content {
-		width: 100%;
-		height: 70%;
-		margin-top: 3%;
-		display: grid;
-		grid-template-rows: repeat(4, 1fr);
-		grid-template-columns: repeat(2, 1fr);
-		gap: 3%;
-	}
-
-	.main-wrapper {
-		display: flex;
-		flex-direction: row;
-		height: 100vh;
-		width: 100vw;
-	}
-
-	.profile-settings-container>p {
-		font-size: 1.2em;
-	}
-
-	.profile-settings-container>p:first-child {
-		font-size: 2em;
-		font-weight: 500;
 	}
 }
 
@@ -1054,7 +1043,6 @@ body {
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0,0,0,0.4);
-	display:flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -1111,11 +1099,8 @@ body {
 	margin-bottom: 5px;
   }
   
-  input[type="text"],
+  input,
   select,
-  input[type="number"],
-  input[type="date"],
-  input[type="time"],
   textarea {
 	box-sizing: border-box;
 	padding: 8px;
@@ -1124,11 +1109,8 @@ body {
 	width: 100%;
   }
   
-  input[type="text"]:focus,
+  input:focus,
   select:focus,
-  input[type="number"]:focus,
-  input[type="date"]:focus,
-  input[type="time"]:focus,
   textarea:focus {
 	outline: none;
 	border-color: #4d90fe;
@@ -1145,6 +1127,23 @@ body {
 	transition: background-color 0.3s ease;
   }
   
+  .checkbox-group {
+	display: flex;
+	align-items: center;
+	width: 100%;
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+	margin-right: 8px; /* Adjust the spacing as needed */
+  }
+  
+  label {
+	margin-bottom: 5px;
+	display: inline-block; /* Ensure label doesn't stretch */
+	margin: 0; /* Remove margin for label */
+  }
+  
+
   .confirm-button:hover {
 	background-color: #3b78d9;
   }
@@ -1152,20 +1151,4 @@ body {
   .confirm-button:disabled {
 	background-color: #ccc;
 	cursor: not-allowed;
-  }
-
-
-  .add-child-bttn
-  {
-	display: none;
-  }
-
-  .add-table-bttn
-  {
-	display: none;
-  }
-
-  .not-resizable
-  {
-	resize: none;
   }

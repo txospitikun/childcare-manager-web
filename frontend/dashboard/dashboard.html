@@ -77,6 +77,30 @@
                   </div>
                 </div>
                 <button class="children-add-button default-button" id="add-child-bttn">+</button>
+                <div class="main-modal" id="add-child-modal">
+                  <div class="popup-form-wrapper">
+                    <button class="close-button">&times;</button>
+                    <h2 class="popup-title">Adaugă un copil nou</h2>
+                    <form class="popup-form">
+                      <div class="form-group">
+                        <label for="prenume">Prenume:</label>
+                        <input type="text" id="prenume" name="prenume" placeholder="Ex: Ion" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="sex">Sex:</label>
+                        <select id="sex" name="sex" required>
+                          <option value="male">Bărbat</option>
+                          <option value="female">Femeie</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="data-nasterii">Data nasterii:</label>
+                        <input type="date" id="data-nasterii" name="data-nasterii" required>
+                      </div>
+                      <button type="submit" class="confirm-button">Confirm</button>
+                    </form>
+                  </div>
+                </div>
               </div>
               <div class="dashboard-info">
                 <button class="delete-child-bttn default-button" id="delete-bttn">
@@ -107,6 +131,59 @@
                     <div class="upper-content">
                       <div class="left-upper-content">
                         <button class="calendar-bttn default-button" id="add-table-bttn">Adaugă</button>
+                        <div class="main-modal" id="add-meal-modal">
+                          <div class="popup-form-wrapper">
+                            <button class="close-button">&times;</button>
+                            <h2 class="popup-title">Adauga o noua masa</h2>
+                            <form class="popup-form">
+                              <div class="form-group"> 
+                                <div > 
+                                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
+                                </div> 
+                              </div>
+                              <div class="form-group" id="date-and-time-inputs-add-table" style="display: none;">
+                                <label for="data">Data:</label>
+                                <input type="date" id="data_add_table" name="data">
+                                <label for="timp">Timp:</label> <br>
+                                <input type="time" id="time_add_table" name="timp">
+                              </div>
+                              <div class="form-group">
+                                <label for="mass-selector">Unitate de cântărire:</label>
+                                <select id="mass-selector" name="mass-selector">
+                                  <option value="grame">Grame</option>
+                                  <option value="miligrame">Miligrame</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label for="mass-input">Cantitate:</label>
+                                <input type="number" id="mass-input" name="mass-input" min="0" required>
+                              </div>
+                              <div class="form-group">
+                                <button type="button" class="add-selected-food-button confirm-button">Crează un aliment nou.</button>
+                              </div>
+                              <div class="form-group">
+                                <label for="food-selector">Aliment:</label>
+                                <select id="food-selector" name="food-selector">
+                                  <option value="carrots">Morcov</option>
+                                  <option value="milk">Lapte</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <button type="button" class="add-selected-food-button confirm-button">Adaugă alimentul selectat.</button>
+                              </div>
+                              
+                              <div class="form-group" id="custom-food-inputs" style="display: none;">
+                                <label for="custom-food-name">Nume:</label>
+                                <input type="text" id="custom-food-name" name="custom-food-name" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="text">Text:</label>
+                                <textarea id="text_add_table" name="text" maxlength="300" required></textarea>
+                              </div>
+                              <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
+                            </form>
+                          </div>
+                        </div>
                         <button class="calendar-bttn default-button">Modifică</button>
                         <button class="calendar-bttn default-button">Elimină</button>
                       </div>
@@ -246,47 +323,105 @@
                   <button class="default-button" id="profile-bttn-notifications">Notificări</button>
                 </div>
                 <div class="grid-layout-content">
-                  <div class="profile-settings-container-first-line">
+                  <div class="profile-settings-container">
                     <h1>Niță Dennis-Alexandru</h1>
                   </div>
-                  <div class="profile-settings-container flex-end">
+                  <div class="profile-settings-container">
                     <p>Email & Telefon</p>
-                    <p>Email: dumbchinese@gmail.com - <span class="clickable">modifică</span>
+                    <p>Email: dumbchinese@gmail.com
                     </p>
-                    <p>Telefon: +40 765928114 - <span class="clickable">modifică</span>
+                    <p>Telefon: +40 765928114
                     </p>
                   </div>
                   <div class="profile-settings-container">
                     <p>Stare civilă</p>
-                    <p>Căsătorit: Nu - <span class="clickable">modifică</span>
-                    </p>
-                  </div>
-                  <div class="profile-settings-container flex-end">
-                    <p>Data nașterii & Gen</p>
-                    <p>Data nașterii: 02 Martie 2003 - <span class="clickable">modifică</span>
-                    </p>
-                    <p>Gen: Masculin - <span class="clickable">modifică</span>
+                    <p>Căsătorit: Nu
                     </p>
                   </div>
                   <div class="profile-settings-container">
-                    <p>Tipul contului</p>
-                    <p>Tipul contului: Familie - <span class="clickable">modifică</span>
+                    <p>Data nașterii & Gen</p>
+                    <p>Data nașterii: 02 Martie 2003
                     </p>
+                    <p>Gen: Masculin
+                    </p>
+                  </div>
+                  <div class="profile-settings-container">
+                      <button class="orange-bg" id="edit-account-bttn">Modifică cont</button>
+                  </div>
+                  <div class="main-modal" id="edit-account-modal">
+                    <div class="popup-form-wrapper">
+                      <button class="close-button">&times;</button>
+                      <h2 class="popup-title">Modifică cont</h2>
+                      <form class="popup-form">
+                        <div class="form-group">
+                          <label for="nume">Nume:</label>
+                          <input type="text" id="nume" name="nume" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email:</label>
+                          <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="telefon">Telefon:</label>
+                          <input type="tel" id="telefon" name="telefon" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="data-nasterii">Data nașterii:</label>
+                          <input type="date" id="data-nasterii" name="data-nasterii" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="gen">Gen:</label>
+                          <select id="gen" name="gen" required>
+                            <option value="male">Bărbat</option>
+                            <option value="female">Femeie</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="localizare">Localizare:</label>
+                          <input type="text" id="localizare" name="localizare" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="limba">Limbă:</label>
+                          <input type="text" id="limba" name="limba" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="tip-cont">Tipul contului:</label>
+                          <select id="tip-cont" name="tip-cont" required>
+                            <option value="familie">Familie</option>
+                            <option value="individual">Individual</option>
+                            <option value="casa-de-copii">Casa de copii</option>
+                          </select>
+                        </div>
+                        <div class="form-group checkbox-group">
+                          <input type="checkbox" id="casatorit" name="casatorit">
+                          <label for="casatorit">Căsătorit</label>
+                        </div>
+                        
+                        <div class="form-group" id="nume-partener-group" style="display: none;">
+                          <label for="nume-partener">Nume partener:</label>
+                          <input type="text" id="nume-partener" name="nume-partener">
+                        </div>
+                        <button type="submit" class="confirm-button">Confirm</button>
+                      </form>
+                    </div>
                   </div>
                   <div class="profile-settings-container">
                     <p>Localizare & Limbă</p>
-                    <p>Localizare: România - <span class="clickable">modifică</span>
+                    <p>Localizare: România
                     </p>
-                    <p>Limbă: Română - <span class="clickable">modifică</span>
+                    <p>Limbă: Română
                     </p>
                   </div>
-                  <div class="profile-settings-container row">
-                    <p>Opțiuni cont</p>
-                    <br>
-                    <div class="flex-column">
-                      <button class="delete-child-bttn default-button">Șterge cont</button>
-                      <button class="delete-child-bttn default-button">Dezactivează cont</button>
-                    </div>
+                  <div class="profile-settings-container">
+                      <button class="red-bg">Șterge cont</button>
+                  </div>
+                  <div class="profile-settings-container">
+                    <p>Tipul contului</p>
+                    <p>Tipul contului: Familie
+                    </p>
+                  </div>
+                  <div class="profile-settings-container">
+                      <button class="red-bg">Dezactivează cont</button>
                   </div>
                 </div>
               </div>
@@ -398,125 +533,50 @@
               <div class="dashboard-groups">
                 <div class="gallery">
                   <figure>
-                    <img src="assets/family.webp">
+                    <img src="assets/family.webp" alt="family">
                     <figcaption>Familie</figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/school.jpg">
+                    <img src="assets/school.jpg" alt="school">
                     <figcaption>Scoala</figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/prieteni.jpg">
+                    <img src="assets/prieteni.jpg" alt="friends">
                     <figcaption>Prieteni</figcaption>
                   </figure>
                   <figure>
-                    <img src="assets/gradinita.jpeg">
+                    <img src="assets/gradinita.jpeg" alt="kindergarten">
                     <figcaption>Gradinita</figcaption>
                   </figure>
-                  <figure class="add-photo" id="addPhoto">
-                    <img src="assets/icons/ds_add_group.svg">
+                  <figure class="add-photo" id="add-group-bttn">
+                    <img src="assets/icons/ds_add_group.svg" alt="addGroup">
                   </figure>
-                  
-                  <div id="myModal2" class="modal2">
-                    <div class="modal2-content">
-                      <span class="close2">&times;</span>
-                      <h2>Add a new group</h2>
-                      <form>
-                        <div class="form-group">
-                          <label for="groupName">Group Name:</label>
-                          <input type="text" id="groupName" name="groupName" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="groupPhoto">Group Photo:</label>
-                          <input type="file" id="groupPhoto" name="groupPhoto" required>
-                        </div>
-                        <div class="form-group">
-                          <button type="submit">Add Group</button>
-                        </div>
-                      </form>
+        
+                  <div class="main-modal" id="add-group-modal">
+                    <div class="popup-form-wrapper">
+                        <button class="close-button">&times;</button>
+                        <h2 class="popup-title">Add a new group</h2>
+                        <form class="popup-form">
+                            <div class="form-group">
+                                <label for="groupName">Group Name:</label>
+                                <input type="text" id="groupName" name="groupName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="groupPhoto">Group Photo:</label>
+                                <input type="file" id="groupPhoto" name="groupPhoto" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="confirm-button">Add Group</button>
+                            </div>
+                        </form>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="main-modal add-child-bttn">
-          <div class="popup-form-wrapper">
-            <button class="close-button">&times;</button>
-            <h2 class="popup-title">Adaugă un copil nou</h2>
-            <form class="popup-form">
-              <div class="form-group">
-                <label for="prenume">Prenume:</label>
-                <input type="text" id="prenume" name="prenume" placeholder="Ex: Ion" required>
-              </div>
-              <div class="form-group">
-                <label for="sex">Sex:</label>
-                <select id="sex" name="sex" required>
-                  <option value="male">Bărbat</option>
-                  <option value="female">Femeie</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="data-nasterii">Data nasterii:</label>
-                <input type="date" id="data-nasterii" name="data-nasterii" required>
-              </div>
-              <button type="submit" class="confirm-button">Confirm</button>
-            </form>
-          </div>
-        </div>
-        <div class="main-modal add-table-bttn">
-          <div class="popup-form-wrapper">
-            <button class="close-button">&times;</button>
-            <h2 class="popup-title">Adauga o noua masa</h2>
-            <form class="popup-form">
-              <div class="form-group"> 
-                <div style="display: flex; align-items: center;"> 
-                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
-                </div> 
-              </div>
-              <div class="form-group" id="date-and-time-inputs-add-table" style="display: none;">
-                <label for="data">Data:</label>
-                <input type="date" id="data_add_table" name="data">
-                <label for="timp">Timp:</label> <br>
-                <input type="time" id="time_add_table" name="timp">
-              </div>
-              <div class="form-group">
-                <label for="mass-selector">Unitate de cântărire:</label>
-                <select id="mass-selector" name="mass-selector">
-                  <option value="grame">Grame</option>
-                  <option value="miligrame">Miligrame</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="mass-input">Cantitate:</label>
-                <input type="number" id="mass-input" name="mass-input" min="0" required>
-              </div>
-              <div class="form-group">
-                <button type="button" class="add-selected-food-button confirm-button">Crează un aliment nou.</button>
-              </div>
-              <div class="form-group">
-                <label for="food-selector">Aliment:</label>
-                <select id="food-selector" name="food-selector">
-                  <option value="carrots">Morcov</option>
-                  <option value="milk">Lapte</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <button type="button" class="add-selected-food-button confirm-button">Adaugă alimentul selectat.</button>
-              </div>
-              
-              <div class="form-group" id="custom-food-inputs" style="display: none;">
-                <label for="custom-food-name">Nume:</label>
-                <input type="text" id="custom-food-name" name="custom-food-name" required>
-              </div>
-              <div class="form-group">
-                <label for="text">Text:</label>
-                <textarea class="not-resizable" id="text_add_table" name="text" maxlength="300" required></textarea>
-              </div>
-              <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
-            </form>
-          </div>
-        </div>
+          
+        
       </div>
       </main>
       <script src="index.js"></script>

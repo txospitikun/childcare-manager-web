@@ -8,22 +8,45 @@ const dashboardProfile = document.querySelector('#dashboard-profile');
 const dashboardAdminPanel = document.querySelector('#dashboard-admin-panel');
 const dashboardGroups = document.querySelector('#dashboard-groups');
 
-const addChildBttn = document.getElementById('add-child-bttn');
-const addChildForm = document.querySelector('.add-child-bttn');
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'flex'; // Set display to flex for centering
+    }
+}
 
-const addTableBttn = document.getElementById('add-table-bttn');
+const addChildForm = document.querySelector('.add-child-bttn');
 const addTableForm = document.querySelector('.add-table-bttn');
+
+document.getElementById('add-child-bttn').addEventListener('click', () => {
+    showModal('add-child-modal');
+});
+
+document.getElementById('add-table-bttn').addEventListener('click', () => {
+    showModal('add-meal-modal');
+});
+
+document.getElementById('add-group-bttn').addEventListener('click', () => {
+    showModal('add-group-modal');
+});
+
+document.getElementById('edit-account-bttn').addEventListener('click', () => {
+    showModal('edit-account-modal');
+});
+
+document.getElementById('casatorit').addEventListener('change', function() {
+    const partnerNameGroup = document.getElementById('nume-partener-group');
+    if (this.checked) {
+        partnerNameGroup.style.display = 'block';
+    } else {
+        partnerNameGroup.style.display = 'none';
+    }
+});
 
 const confirmBttn = document.querySelector('.confirm-button');
 const confirmBttnTable = document.getElementById('confirm-add-table-bttn');
 
-addChildBttn.addEventListener('click', () => {
-    addChildForm.style.display = 'flex';
-});
 
-addTableBttn.addEventListener('click', () => {
-    addTableForm.style.display = 'flex';
-});
 
 // Close button functionality
 document.querySelectorAll('.close-button').forEach(button => {
@@ -193,19 +216,9 @@ document.querySelectorAll('.children-container').forEach(function (button) {
     });
 });
 
-var modal2 = document.getElementById("myModal2");
 
 var btn = document.getElementById("addPhoto");
 
-var span = modal2.getElementsByClassName("close2")[0];
-
-btn.onclick = function () {
-    modal2.style.display = "block";
-}
-
-span.onclick = function () {
-    modal2.style.display = "none";
-}
 
 document.addEventListener("DOMContentLoaded", function () {
     const calendarContainer = document.getElementById("calendarElement");
