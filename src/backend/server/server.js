@@ -1,4 +1,5 @@
 var http = require('http');
+const url = require('url');
 var querystring = require('querystring');
 
 const authentification_worker = require('./workers/auth_worker.js');
@@ -16,11 +17,12 @@ http.createServer((req, res) =>
         res.end('Request not found!');
         return;
     }
+    const parsedUrl = url.parse(req.url, true);
 
     switch (req.method)
     {
         case 'POST':
-            switch (req.url)
+            switch (parsedUrl.pathname)
             {
                 case '/register':
                     authentification_worker.handle_register(req, res);
@@ -34,8 +36,36 @@ http.createServer((req, res) =>
                 case '/insert_children':
                     user_worker.insertChildren(req, res);
                     break;
-                case '/load_children':
-                    user_worker.loadChildren(req, res);
+                case '/insert_feeding_entry':
+                    user_worker.insertFeedingEntry(req, res);
+                    break;
+                default:
+                    res.writeHead(404, { 'Content-Type': 'text/plain' });
+                    res.end('Not Found');
+            }
+            break;
+        case 'GET':
+            switch(parsedUrl.pathname)
+            {
+                case '/get_user_children':
+                    user_worker.loadSelfChildren(req, res);
+                    break;
+                case '/get_feeding_entry':
+                    user_worker.getFeedingEntry(req, res);
+                    break;
+                case '/get_feeding_entries_by_date':
+                    user_worker.getFeedingEntriesByDate(req, res);
+                    break;
+                default:
+                    res.writeHead(404, { 'Content-Type': 'text/plain' });
+                    res.end('Not Found');
+            }
+            break;
+        case 'PUT':
+            switch(parsedUrl.pathname)
+            {
+                case '/edit_feeding_entry':
+                    user_worker.editFeedingEntry(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -43,24 +73,15 @@ http.createServer((req, res) =>
             }
             break;
 
-        case 'GET':
-            switch(req.url)
-            {
-
-            }
-            break;
-
-        case 'PUT':
-            switch(req.url)
-            {
-
-            }
-            break;
-
         case 'DELETE':
-            switch(req.url)
+            switch(parsedUrl.pathname)
             {
-
+                case '/delete_feeding_entry':
+                    user_worker.deleteFeedingEntry(req, res);
+                    break;
+                default:
+                    res.writeHead(404, { 'Content-Type': 'text/plain' });
+                    res.end('Not Found');
             }
             break;
     }
