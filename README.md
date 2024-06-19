@@ -8,11 +8,11 @@
 ```
 Payload:
 {
-    "name":"dennis",
-    "prename":"alexandru",
-    "email":"dennis@hotmail.com",
-    "password":"parolamea",
-    "confirm_password":"parolamea"
+    "firstname":"Dennis",
+    "lastname":"Nita",
+    "email":"abcdef12@gmail.com",
+    "password":"123",
+    "confirm_password":"123"
 }
 
 Response:
@@ -56,9 +56,8 @@ Response:
 ```
 /api/insert_children
 ```
-Payload:
+Payload: (JWT token as cookie)
 {
-    "JWT": "eyJ... (the token is longer and should be saved as cookie) ...ppkJCyjU="
     "FirstName":"Luca",
     "LastName":"Cozloschi",
     "Gender":"Male",
@@ -73,8 +72,144 @@ Payload:
 {
     "InsertChildrenResponse": 300
 }
+```
+#GETS
+
+/api/get_children // JWT token as cookie
+```
+Payload: JWT as header
+Response: --- STATUS 200
+{
+    "Response": 200,
+    "ChildrenInfo": [
+        {
+            "ID": 16,
+            "FirstName": "Luca",
+            "LastName": "Cozloschi",
+            "Gender": "Male",
+            "DateOfBirth": "2003-03-01T22:00:00.000Z",
+            "PictureRef": "not implemented",
+            "UserID": 15
+        },
+        {
+            "ID": 17,
+            "FirstName": "Marian",
+            "LastName": "Ciotir",
+            "Gender": "Male",
+            "DateOfBirth": "2003-03-01T22:00:00.000Z",
+            "PictureRef": "not implemented",
+            "UserID": 15
+        }
+    ]
+}
+
+Response: 401 - INVALID AUTHENTIFICATION --- STATUS 401
+Response: 404 - NO CHILDREN FOUND        --- STATUS 404
 
 ```
+/api/get_feeding_entries_by_date?date=2024-06-18 // JWT token as cookie
+```
+Response: --- STATUS 200
+[
+    {
+        "ID": 10,
+        "Date": "2024-06-17T21:00:00.000Z",
+        "Time": "15:00:00",
+        "Unit": "mg",
+        "Quantity": 1500,
+        "FoodType": null,
+        "UserID": 15,
+        "ChildrenID": 1
+    },
+    {
+        "ID": 11,
+        "Date": "2024-06-17T21:00:00.000Z",
+        "Time": "15:00:00",
+        "Unit": "mg",
+        "Quantity": 1500,
+        "FoodType": null,
+        "UserID": 15,
+        "ChildrenID": 1
+    }
+]
+
+GetFeedingEntryResponse: 301 - invalid entry id  --- STATUS: 400
+GetFeedingEntryResponse: 404 - no entries found  --- STATUS: 404
+GetFeedingEntryResponse: 1 - for backend errors  --- STATUS: 505
+```
+api/get_feeding_entry?id=1 // id is child's id // JWT token as cookie
+```
+Response: --- STATUS 200
+[
+    {
+        "ID": 10,
+        "Date": "2024-06-17T21:00:00.000Z",
+        "Time": "15:00:00",
+        "Unit": "mg",
+        "Quantity": 1500,
+        "FoodType": null,
+        "UserID": 15,
+        "ChildrenID": 1
+    },
+    {
+        "ID": 11,
+        "Date": "2024-06-17T21:00:00.000Z",
+        "Time": "15:00:00",
+        "Unit": "mg",
+        "Quantity": 1500,
+        "FoodType": null,
+        "UserID": 15,
+        "ChildrenID": 1
+    },
+    {
+        "ID": 12,
+        "Date": "2024-06-17T21:00:00.000Z",
+        "Time": "15:00:00",
+        "Unit": "mg",
+        "Quantity": 1500,
+        "FoodType": null,
+        "UserID": 15,
+        "ChildrenID": 1
+    },
+    {
+        "ID": 13,
+        "Date": "2024-06-17T21:00:00.000Z",
+        "Time": "15:00:00",
+        "Unit": "mg",
+        "Quantity": 1500,
+        "FoodType": null,
+        "UserID": 15,
+        "ChildrenID": 1
+    }
+]
+
+GetFeedingEntryResponse: 301 - invalid entry id  --- STATUS: 400
+GetFeedingEntryResponse: 404 - no entries found  --- STATUS: 404
+GetFeedingEntryResponse: 1 - for backend errors  --- STATUS: 505
+```
+# PUTS
+/api/edit_feeding_entry
+```
+Payload:
+{
+    "ID": 9,
+    "SelectedChildren": 1,
+    "Date": "2023-03-11",
+    "Time": "14:00:00",
+    "Unit": "ml",
+    "Quantity": 2000,
+    "FoodType": "Milk"
+}
+
+Response:
+
+EditFeedingEntryResponse: 404 if no entries affected
+EditFeedingEntryResponse: 300 if edited sucesfully 
+
+```
+
+# DELETE
+/api/delete_feeding_entry?id=9
 
 # SQL Tabels:
 Users:
