@@ -55,6 +55,12 @@ document.querySelectorAll('.close-button').forEach(button => {
     });
 });
 
+document.querySelectorAll('.confirm-button').forEach(button => {
+    button.addEventListener('click', function() {
+        this.closest('.main-modal').style.display = 'none';
+    });
+});
+
 // Close the modal when clicking outside of it
 window.addEventListener('click', (event) => {
     document.querySelectorAll('.main-modal').forEach(modal => {
@@ -63,15 +69,6 @@ window.addEventListener('click', (event) => {
         }
     });
 });
-
-// confirmBttn.addEventListener('click', (event) => {
-//     event.preventDefault();
-//     // addChildForm.style.display = 'none';
-//     document.getElementById('prenume').value = '';
-//     document.getElementById('sex').value = '';
-//     document.getElementById('data-nasterii').value = '';
-// });
-
 
 const checkbox = document.getElementById('use-current-date-time-checkbox');
 const dataSiTimpInputs = document.getElementById('date-and-time-inputs-add-table');
@@ -200,23 +197,6 @@ deleteBtn.onclick = function () {
     modal.style.display = "none";
 }
 
-
-document.querySelectorAll('.children-container').forEach(function (button) {
-    if (!currentSelectedChild) {
-        currentSelectedChild = button;
-        button.style.border = "2px solid gray";
-    }
-
-    button.addEventListener('click', function () {
-        if (currentSelectedChild) {
-            currentSelectedChild.style.border = "";
-        }
-        currentSelectedChild = this;
-        this.style.border = "2px solid gray";
-    });
-});
-
-
 var btn = document.getElementById("addPhoto");
 
 
@@ -330,7 +310,201 @@ document.addEventListener("DOMContentLoaded", function () {
     
     updateCalendar();
     updateCurrentDayTitle(selectedDate);
+
+    let currentSelectedChild = null;
+
+    // Function to load and display children
+    function loadChildren() {
+        // Retrieve the JWT token from cookies
+        const cookieString = document.cookie;
+        console.log('Cookie string:', cookieString);
+        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+        console.log('JWT Token:', token);
+
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+
+        // Fetch the children data
+        fetch('http://localhost:5000/api/get_user_children', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(result => {
+            console.log('Result:', result);
+            if (result.childrenInfo) {
+                displayChildren(result.childrenInfo);
+                addChildSelectionHandler();
+            } else {
+                console.error('Error: ' + result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Function to display children in the HTML
+    function displayChildren(children) {
+        const dashboardChildren = document.getElementById('user-children-id');
+        const childrenAddButton = document.getElementById('add-child-bttn');
+
+        // Remove existing children elements
+        while (dashboardChildren.firstChild && dashboardChildren.firstChild !== childrenAddButton) {
+            dashboardChildren.removeChild(dashboardChildren.firstChild);
+        }
+
+        // Re-append the header and add button
+        const header = document.createElement('p');
+        header.textContent = 'Copiii tăi inregistrați';
+        dashboardChildren.insertBefore(header, childrenAddButton);
+
+        children.forEach(child => {
+            const childContainer = createChildElement(child);
+            dashboardChildren.insertBefore(childContainer, childrenAddButton);
+        });
+    }
+
+    // Function to create a child element
+    function createChildElement(child) {
+        const childContainer = document.createElement('div');
+        childContainer.className = 'children-container';
+
+        const img = document.createElement('img');
+        img.src = '../placeholders/child_default.jpg'; // Placeholder image
+        img.className = 'photo-container';
+        img.alt = 'child';
+
+        const infoContainer = document.createElement('div');
+        infoContainer.className = 'info-container';
+
+        const nameP = document.createElement('p');
+        nameP.textContent = `${child.FirstName} ${child.LastName}`;
+
+        const ageP = document.createElement('p');
+        ageP.textContent = calculateAge(child.DateOfBirth) + ' ani - ' + getAgeCategory(calculateAge(child.DateOfBirth));
+
+        infoContainer.appendChild(nameP);
+        infoContainer.appendChild(ageP);
+
+        childContainer.appendChild(img);
+        childContainer.appendChild(infoContainer);
+
+        return childContainer;
+    }
+
+    // Function to calculate age
+    function calculateAge(dateOfBirth) {
+        const dob = new Date(dateOfBirth);
+        const diff_ms = Date.now() - dob.getTime();
+        const age_dt = new Date(diff_ms);
+
+        return Math.abs(age_dt.getUTCFullYear() - 1970);
+    }
+
+    // Function to get age category
+    function getAgeCategory(age) {
+        if (age < 3) return 'infant';
+        if (age < 13) return 'copil';
+        if (age < 18) return 'adolescent';
+        return 'adult';
+    }
+
+    // Function to add event listeners for child selection
+    function addChildSelectionHandler() {
+        document.querySelectorAll('.children-container').forEach(function(button) {
+            if (!currentSelectedChild) {
+                currentSelectedChild = button;
+                button.style.border = "2px solid gray";
+            }
+
+            button.addEventListener('click', function() {
+                if (currentSelectedChild) {
+                    currentSelectedChild.style.border = "";
+                }
+                currentSelectedChild = this;
+                this.style.border = "2px solid gray";
+            });
+        });
+    }
+
+    // Load children on page load
+    loadChildren();
+
+    document.getElementById('add-child-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Collect form data
+        const nume = document.getElementById('nume').value;
+        const prenume = document.getElementById('prenume').value;
+        const sex = document.getElementById('sex').value;
+        const dataNasterii = document.getElementById('data-nasterii').value;
+
+        // Create the data object
+        const data = {
+            FirstName: prenume,
+            LastName: nume,
+            Gender: sex,
+            DateOfBirth: dataNasterii
+        };
+
+        // Retrieve the JWT token from cookies
+        const cookieString = document.cookie;
+        console.log('Cookie string:', cookieString);
+        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+        console.log('JWT Token:', token);
+
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+
+        console.log('Form data:', data);
+
+        // Send the data to the server
+        fetch('http://localhost:5000/api/insert_children', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(({ status, result }) => {
+            console.log('Result:', result);
+            if (status === 200) {
+                const newChild = createChildElement(data);
+                document.getElementById('user-children-id').insertBefore(newChild, document.getElementById('add-child-bttn'));
+                addChildSelectionHandler();
+                closeModal();
+            } else if (status === 10) {
+                alert('Invalid or expired JWT token. Redirecting to login page.');
+                window.location.href = '/login';
+            } else {
+                alert('Error: ' + result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    
 });
+
 
 const figures = [
     { src: '../placeholders/child1.jpg', caption: '17 Mai 2024' },
@@ -375,62 +549,3 @@ for (let i = 0; i < img.length; i++) {
     }
 }
 
-document.getElementById('add-child-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Collect form data
-    const nume = document.getElementById('nume').value;
-    const prenume = document.getElementById('prenume').value;
-    const sex = document.getElementById('sex').value;
-    const dataNasterii = document.getElementById('data-nasterii').value;
-
-    // Create the data object
-    const data = {
-        FirstName: prenume,
-        LastName: nume,
-        Gender: sex,
-        DateOfBirth: dataNasterii
-    };
-
-    // Retrieve the JWT token from cookies
-    const cookieString = document.cookie;
-    console.log('Cookie string:', cookieString);
-    const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
-    console.log('JWT Token:', token);
-
-    if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
-        return;
-    }
-
-    console.log('Form data:', data);
-
-    // Send the data to the server
-    fetch('http://localhost:5000/api/insert_children', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        return response.json();
-    })
-    .then(result => {
-        console.log('Result:', result);
-        if (result.InsertChildrenResponse === 300) {
-            alert('Child successfully added.');
-        } else if (result.InsertChildrenResponse === 10) {
-            alert('Invalid or expired JWT token. Redirecting to login page.');
-            window.location.href = '/login';
-        } else {
-            alert('Error: ' + result.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
