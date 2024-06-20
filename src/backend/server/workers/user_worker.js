@@ -13,6 +13,7 @@ const cookie_worker = require('./cookie_worker');
 const FeedingEntryForm = require("../request_modals/feedingentryform_modal");
 const UpdateAccount = require("../request_modals/updateaccountform_modal");
 const {parseFormData} = require("./fetch_worker");
+
 async function getUser(req, res) {
     
 
@@ -20,7 +21,7 @@ async function getUser(req, res) {
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         console.log('JWT token not found in Authorization header');
-        res.writeHead(401, {'Content-Type': 'application/json'});
+        res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "No authentication token" }));
         return null;
     }
@@ -32,14 +33,14 @@ async function getUser(req, res) {
         decoded_jwt_token = encryption_worker.decode(jwtToken);
     } catch (error) {
         console.log('Error decoding JWT token:', error);
-        res.writeHead(401, {'Content-Type': 'application/json'});
+        res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Invalid authentication token" }));
         return null;
     }
 
     if (decoded_jwt_token === false) {
         console.log('Invalid JWT token');
-        res.writeHead(401, {'Content-Type': 'application/json'});
+        res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Invalid authentication token" }));
         return null;
     }
@@ -55,24 +56,78 @@ async function getUser(req, res) {
 }
 
 
-async function getSelfInfo(req, res)
-{
-    try
-    {
+async function getSelfInfo(req, res) {
+    try {
         const user = await getUser(req, res);
         if (!user) return;
 
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify({ user }));
-    }
-    catch (err)
-    {
+        // Construct the URL for the image
+        let imageUrl = null;
+        if (user.PictureRef) {
+            const relativePath = user.PictureRef.replace(/\\/g, '/');
+            imageUrl = `${req.protocol}://${req.headers.host}/api/${relativePath}`;
+        }
+
+        // Respond with user info and the image URL
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            user: {
+                ...user,
+                PictureRef: imageUrl
+            }
+        }));
+    } catch (err) {
         console.log("Server error: Couldn't load user! ", err);
-        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Backend error" }));
     }
-
 }
+
+async function getUser(req, res) {
+    console.log('getUser called');
+
+    const authHeader = req.headers['authorization'];
+    console.log('Authorization Header:', authHeader);
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        console.log('JWT token not found in Authorization header');
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "No authentication token" }));
+        return null;
+    }
+
+    const jwtToken = authHeader.split(' ')[1];
+    console.log('JWT Token:', jwtToken);
+
+    let decoded_jwt_token;
+    try {
+        decoded_jwt_token = encryption_worker.decode(jwtToken);
+    } catch (error) {
+        console.log('Error decoding JWT token:', error);
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Invalid authentication token" }));
+        return null;
+    }
+    console.log('Decoded JWT Token:', decoded_jwt_token);
+
+    if (decoded_jwt_token === false) {
+        console.log('Invalid JWT token');
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Invalid authentication token" }));
+        return null;
+    }
+
+    const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
+    console.log('Retrieved User:', User);
+
+    if (User == null) {
+        console.log('User not found, backend error.');
+        throw new Error("Backend error.");
+    }
+
+    return User;
+}
+
 
 async function insertChildren(req, res) {
     try {
@@ -104,7 +159,7 @@ async function insertChildren(req, res) {
     }
 }
 
-async function modifyAccountSettings(req, res) {
+async function editAccountSettings(req, res) {
     try {
         const user = await getUser(req, res);
         if (!user) return;
@@ -277,4 +332,4 @@ async function deleteFeedingEntry(req, res) {
     }
 }
 
-module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, modifyAccountSettings, getSelfInfo};
+module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, editAccountSettings, getSelfInfo};
