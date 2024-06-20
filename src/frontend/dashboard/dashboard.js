@@ -378,27 +378,27 @@ document.addEventListener("DOMContentLoaded", function () {
     function createChildElement(child) {
         const childContainer = document.createElement('div');
         childContainer.className = 'children-container';
-
+    
         const img = document.createElement('img');
-        img.src = '../placeholders/child_default.jpg'; // Placeholder image
+        img.src = child.PictureRef ? `http://localhost:5000/api/${child.PictureRef}` : '../placeholders/child2.jpg';
         img.className = 'photo-container';
         img.alt = 'child';
-
+    
         const infoContainer = document.createElement('div');
         infoContainer.className = 'info-container';
-
+    
         const nameP = document.createElement('p');
         nameP.textContent = `${child.FirstName} ${child.LastName}`;
-
+    
         const ageP = document.createElement('p');
         ageP.textContent = calculateAge(child.DateOfBirth) + ' ani - ' + getAgeCategory(calculateAge(child.DateOfBirth));
-
+    
         infoContainer.appendChild(nameP);
         infoContainer.appendChild(ageP);
-
+    
         childContainer.appendChild(img);
         childContainer.appendChild(infoContainer);
-
+    
         return childContainer;
     }
 
@@ -440,68 +440,68 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load children on page load
     loadChildren();
 
-    document.getElementById('add-child-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
+    document.getElementById('add-child-form').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevent the default form submission
+    
         // Collect form data
-        const nume = document.getElementById('nume').value;
-        const prenume = document.getElementById('prenume').value;
-        const sex = document.getElementById('sex').value;
-        const dataNasterii = document.getElementById('data-nasterii').value;
-
-        // Create the data object
-        const data = {
-            FirstName: prenume,
-            LastName: nume,
-            Gender: sex,
-            DateOfBirth: dataNasterii
-        };
-
+        const form = document.getElementById('add-child-form');
+        const formData = new FormData(form);
+    
         // Retrieve the JWT token from cookies
         const cookieString = document.cookie;
         console.log('Cookie string:', cookieString);
         const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
         console.log('JWT Token:', token);
-
+    
         if (!token) {
             console.error('JWT token not found');
             alert('JWT token not found');
             return;
         }
-
-        console.log('Form data:', data);
-
-        // Send the data to the server
-        fetch('http://localhost:5000/api/insert_children', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
+    
+        // Log form data for debugging
+        console.log('Form data entries:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_children', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+    
             console.log('Response status:', response.status);
-            return response.json();
-        })
-        .then(({ status, result }) => {
+            const result = await response.json();
             console.log('Result:', result);
-            if (status === 200) {
-                const newChild = createChildElement(data);
+    
+            if (response.ok) {
+                const newChild = createChildElement({
+                    FirstName: formData.get('prenume'),
+                    LastName: formData.get('nume'),
+                    Gender: formData.get('sex'),
+                    DateOfBirth: formData.get('data-nasterii'),
+                    PictureRef: result.PictureRef // Assuming the server returns the saved picture path
+                });
                 document.getElementById('user-children-id').insertBefore(newChild, document.getElementById('add-child-bttn'));
                 addChildSelectionHandler();
                 closeModal();
-            } else if (status === 10) {
-                alert('Invalid or expired JWT token. Redirecting to login page.');
-                window.location.href = '/login';
             } else {
-                alert('Error: ' + result.message);
+                if (result.status === 10) {
+                    alert('Invalid or expired JWT token. Redirecting to login page.');
+                    window.location.href = '/login';
+                } else {
+                    alert('Error: ' + result.message);
+                }
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error:', error);
-        });
+        }
     });
+    
     
 });
 

@@ -62,27 +62,27 @@
                     <h2 class="popup-title">Adaugă un copil nou</h2>
                     <form class="popup-form" id="add-child-form">
                       <div class="form-group">
-                        <label for="prenume">Nume:</label>
-                        <input type="text" id="nume" name="nume" placeholder="Ex: Popescu" required>
+                        <label for="FirstName">Nume:</label>
+                        <input type="text" id="FirstName" name="FirstName" placeholder="Ex: Popescu" required>
                       </div>
                       <div class="form-group">
-                        <label for="prenume">Prenume:</label>
-                        <input type="text" id="prenume" name="prenume" placeholder="Ex: Ion" required>
+                        <label for="LastName">Prenume:</label>
+                        <input type="text" id="LastName" name="LastName" placeholder="Ex: Ion" required>
                       </div>
                       <div class="form-group">
-                        <label for="sex">Sex:</label>
-                        <select id="sex" name="sex" required>
+                        <label for="Gender">Sex:</label>
+                        <select id="Gender" name="Gender" required>
                           <option value="male">Bărbat</option>
                           <option value="female">Femeie</option>
                         </select>
                       </div>
                       <div class="form-group">
-                        <label for="data-nasterii">Data nasterii:</label>
-                        <input type="date" id="data-nasterii" name="data-nasterii" required>
+                        <label for="DateOfBirth">Data nasterii:</label>
+                        <input type="date" id="DateOfBirth" name="DateOfBirth" required>
                       </div>
                       <div class="form-group">
-                        <label for="photo">Foto:</label>
-                        <input type="file" id="photo" name="photo" required>
+                        <label for="PictureRef">Foto:</label>
+                        <input type="file" id="PictureRef" name="PictureRef" required>
                     </div>
                       <button type="submit" class="confirm-button">Confirm</button>
                     </form>
@@ -342,35 +342,41 @@
                       <h2 class="popup-title">Modifică cont</h2>
                       <form class="popup-form">
                         <div class="form-group">
-                          <label for="nume">Nume:</label>
-                          <input type="text" id="nume" name="nume" required>
-                        </div>
-                        <div class="form-group">
                           <label for="email">Email:</label>
                           <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
-                          <label for="telefon">Telefon:</label>
-                          <input type="tel" id="telefon" name="telefon" required>
+                          <label for="password">Parola:</label>
+                          <input type="password" id="password" name="password" required>
                         </div>
                         <div class="form-group">
-                          <label for="data-nasterii">Data nașterii:</label>
-                          <input type="date" id="data-nasterii" name="data-nasterii" required>
+                          <label for="firstname">Nume:</label>
+                          <input type="text" id="firstname" name="firstname" required>
                         </div>
                         <div class="form-group">
-                          <label for="gen">Gen:</label>
-                          <select id="gen" name="gen" required>
-                            <option value="male">Bărbat</option>
-                            <option value="female">Femeie</option>
-                          </select>
+                          <label for="lastname">Prenume:</label>
+                          <input type="text" id="lastname" name="lastname" required>
                         </div>
                         <div class="form-group">
-                          <label for="localizare">Localizare:</label>
-                          <input type="text" id="localizare" name="localizare" required>
+                          <label for="phoneNo">Telefon:</label>
+                          <input type="tel" id="phoneNo" name="phoneNo" required>
                         </div>
                         <div class="form-group">
-                          <label for="limba">Limbă:</label>
-                          <input type="text" id="limba" name="limba" required>
+                          <label for="location">Localizare:</label>
+                          <input type="text" id="location" name="location" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="language">Limbă:</label>
+                          <input type="text" id="language" name="language" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                          <label for="casatorit">Căsătorit</label>
+                          <input type="checkbox" id="casatorit" name="civilState">
+                          
+                        </div>
+                        <div class="form-group" id="nume-partener-group" style="display: none;">
+                          <label for="civilPartner">Nume partener:</label>
+                          <input type="text" id="civilPartner" name="civilPartner">
                         </div>
                         <div class="form-group">
                           <label for="tip-cont">Tipul contului:</label>
@@ -380,15 +386,12 @@
                             <option value="casa-de-copii">Casa de copii</option>
                           </select>
                         </div>
-                        <div class="form-group checkbox-group">
-                          <input type="checkbox" id="casatorit" name="casatorit">
-                          <label for="casatorit">Căsătorit</label>
+                        <div class="form-group">
+                          <label for="ProfilePhoto">Foto:</label>
+                          <input type="file" id="ProfilePhoto" name="PictureRef" required>
                         </div>
                         
-                        <div class="form-group" id="nume-partener-group" style="display: none;">
-                          <label for="nume-partener">Nume partener:</label>
-                          <input type="text" id="nume-partener" name="nume-partener">
-                        </div>
+                        
                         <button type="submit" class="confirm-button">Confirm</button>
                       </form>
                     </div>

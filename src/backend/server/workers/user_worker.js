@@ -14,10 +14,9 @@ const FeedingEntryForm = require("../request_modals/feedingentryform_modal");
 const UpdateAccount = require("../request_modals/updateaccountform_modal");
 const {parseFormData} = require("./fetch_worker");
 async function getUser(req, res) {
-    console.log('getUser called');
+    
 
     const authHeader = req.headers['authorization'];
-    console.log('Authorization Header:', authHeader);
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         console.log('JWT token not found in Authorization header');
@@ -27,7 +26,6 @@ async function getUser(req, res) {
     }
 
     const jwtToken = authHeader.split(' ')[1];
-    console.log('JWT Token:', jwtToken);
 
     let decoded_jwt_token;
     try {
@@ -38,7 +36,6 @@ async function getUser(req, res) {
         res.end(JSON.stringify({ message: "Invalid authentication token" }));
         return null;
     }
-    console.log('Decoded JWT Token:', decoded_jwt_token);
 
     if (decoded_jwt_token === false) {
         console.log('Invalid JWT token');
@@ -48,7 +45,6 @@ async function getUser(req, res) {
     }
 
     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
-    console.log('Retrieved User:', User);
 
     if (User == null) {
         console.log('User not found, backend error.');
@@ -87,8 +83,11 @@ async function insertChildren(req, res) {
 
         const childrenform = new ChildrenForm(parsedData);
 
-
-        if (json_worker.isNullOrEmpty(childrenform.FirstName) || json_worker.isNullOrEmpty(childrenform.LastName) || json_worker.isNullOrEmpty(childrenform.Gender) || json_worker.isNullOrEmpty(childrenform.DateOfBirth)) {
+        if (json_worker.isNullOrEmpty(childrenform.FirstName) || 
+            json_worker.isNullOrEmpty(childrenform.LastName) || 
+            json_worker.isNullOrEmpty(childrenform.Gender) || 
+            json_worker.isNullOrEmpty(childrenform.DateOfBirth) ||
+            json_worker.isNullOrEmpty(childrenform.PictureRef)) {
             res.writeHead(400, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "Invalid form data" }));
             return;
@@ -131,7 +130,6 @@ async function loadSelfChildren(req, res) {
         if (!user) return;
 
         const childrenInfo = await childrendb_logic.getChildrensByID(user.ID);
-        console.log(childrenInfo);
 
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ childrenInfo }));
