@@ -78,7 +78,7 @@ function decode(str) {
             console.log('Token expired');
             return false;
         }
-
+        
         return {
             payload: payload,
         };

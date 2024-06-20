@@ -7,6 +7,18 @@ const user_worker = require('./workers/user_worker.js');
 
 http.createServer((req, res) =>
 {
+     // Add CORS headers
+     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Include Authorization
+ 
+     // Handle preflight requests
+     if (req.method === 'OPTIONS') {
+         res.writeHead(204);
+         res.end();
+         return;
+     }
+
     if (req.url.startsWith('/api')) 
     {
         req.url = req.url.slice(4);
@@ -17,6 +29,7 @@ http.createServer((req, res) =>
         res.end('Request not found!');
         return;
     }
+   
     const parsedUrl = url.parse(req.url, true);
 
     switch (req.method)
