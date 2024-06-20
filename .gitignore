@@ -47,5 +47,6 @@ coverage/
 src/backend/config/
 src/backend/server/database/connection.js
 src/config.js
+src/uploads/*
 # Ignore VSCode workspace settings
 .vscode/

@@ -44,12 +44,12 @@
                 <button id="search-button">Caută</button>
               </div>
               <div class="dashboard-profile-container">
-                <img src="../placeholders/user1.jpg" class="profile-photo" alt="Profile Photo">
+                <img src="../placeholders/user1.jpg" class="profile-photo" id="profile-photo" alt="Profile Photo">
                 <div class="profile-info-container">
                   <p class="profile-name" id="user-profile-name">undefined</p>
                   <p class="profile-name-grad" id="user-profile-type">undefined</p>
                 </div>
-                <img class="profile-bell" src="./assets/icons/dashboard_bell_icon.svg" alt = "Bell Icon">
+                <!-- <img class="profile-bell" src="./assets/icons/dashboard_bell_icon.svg" alt = "Bell Icon"> -->
               </div>
             </div>
             <div class="dashboard-control-panel" id="dashboard-main">
@@ -322,25 +322,13 @@
                     </p>
                   </div>
                   <div class="profile-settings-container">
-                    <p>Stare civilă</p>
-                    <p>Căsătorit: Nu
-                    </p>
-                  </div>
-                  <div class="profile-settings-container">
-                    <p>Data nașterii & Gen</p>
-                    <p>Data nașterii: 02 Martie 2003
-                    </p>
-                    <p>Gen: Masculin
-                    </p>
-                  </div>
-                  <div class="profile-settings-container">
-                      <button class="orange-bg" id="edit-account-bttn">Modifică cont</button>
+                    <button class="orange-bg" id="edit-account-bttn">Modifică cont</button>
                   </div>
                   <div class="main-modal" id="edit-account-modal">
                     <div class="popup-form-wrapper">
                       <button class="close-button">&times;</button>
                       <h2 class="popup-title">Modifică cont</h2>
-                      <form class="popup-form">
+                      <form class="popup-form" id="edit-account-form">
                         <div class="form-group">
                           <label for="email">Email:</label>
                           <input type="email" id="email" name="email" required>
@@ -350,12 +338,12 @@
                           <input type="password" id="password" name="password" required>
                         </div>
                         <div class="form-group">
-                          <label for="firstname">Nume:</label>
-                          <input type="text" id="firstname" name="firstname" required>
+                          <label for="lastname">Nume:</label>
+                          <input type="text" id="lastname" name="lastname" required>
                         </div>
                         <div class="form-group">
-                          <label for="lastname">Prenume:</label>
-                          <input type="text" id="lastname" name="lastname" required>
+                          <label for="firstname">Prenume:</label>
+                          <input type="text" id="firstname" name="firstname" required>
                         </div>
                         <div class="form-group">
                           <label for="phoneNo">Telefon:</label>
@@ -379,8 +367,8 @@
                           <input type="text" id="civilPartner" name="civilPartner">
                         </div>
                         <div class="form-group">
-                          <label for="tip-cont">Tipul contului:</label>
-                          <select id="tip-cont" name="tip-cont" required>
+                          <label for="accountType">Tipul contului:</label>
+                          <select id="accountType" name="accountType" required>
                             <option value="familie">Familie</option>
                             <option value="individual">Individual</option>
                             <option value="casa-de-copii">Casa de copii</option>
@@ -388,14 +376,20 @@
                         </div>
                         <div class="form-group">
                           <label for="ProfilePhoto">Foto:</label>
-                          <input type="file" id="ProfilePhoto" name="PictureRef" required>
+                          <input type="file" id="ProfilePhoto" name="pictureRef">
                         </div>
-                        
-                        
                         <button type="submit" class="confirm-button">Confirm</button>
                       </form>
                     </div>
                   </div>
+                  <div class="profile-settings-container">
+                    <p>Stare civilă</p>
+                    <p>Căsătorit: Nu
+                    </p>
+                  </div>
+                  <div class="profile-settings-container">
+                    <button class="red-bg">Șterge cont</button>
+                </div>
                   <div class="profile-settings-container">
                     <p>Localizare & Limbă</p>
                     <p>Localizare: România
@@ -403,17 +397,17 @@
                     <p>Limbă: Română
                     </p>
                   </div>
+
                   <div class="profile-settings-container">
-                      <button class="red-bg">Șterge cont</button>
-                  </div>
+                    <button class="red-bg">Dezactivează cont</button>
+                </div>
+                  
                   <div class="profile-settings-container">
                     <p>Tipul contului</p>
                     <p>Tipul contului: Familie
                     </p>
                   </div>
-                  <div class="profile-settings-container">
-                      <button class="red-bg">Dezactivează cont</button>
-                  </div>
+                  
                 </div>
               </div>
             </div>
