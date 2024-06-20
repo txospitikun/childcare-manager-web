@@ -64,8 +64,6 @@ confirm_add_child_bttn.addEventListener('click', () =>
             }
 
         );
-
-
 })
 
 function calculateAge(dateOfBirth) {

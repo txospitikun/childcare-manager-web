@@ -1,0 +1,51 @@
+# Node modules
+**/node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+
+# Optional npm cache directory
+.npm
+
+# Bower dependency directories
+bower_components/
+
+# Output directories
+dist/
+build/
+
+# Misc
+*.swp
+*.bak
+*~
+*.tmp
+*.tmp.*
+~*
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# Ignore config files that might contain sensitive information
+src/backend/config/
+src/backend/server/database/connection.js
+src/config.js
+# Ignore VSCode workspace settings
+.vscode/

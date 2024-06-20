@@ -28,9 +28,8 @@ confirm_login_bttn.addEventListener('click', () => {
     password: sha256(login_password.value),
   };
 
-
-  fetch(`${config.apiUrl}/account_login`, {
-    mode: 'no-cors',
+  fetch(`${config.apiUrl}/api/login`, {
+    // mode: 'no-cors',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -43,19 +42,25 @@ confirm_login_bttn.addEventListener('click', () => {
     }
     return response.json();
   })
-  .then(data => {
-    switch(data['LoginResponse'])
+  .then(loginData => {
+    console.log('Login data:', loginData);
+    switch(loginData['LoginResponse'])
     {
-        case 110:
-            console.log(data);
+        case 200:
+          console.log('Login data:', loginData);
             login_response.style.color = 'green';
             login_response.innerHTML = "Te-ai logat cu succes!";
-            console.log("begin cookie set1");
-            setCookie('JWT', data['JWTToken'], 1);
-            console.log("end cookie set");
-            localStorage.setItem('userInfo', JSON.stringify(data['UserInfo']));
 
-            window.location.href = '/frontend/dashboard/dashboard.html';
+            const jwtToken = loginData['JWT'];
+            console.log('JWT token:', jwtToken);
+            if(jwtToken){
+              console.log('Setting JWT token:', jwtToken);
+              setCookie('JWT', jwtToken, 1);
+            }
+            
+            localStorage.setItem('userInfo', JSON.stringify(loginData['UserInfo']));
+            console.log('Redirecting to dashboard...');
+            window.location.href = '../../dashboard/dashboard.html';
             break;
         case 111:
             login_response.style.color = 'red';
@@ -73,5 +78,7 @@ confirm_login_bttn.addEventListener('click', () => {
   })
   .catch(error => {
     console.error('Request failed', error);
+    login_response.style.color = 'red';
+    login_response.innerHTML = "A apărut o eroare.";
   });
 });

@@ -1,3 +1,5 @@
+import { addChild, fetchUserChildren } from './dashboard_post_operations.js';
+
 let currentDashboardButton = null;
 let currentSelectedChild = null;
 let currentSelectedAttribute = null;
@@ -64,13 +66,13 @@ window.addEventListener('click', (event) => {
     });
 });
 
-confirmBttn.addEventListener('click', (event) => {
-    event.preventDefault();
-    addChildForm.style.display = 'none';
-    document.getElementById('prenume').value = '';
-    document.getElementById('sex').value = '';
-    document.getElementById('data-nasterii').value = '';
-});
+// confirmBttn.addEventListener('click', (event) => {
+//     event.preventDefault();
+//     // addChildForm.style.display = 'none';
+//     document.getElementById('prenume').value = '';
+//     document.getElementById('sex').value = '';
+//     document.getElementById('data-nasterii').value = '';
+// });
 
 
 const checkbox = document.getElementById('use-current-date-time-checkbox');
@@ -374,3 +376,63 @@ for (let i = 0; i < img.length; i++) {
         captionText.innerHTML = this.nextElementSibling.innerHTML;
     }
 }
+
+document.getElementById('add-child-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Collect form data
+    const nume = document.getElementById('nume').value;
+    const prenume = document.getElementById('prenume').value;
+    const sex = document.getElementById('sex').value;
+    const dataNasterii = document.getElementById('data-nasterii').value;
+
+    // Create the data object
+    const data = {
+        FirstName: prenume,
+        LastName: nume,
+        Gender: sex,
+        DateOfBirth: dataNasterii
+    };
+
+    // Retrieve the JWT token from cookies
+    const cookieString = document.cookie;
+    console.log('Cookie string:', cookieString);
+    const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+    console.log('JWT Token:', token);
+
+    if (!token) {
+        console.error('JWT token not found');
+        alert('JWT token not found');
+        return;
+    }
+
+    console.log('Form data:', data);
+
+    // Send the data to the server
+    fetch('http://localhost:5000/api/insert_children', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(result => {
+        console.log('Result:', result);
+        if (result.InsertChildrenResponse === 300) {
+            alert('Child successfully added.');
+        } else if (result.InsertChildrenResponse === 10) {
+            alert('Invalid or expired JWT token. Redirecting to login page.');
+            window.location.href = '/login';
+        } else {
+            alert('Error: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});

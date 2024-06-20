@@ -20,14 +20,14 @@ register_form.addEventListener('submit', (e) =>
 confirm_register_bttn.addEventListener('click', () => {
 
   let data = {
-    fname: register_fname.value,
-    lname: register_lname.value,
+    firstname: register_fname.value,
+    lastname: register_lname.value,
     email: register_email.value,
     password: sha256(register_password.value),
-    register_confirm_password: sha256(register_confirm_password.value)
+    confirm_password: sha256(register_confirm_password.value)
   };
 
-  fetch(`${config.apiUrl}/account_register`, {
+  fetch(`${config.apiUrl}/api/register`, {
     mode: 'no-cors',
     method: 'POST',
     headers: {

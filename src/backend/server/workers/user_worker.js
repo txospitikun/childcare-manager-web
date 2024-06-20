@@ -13,21 +13,53 @@ const cookie_worker = require('./cookie_worker');
 const FeedingEntryForm = require("../request_modals/feedingentryform_modal");
 
 async function getUser(req, res) {
-    const cookies = cookie_worker.parseCookies(req);
-    const decoded_jwt_token = encryption_worker.decode(cookies['JWT']);
+    console.log('getUser called');
+    
+    // Extract JWT token from Authorization header
+    const authHeader = req.headers['authorization'];
+    console.log('Authorization Header:', authHeader);
 
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        console.log('JWT token not found in Authorization header');
+        res.writeHead(401, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "No authentication token" }));
+        return null;
+    }
+
+    const jwtToken = authHeader.split(' ')[1];
+    console.log('JWT Token:', jwtToken);
+
+    // Decode JWT token
+    let decoded_jwt_token;
+    try {
+        decoded_jwt_token = encryption_worker.decode(jwtToken);
+    } catch (error) {
+        console.log('Error decoding JWT token:', error);
+        res.writeHead(401, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Invalid authentication token" }));
+        return null;
+    }
+    console.log('Decoded JWT Token:', decoded_jwt_token);
+
+    // Check if token is valid
     if (decoded_jwt_token === false) {
+        console.log('Invalid JWT token');
         res.writeHead(401, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Invalid authentication token" }));
         return null;
     }
 
+    // Retrieve user from database
     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
+    console.log('Retrieved User:', User);
 
+    // Check if user is found
     if (User == null) {
+        console.log('User not found, backend error.');
         throw new Error("Backend error.");
     }
-    console.log(User);
+
+    // Return user
     return User;
 }
 

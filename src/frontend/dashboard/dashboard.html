@@ -81,7 +81,11 @@
                   <div class="popup-form-wrapper">
                     <button class="close-button">&times;</button>
                     <h2 class="popup-title">Adaugă un copil nou</h2>
-                    <form class="popup-form">
+                    <form class="popup-form" id="add-child-form">
+                      <div class="form-group">
+                        <label for="prenume">Nume:</label>
+                        <input type="text" id="nume" name="nume" placeholder="Ex: Popescu" required>
+                      </div>
                       <div class="form-group">
                         <label for="prenume">Prenume:</label>
                         <input type="text" id="prenume" name="prenume" placeholder="Ex: Ion" required>
@@ -97,6 +101,10 @@
                         <label for="data-nasterii">Data nasterii:</label>
                         <input type="date" id="data-nasterii" name="data-nasterii" required>
                       </div>
+                      <div class="form-group">
+                        <label for="photo">Foto:</label>
+                        <input type="file" id="photo" name="photo" required>
+                    </div>
                       <button type="submit" class="confirm-button">Confirm</button>
                     </form>
                   </div>
@@ -580,7 +588,8 @@
         
       </div>
       </main>
-      <script src="./dashboard.js"></script>
-      <script type = "module" src="./dashboard_logic.js"></script>
+      <script type = "module" src="./dashboard.js"></script>
+      <!-- <script type = "module" src="./dashboard_logic.js"></script> -->
+      <script type = "module" src="./dashboard_post_operations.js"></script>
     </body>
   </html>

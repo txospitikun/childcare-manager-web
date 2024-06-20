@@ -44,25 +44,46 @@ function encode(obj) {
 }
 
 function decode(str) {
+    console.log('Token to decode:', str);
+    if (!str) {
+        throw new Error('Invalid token: token is undefined');
+    }
+
     const jwtArr = str.split(".");
+    console.log('JWT parts:', jwtArr);
+    if (jwtArr.length !== 3) {
+        throw new Error('Invalid token format');
+    }
+
     const head = jwtArr[0];
     const body = jwtArr[1];
     const hash = jwtArr[2];
-    const checkSum = checkSumGen(head, body);
+    console.log('Header:', head);
+    console.log('Payload:', body);
+    console.log('Hash:', hash);
+
+    const checkSum = checkSumGen(head, body).replace(/=+$/, ''); // Remove padding
+    console.log('Generated Checksum:', checkSum);
 
     if (hash === checkSum) {
         const payload = JSON.parse(decodeBase64(body));
+        console.log('Decoded Payload:', payload);
 
         const date = new Date(payload.iat);
+        console.log('Issued At Date:', date);
         const time_difference = date - new Date();
+        console.log('Time Difference:', time_difference);
 
-        if(time_difference / (24 * 60 * 60 * 1000) > 5)
+        if(time_difference / (24 * 60 * 60 * 1000) > 5) {
+            console.log('Token expired');
             return false;
+        }
         
         return {
             payload: payload,
         };
     } else {
+        console.log('Checksum mismatch');
         return false;
     }
 }
