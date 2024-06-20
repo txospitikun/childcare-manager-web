@@ -65,7 +65,7 @@ function decode(str) {
     const checkSum = checkSumGen(head, body).replace(/=+$/, ''); // Remove padding
     console.log('Generated Checksum:', checkSum);
 
-    if (hash === checkSum + '=') {
+    if (hash === checkSum) {
         const payload = JSON.parse(decodeBase64(body));
         console.log('Decoded Payload:', payload);
 
