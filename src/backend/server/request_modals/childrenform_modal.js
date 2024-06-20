@@ -14,6 +14,7 @@ class ChildrenForm
         this.LastName = json.LastName;
         this.Gender = json.Gender;
         this.DateOfBirth = json.DateOfBirth;
+        this.PictureRef = json.PictureRef;
     }
 }
 

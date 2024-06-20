@@ -69,6 +69,9 @@ http.createServer((req, res) =>
                 case '/get_feeding_entries_by_date':
                     user_worker.getFeedingEntriesByDate(req, res);
                     break;
+                case '/get_self_info':
+                    user_worker.getSelfInfo(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -77,6 +80,9 @@ http.createServer((req, res) =>
         case 'PUT':
             switch(parsedUrl.pathname)
             {
+                case '/modify_account_settings':
+                    user_worker.modifyAccountSettings(req, res);
+                    break;
                 case '/edit_feeding_entry':
                     user_worker.editFeedingEntry(req, res);
                     break;
