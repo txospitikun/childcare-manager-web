@@ -11,11 +11,11 @@ const ChildrenFeedingForm = require('./../request_modals/feedingentryform_modal'
 const json_worker = require('./json_worker');
 const cookie_worker = require('./cookie_worker');
 const FeedingEntryForm = require("../request_modals/feedingentryform_modal");
-
+const UpdateAccount = require("../request_modals/updateaccountform_modal");
+const {parseFormData} = require("./fetch_worker");
 async function getUser(req, res) {
     console.log('getUser called');
 
-    // Extract JWT token from Authorization header
     const authHeader = req.headers['authorization'];
     console.log('Authorization Header:', authHeader);
 
@@ -29,7 +29,6 @@ async function getUser(req, res) {
     const jwtToken = authHeader.split(' ')[1];
     console.log('JWT Token:', jwtToken);
 
-    // Decode JWT token
     let decoded_jwt_token;
     try {
         decoded_jwt_token = encryption_worker.decode(jwtToken);
@@ -41,7 +40,6 @@ async function getUser(req, res) {
     }
     console.log('Decoded JWT Token:', decoded_jwt_token);
 
-    // Check if token is valid
     if (decoded_jwt_token === false) {
         console.log('Invalid JWT token');
         res.writeHead(401, {'Content-Type': 'application/json'});
@@ -49,18 +47,35 @@ async function getUser(req, res) {
         return null;
     }
 
-    // Retrieve user from database
     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
     console.log('Retrieved User:', User);
 
-    // Check if user is found
     if (User == null) {
         console.log('User not found, backend error.');
         throw new Error("Backend error.");
     }
 
-    // Return user
     return User;
+}
+
+
+async function getSelfInfo(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ user }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't load user! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
 }
 
 async function insertChildren(req, res) {
@@ -68,8 +83,10 @@ async function insertChildren(req, res) {
         const user = await getUser(req, res);
         if (!user) return;
 
-        const parsedData = await fetch_worker.handle_request(req);
+        const parsedData = await parseFormData(req); // Use parseFormData to handle multipart form data
+
         const childrenform = new ChildrenForm(parsedData);
+
 
         if (json_worker.isNullOrEmpty(childrenform.FirstName) || json_worker.isNullOrEmpty(childrenform.LastName) || json_worker.isNullOrEmpty(childrenform.Gender) || json_worker.isNullOrEmpty(childrenform.DateOfBirth)) {
             res.writeHead(400, {'Content-Type': 'application/json'});
@@ -83,6 +100,26 @@ async function insertChildren(req, res) {
         res.end(JSON.stringify({ message: "Children added successfully" }));
     } catch (err) {
         console.log("Server error: Couldn't insert children in the database! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+async function modifyAccountSettings(req, res) {
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedData = await parseFormData(req);
+        const updateaccount = new UpdateAccount(parsedData);
+        console.log(updateaccount);
+
+        await userdb_logic.editUser(updateaccount, user.ID);
+
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Account settings updated successfully" }));
+    } catch (err) {
+        console.log("Server error: Couldn't update account settings in the database! ", err);
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
@@ -242,4 +279,4 @@ async function deleteFeedingEntry(req, res) {
     }
 }
 
-module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry };
+module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, modifyAccountSettings, getSelfInfo};

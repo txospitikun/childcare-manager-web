@@ -60,4 +60,70 @@ async function findUserByEmail(email) {
     }
 }
 
-module.exports = {findUserByID, findUserByEmail, insertUser}
+
+async function editUser(updateaccount, userId) {
+    try {
+        const connection = await pool.getConnection();
+
+        let query = 'UPDATE Users SET ';
+        let fields = [];
+        let values = [];
+
+        if (updateaccount.email !== 'N/A' && updateaccount.email !== -1) {
+            fields.push('Email = ?');
+            values.push(updateaccount.email);
+        }
+        if (updateaccount.firstname !== 'N/A' && updateaccount.firstname !== -1) {
+            fields.push('FirstName = ?');
+            values.push(updateaccount.firstname);
+        }
+        if (updateaccount.lastname !== 'N/A' && updateaccount.lastname !== -1) {
+            fields.push('LastName = ?');
+            values.push(updateaccount.lastname);
+        }
+        if (updateaccount.phoneNo !== 'N/A' && updateaccount.phoneNo !== -1) {
+            fields.push('PhoneNo = ?');
+            values.push(updateaccount.phoneNo);
+        }
+        if (updateaccount.location !== 'N/A' && updateaccount.location !== -1) {
+            fields.push('Location = ?');
+            values.push(updateaccount.location);
+        }
+        if (updateaccount.language !== 'N/A' && updateaccount.language !== -1) {
+            fields.push('Language = ?');
+            values.push(updateaccount.language);
+        }
+        if (updateaccount.civilState !== 'N/A' && updateaccount.civilState !== -1) {
+            fields.push('CivilState = ?');
+            values.push(updateaccount.civilState);
+        }
+        if (updateaccount.civilPartner !== 'N/A' && updateaccount.civilPartner !== -1) {
+            fields.push('CivilPartner = ?');
+            values.push(updateaccount.civilPartner);
+        }
+        if (updateaccount.accountType !== 'N/A' && updateaccount.accountType !== -1) {
+            fields.push('AccountType = ?');
+            values.push(updateaccount.accountType);
+        }
+        if (updateaccount.pictureRef !== 'N/A' && updateaccount.pictureRef !== -1) {
+            fields.push('PictureRef = ?');
+            values.push(updateaccount.pictureRef);
+        }
+
+        if (fields.length === 0) {
+            return;
+        }
+
+        query += fields.join(', ') + ' WHERE ID = ?';
+        values.push(userId);
+
+        const [result] = await connection.query(query, values);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error;
+    }
+}
+
+module.exports = {findUserByID, findUserByEmail, insertUser, editUser}
