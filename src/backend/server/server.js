@@ -4,6 +4,7 @@ var querystring = require('querystring');
 
 const authentification_worker = require('./workers/auth_worker.js');
 const user_worker = require('./workers/user_worker.js');
+const {serveStaticFiles} = require("./workers/fetch_worker");
 
 http.createServer((req, res) =>
 {
@@ -32,7 +33,12 @@ http.createServer((req, res) =>
    
     const parsedUrl = url.parse(req.url, true);
 
-    switch (req.method)
+    if(parsedUrl.pathname.startsWith('/src/uploads/'))
+    {
+        console.log("test");
+        serveStaticFiles(req, res);
+    }
+    else switch (req.method)
     {
         case 'POST':
             switch (parsedUrl.pathname)
@@ -81,7 +87,7 @@ http.createServer((req, res) =>
             switch(parsedUrl.pathname)
             {
                 case '/modify_account_settings':
-                    user_worker.modifyAccountSettings(req, res);
+                    user_worker.editAccountSettings(req, res);
                     break;
                 case '/edit_feeding_entry':
                     user_worker.editFeedingEntry(req, res);
@@ -104,6 +110,7 @@ http.createServer((req, res) =>
             }
             break;
     }
+
 }
 ).listen(5000);
 console.log("Server has started!");
