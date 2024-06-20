@@ -212,48 +212,54 @@ EditFeedingEntryResponse: 300 if edited sucesfully
 /api/delete_feeding_entry?id=9
 
 # SQL Tabels:
-Users:
 ```
 CREATE TABLE Users (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Email VARCHAR(255) NOT NULL,
     Password VARCHAR(255) NOT NULL,
-    RegisterDate DATE NOT NULL DEFAULT (CURRENT_DATE),
-    Privilege INT NOT NULL,
-    Suspended BOOLEAN NOT NULL,
-    FirstName VARCHAR(255) NOT NULL,
-    LastName VARCHAR(255) NOT NULL,
+    RegisterDate DATE,
+    Privilege INT,
+    Suspended TINYINT(1),
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
     PhoneNo VARCHAR(20),
     Location VARCHAR(255),
     Language VARCHAR(255),
-    CivilState BOOLEAN,
+    CivilState TINYINT(1),
     CivilPartner INT,
     AccountType INT,
     PictureRef VARCHAR(255)
 );
 
-```
-Children:
-```
 CREATE TABLE Childrens (
-    ID SERIAL PRIMARY KEY,
-    FirstName VARCHAR(255) NOT NULL,
-    LastName VARCHAR(255) NOT NULL,
-    Gender VARCHAR(255) NOT NULL,
-    DateOfBirth DATE NOT NULL,
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(255),
+    LastName VARCHAR(255),
+    Gender VARCHAR(255),
+    DateOfBirth DATE,
     PictureRef VARCHAR(255),
-    UserID INT NOT NULL,
+    UserID INT,
     FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
 
-```
-Relations:
-```
+CREATE TABLE Feeding (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Date DATE,
+    Time TIME,
+    Unit VARCHAR(50),
+    Quantity INT,
+    FoodType VARCHAR(100),
+    UserID INT,
+    ChildrenID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    FOREIGN KEY (ChildrenID) REFERENCES Children(ID)
+);
+
 CREATE TABLE Relations (
-    ID SERIAL PRIMARY KEY,
-    First INT NOT NULL,
-    SECOND INT NOT NULL,
-    RelationType INT NOT NULL
+    ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    First INT,
+    Second INT,
+    RelationType INT
 );
 ```
 

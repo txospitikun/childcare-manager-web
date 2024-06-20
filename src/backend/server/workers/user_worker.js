@@ -14,7 +14,7 @@ const FeedingEntryForm = require("../request_modals/feedingentryform_modal");
 
 async function getUser(req, res) {
     console.log('getUser called');
-    
+
     // Extract JWT token from Authorization header
     const authHeader = req.headers['authorization'];
     console.log('Authorization Header:', authHeader);
