@@ -622,6 +622,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById('add-meal-bttn').addEventListener('click', () => {
+        resetMealForm();
         showModal('add-meal-modal');
     });
 
@@ -633,6 +634,12 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal('edit-meal-modal');
         fetchFeedingEntryData();
     });
+
+    function resetMealForm() {
+        document.getElementById('add-meal-form').reset();
+        document.getElementById('use-current-date-time-checkbox-add').checked = true;
+        document.getElementById('date-and-time-inputs-add-meal').style.display = 'none';
+    }
 
     
     document.getElementById('add-meal-form').addEventListener('submit', async function(e) {
@@ -831,84 +838,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    document.getElementById('use-current-date-time-checkbox').addEventListener('change', function() {
-        const dateTimeInputs = document.getElementById('date-and-time-inputs-add-meal');
-        if (this.checked) {
-            dateTimeInputs.style.display = 'none';
-        } else {
-            dateTimeInputs.style.display = 'block';
-        }
-    });
-
-    document.getElementById('meal-form').addEventListener('submit', async function(e) {
-        e.preventDefault(); 
-
-        if (!currentSelectedChild) {
-            alert("Please select a child first.");
-            return;
-        }
-
-        const selectedChildId = currentSelectedChild.dataset.childId;
-
-        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
-        let date, time;
-        
-        if (useCurrentDateTime) {
-            const now = new Date();
-            date = now.toISOString().split('T')[0];
-            time = now.toTimeString().split(' ')[0];
-        } else {
-            date = document.getElementById('data_add_meal').value;
-            time = document.getElementById('time_add_meal').value + ":00";
-        }
-
-        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
-        const quantity = document.getElementById('mass-input').value;
-        const foodType = document.getElementById('food').value;
-
-        const payload = {
-            ID: selectedChildId,
-            Date: date,
-            Time: time,
-            Unit: unit,
-            Quantity: parseInt(quantity, 10),
-            FoodType: foodType,
-        };
-
-        console.log(payload);
-
-        const cookieString = document.cookie;
-        const token = cookieString.substring(4);
-
-        if (!token) {
-            alert('JWT token not found');
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:5000/api/insert_feeding_entry', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            console.log('Response status:', response.status);
-            const result = await response.json();
-            console.log('Result:', result);
-
-            if (response.ok) {
-                fetchFeedingEntries(selectedDate, selectedChildId);
+    function handleDateTimeCheckboxChange(checkboxId, dateTimeInputsId) {
+        const checkbox = document.getElementById(checkboxId);
+        const dateTimeInputs = document.getElementById(dateTimeInputsId);
+    
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                dateTimeInputs.style.display = 'none';
             } else {
-                alert(`Error: ${result.message}`);
+                dateTimeInputs.style.display = 'block';
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while adding the meal.');
-        }
-    });
+        });
+    }
+
+    handleDateTimeCheckboxChange('use-current-date-time-checkbox-add', 'date-and-time-inputs-add-meal');
+    handleDateTimeCheckboxChange('use-current-date-time-checkbox-edit', 'date-and-time-inputs-edit-meal');
 
     addChildSelectionHandler();
 
