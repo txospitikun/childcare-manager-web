@@ -1,6 +1,6 @@
 import { sha256 } from './../../workers/crypto_worker.js';
 import { setCookie, getCookie, deleteCookie } from '../../workers/cookie_worker.js';
-import config from './../../../config.js';
+import config from './../../../../config.js';
 
 function hash(text) {
   const hmac = crypto.createHmac('sha256', key);
