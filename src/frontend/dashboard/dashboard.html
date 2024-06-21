@@ -123,10 +123,11 @@
                           <div class="popup-form-wrapper">
                             <button class="close-button">&times;</button>
                             <h2 class="popup-title">Adauga o noua masa</h2>
-                            <form class="popup-form">
+                            <form class="popup-form" id="add-meal-form">
                               <div class="form-group"> 
                                 <div > 
-                                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
+                                  <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
+                                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> 
                                 </div> 
                               </div>
                               <div class="form-group" id="date-and-time-inputs-add-table" style="display: none;">
@@ -147,26 +148,8 @@
                                 <input type="number" id="mass-input" name="mass-input" min="0" required>
                               </div>
                               <div class="form-group">
-                                <button type="button" class="add-selected-food-button confirm-button">Crează un aliment nou.</button>
-                              </div>
-                              <div class="form-group">
-                                <label for="food-selector">Aliment:</label>
-                                <select id="food-selector" name="food-selector">
-                                  <option value="carrots">Morcov</option>
-                                  <option value="milk">Lapte</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <button type="button" class="add-selected-food-button confirm-button">Adaugă alimentul selectat.</button>
-                              </div>
-                              
-                              <div class="form-group" id="custom-food-inputs" style="display: none;">
-                                <label for="custom-food-name">Nume:</label>
-                                <input type="text" id="custom-food-name" name="custom-food-name" required>
-                              </div>
-                              <div class="form-group">
-                                <label for="text">Text:</label>
-                                <textarea id="text_add_table" name="text" maxlength="300" required></textarea>
+                                <label for="food">Aliment:</label>
+                                <input type="text" id="food" name="food" required>
                               </div>
                               <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
                             </form>

@@ -29,8 +29,6 @@ document.getElementById('casatorit').addEventListener('change', function() {
     }
 });
 
-const confirmBttn = document.querySelector('.confirm-button');
-const confirmBttnTable = document.getElementById('confirm-add-table-bttn');
 
 
 
@@ -55,27 +53,6 @@ window.addEventListener('click', (event) => {
         }
     });
 });
-
-const checkbox = document.getElementById('use-current-date-time-checkbox');
-const dataSiTimpInputs = document.getElementById('date-and-time-inputs-add-table');
-
-checkbox.addEventListener('change', () => {
-    if (checkbox.checked) {
-        dataSiTimpInputs.style.display = 'none';
-    } else {
-        dataSiTimpInputs.style.display = 'block';
-    }
-});
-
-confirmBttnTable.addEventListener('click', (event) => {
-    event.preventDefault();
-    addTableForm.style.display = 'none';
-    document.getElementById('data_add_table').value = '';
-    document.getElementById('time_add_table').value = '';
-    document.getElementById('text_add_table').value = '';
-});
-
-
 
 var buttonDisplayMap = {
     "feeding-bttn": document.getElementById('feeding_items'),
@@ -348,6 +325,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function displayChildren(children) {
         const dashboardChildren = document.getElementById('user-children-id');
         const childrenAddButton = document.getElementById('add-child-bttn');
+        console.log('Children:', children);
 
         // Remove existing children elements
         while (dashboardChildren.firstChild && dashboardChildren.firstChild !== childrenAddButton) {
@@ -369,6 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function createChildElement(child) {
         const childContainer = document.createElement('div');
         childContainer.className = 'children-container';
+        childContainer.dataset.childId = child.ID;
     
         const img = document.createElement('img');
         img.src = child.PictureRef ? `http://localhost:5000/api/src/${child.PictureRef}` : '../placeholders/child2.jpg';
@@ -479,7 +458,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
                 document.getElementById('user-children-id').insertBefore(newChild, document.getElementById('add-child-bttn'));
                 addChildSelectionHandler();
-                closeModal();
             } else {
                 if (result.status === 10) {
                     alert('Invalid or expired JWT token. Redirecting to login page.');
@@ -527,6 +505,86 @@ document.addEventListener("DOMContentLoaded", function () {
             default: return 0;
         }
     }
+
+    document.getElementById('use-current-date-time-checkbox').addEventListener('change', function() {
+        const dateTimeInputs = document.getElementById('date-and-time-inputs-add-table');
+        if (this.checked) {
+            dateTimeInputs.style.display = 'none';
+        } else {
+            dateTimeInputs.style.display = 'block';
+        }
+    });
+
+    document.getElementById('add-meal-form').addEventListener('submit', async function(e) {
+        e.preventDefault(); 
+
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+
+        const selectedChildId = currentSelectedChild.dataset.childId;
+
+        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
+        let date, time;
+        
+        if (useCurrentDateTime) {
+            const now = new Date();
+            date = now.toISOString().split('T')[0];
+            time = now.toTimeString().split(' ')[0];
+        } else {
+            date = document.getElementById('data_add_table').value;
+            time = document.getElementById('time_add_table').value + ":00";
+        }
+
+        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
+        const quantity = document.getElementById('mass-input').value;
+        const foodType = document.getElementById('food').value;
+
+        const payload = {
+            SelectedChildren: selectedChildId,
+            Date: date,
+            Time: time,
+            Unit: unit,
+            Quantity: parseInt(quantity, 10),
+            FoodType: foodType,
+        };
+
+        const cookieString = document.cookie;
+        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_feeding_entry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Result:', result);
+
+            if (response.ok) {
+                alert('Meal added successfully.');
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the meal.');
+        }
+    });
+
+    addChildSelectionHandler();
 
     async function fetchAccountData() {
         const cookieString = document.cookie;
