@@ -1,6 +1,7 @@
 let currentDashboardButton = null;
 let currentSelectedChild = null;
 let currentSelectedAttribute = null;
+const currentDateToday = new Date();
 
 let deleteChildrenButton = document.getElementById('delete-bttn');
 
@@ -135,9 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
         currentSelectedChild = null;
 
         const cookieString = document.cookie;
-        console.log('Cookie string:', cookieString);
         const token = cookieString.substring(4);
-        console.log('JWT Token:', token);
 
         if (!token) {
             console.error('JWT token not found');
@@ -301,6 +300,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             updateCurrentDayTitle(date);
             selectedDate = date;
+            const selectedChildId = currentSelectedChild.dataset.childId;
+            fetchFeedingEntries(date, selectedChildId);
         });
 
         return dateDiv;
@@ -323,16 +324,129 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     
+    
     updateCalendar();
     updateCurrentDayTitle(selectedDate);
+
+    function fetchFeedingEntries(date, childID) {
+        // Retrieve the JWT token from cookies
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4); // Assuming token starts at position 4
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        // Convert date to YYYY-MM-DD format
+        const dateString = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0];
+    
+        // Fetch the feeding entries data
+        fetch(`http://localhost:5000/api/get_feeding_entries_by_date?date=${dateString}&childID=${childID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Result:', result);
+            if (result.feedingEntries) {
+                displayFeedingEntries(result.feedingEntries);
+            } else {
+                displayFeedingEntries([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayFeedingEntries([]);
+        });
+    }
+
+    let selectedEntryId=null;
+
+    function displayFeedingEntries(entries) {
+        const feedingItemsContainer = document.getElementById("feeding_items");
+        feedingItemsContainer.innerHTML = ""; // Clear existing entries
+
+        if (entries.length === 0) {
+            feedingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
+        }
+    
+        entries.forEach(entry => {
+            const entryDiv = document.createElement("div");
+            entryDiv.className = "calendar-item";
+            entryDiv.dataset.entryId = entry.ID;
+    
+            const timeP = document.createElement("p");
+            timeP.textContent = entry.Time.slice(0, 5); // Display time in HH:MM format
+    
+            const foodP = document.createElement("p");
+            foodP.textContent = `- ${entry.Quantity}${entry.Unit} ${entry.FoodType}`;
+    
+            entryDiv.appendChild(timeP);
+            entryDiv.appendChild(foodP);
+            entryDiv.addEventListener('click', function() {
+                document.querySelectorAll('.calendar-item.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                entryDiv.classList.add('selected');
+                selectedEntryId = entry.ID; // Store the selected entry's ID
+            });
+            feedingItemsContainer.appendChild(entryDiv);
+        });
+    }
+
+    document.getElementById('delete-meal-bttn').addEventListener('click', function() {
+        if (!selectedEntryId) {
+            alert("Please select a feeding entry first.");
+            return;
+        }
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        fetch(`http://localhost:5000/api/delete_feeding_entry?id=${selectedEntryId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(result => {
+            console.log('Result:', result);
+            if (response.ok) {
+                alert('Feeding entry deleted successfully.');
+                // Refresh the feeding entries after deletion
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchFeedingEntries(selectedDate, selectedChildId);
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the feeding entry.');
+        });
+    });
+    
 
 
     function loadChildren() {
         // Retrieve the JWT token from cookies
         const cookieString = document.cookie;
-        console.log('Cookie string:', cookieString);
         const token = cookieString.substring(4);
-        console.log('JWT Token:', token);
 
         if (!token) {
             console.error('JWT token not found');
@@ -349,7 +463,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
         .then(response => {
-            console.log('Response status:', response.status);
             return response.json();
         })
         .then(result => {
@@ -440,6 +553,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!currentSelectedChild) {
                 currentSelectedChild = button;
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchFeedingEntries(currentDateToday, selectedChildId);
                 button.style.border = "2px solid gray";
             }
 
@@ -463,9 +578,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData(form);
     
         const cookieString = document.cookie;
-        console.log('Cookie string:', cookieString);
         const token = cookieString.substring(4);
-        console.log('JWT Token', token);
     
         if (!token) {
             console.error('JWT token not found');
@@ -597,6 +710,8 @@ document.addEventListener("DOMContentLoaded", function () {
             FoodType: foodType,
         };
 
+        console.log(payload);
+
         const cookieString = document.cookie;
         const token = cookieString.substring(4);
 
@@ -622,6 +737,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 alert('Meal added successfully.');
+                fetchFeedingEntries(currentDateToday, selectedChildId);
             } else {
                 alert(`Error: ${result.message}`);
             }
@@ -640,7 +756,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!token) {
             console.error('JWT token not found');
             alert('JWT token not found');
-            return;
+            return null;
         }
 
         try {
@@ -655,24 +771,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 const data = await response.json();
                 fillFormData(data);
                 populateProfileData(data.user);
+                return data.user;
             } else {
                 console.error('Error fetching account data');
                 alert('Error fetching account data');
+                return null;
             }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while fetching account data');
+            return null;
         }
     }
 
     function populateProfileData(userData) {
-        console.log(userData);
         const fullName = `${userData.FirstName} ${userData.LastName}`;
         const email = `Email: ${userData.Email}`;
         const phoneNo = `Telefon: ${userData.PhoneNo}`;
         const maritalStatus = `Căsătorit: ${userData.CivilState === 1 ? 'Da' : 'Nu'}`;
-        const birthDate = `Data nașterii: ${userData.BirthDate}`;
-        const gender = `Gen: ${userData.Gender}`;
         const location = `Localizare: ${userData.Location}`;
         const language = `Limbă: ${userData.Language}`;
         const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType)}`;
