@@ -70,4 +70,19 @@ async function deleteFeedingEntry(entryId, userID) {
     }
 }
 
-module.exports = { insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry};
+async function insertPhoto(ID, photoForm)
+{
+    try {
+        const connection = await pool.getConnection();
+        const query = 'INSERT INTO Photos (Date, Time, PictureRef, UserID, InTimeline, ChildrenID) VALUES (?, ?, ?, ?, ?, ?)';
+        const [result] = await connection.query(query, [photoForm.Date, photoForm.Time, photoForm.PictureRef, ID, photoForm.InTimeline, photoForm.ChildrenID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error inserting photo:', error);
+        throw error;
+    }
+
+}
+
+module.exports = { insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertPhoto};
