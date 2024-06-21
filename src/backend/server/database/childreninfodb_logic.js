@@ -5,7 +5,7 @@ async function insertFeedingEntry(ID, feedingEntryForm)
 {
     try {
         const connection = await pool.getConnection();
-        const query = 'INSERT INTO Feeding (Date, Time, Unit, Quantity, FoodType, UserID, ChildrenID) VALUES (?, ?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO Feeding (Date, Time, Unit, Quantity, FoodType, UserID, ChildrenID) VALUES (?, ?, ?, ?, ?, ?, ?)';
         const [result] = await connection.query(query, [feedingEntryForm.Date, feedingEntryForm.Time, feedingEntryForm.Unit, feedingEntryForm.Quantity, feedingEntryForm.FoodType, ID, feedingEntryForm.ID]);
         connection.release();
         return result;
