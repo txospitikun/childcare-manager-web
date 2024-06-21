@@ -101,6 +101,9 @@ http.createServer((req, res) =>
                 case '/delete_feeding_entry':
                     user_worker.deleteFeedingEntry(req, res);
                     break;
+                case '/delete_children':
+                    user_worker.deleteChildren(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
