@@ -46,7 +46,7 @@ coverage/
 # Ignore config files that might contain sensitive information
 src/backend/config/
 src/backend/server/database/connection.js
-src/config.js
+config.js
 src/uploads/*
 # Ignore VSCode workspace settings
 .vscode/
