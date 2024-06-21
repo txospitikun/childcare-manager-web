@@ -17,6 +17,24 @@ async function insertChildren(ID, childrenform)
     }
 }
 
+async function deleteChildren(userID, childrenID)
+{
+    try
+    {
+        const connection = await pool.getConnection();
+        const query_feeding = 'DELETE from feeding WHERE ChildrenID = ? AND UserID = ?';
+        const query = 'DELETE FROM Childrens WHERE UserID = ? AND ID = ?';
+        const [result_feeding] = await connection.query(query_feeding, [childrenID, userID]);
+        const [result] = await connection.query(query, [userID, childrenID]);
+        connection.release();
+        return result;
+    }
+    catch (error) {
+        console.error('Error deleting user:', error);
+        throw error;
+    }
+}
+
 async function getChildrensByID(ID) 
 {
     try 
@@ -32,4 +50,4 @@ async function getChildrensByID(ID)
     }
 }
 
-module.exports = {insertChildren, getChildrensByID};
+module.exports = {insertChildren, getChildrensByID, deleteChildren};
