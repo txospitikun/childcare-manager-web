@@ -8,7 +8,7 @@ class FeedingEntryForm {
 
 
     constructor(json) {
-        this.SelectedChildren = json.SelectedChildren;
+        this.ID = json.ID;
         this.Date = json.Date;
         this.Time = json.Time;
         this.Unit = json.Unit;

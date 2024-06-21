@@ -2,6 +2,7 @@ let currentDashboardButton = null;
 let currentSelectedChild = null;
 let currentSelectedAttribute = null;
 
+let deleteChildrenButton = document.getElementById('delete-bttn');
 
 const dashboardMain = document.querySelector('#dashboard-main');
 const dashboardProfile = document.querySelector('#dashboard-profile');
@@ -122,6 +123,52 @@ var btn = document.getElementById("addPhoto");
 document.addEventListener("DOMContentLoaded", function () {
 
     fetchAccountData();
+
+    deleteChildrenButton.addEventListener('click', function()
+    {
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+
+        const selectedChildId = currentSelectedChild.dataset.childId;
+        currentSelectedChild = null;
+
+        const cookieString = document.cookie;
+        console.log('Cookie string:', cookieString);
+        const token = cookieString.substring(4);
+        console.log('JWT Token:', token);
+
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+
+        fetch(`http://localhost:5000/api/delete_children?childID=${selectedChildId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(result => {
+                console.log('Result:', result);
+                if (result) {
+                } else {
+                    console.error('Error: ' + result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                loadChildren()});
+    });
 
     document.querySelectorAll('.dashboard-button').forEach(function (button) {
 
@@ -279,14 +326,12 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCalendar();
     updateCurrentDayTitle(selectedDate);
 
-    let currentSelectedChild = null;
 
-    // Function to load and display children
     function loadChildren() {
         // Retrieve the JWT token from cookies
         const cookieString = document.cookie;
         console.log('Cookie string:', cookieString);
-        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+        const token = cookieString.substring(4);
         console.log('JWT Token:', token);
 
         if (!token) {
@@ -392,6 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to add event listeners for child selection
     function addChildSelectionHandler() {
         document.querySelectorAll('.children-container').forEach(function(button) {
+
             if (!currentSelectedChild) {
                 currentSelectedChild = button;
                 button.style.border = "2px solid gray";
@@ -413,15 +459,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('add-child-form').addEventListener('submit', async function(e) {
         e.preventDefault(); // Prevent the default form submission
     
-        // Collect form data
         const form = document.getElementById('add-child-form');
         const formData = new FormData(form);
     
-        // Retrieve the JWT token from cookies
         const cookieString = document.cookie;
         console.log('Cookie string:', cookieString);
-        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
-        console.log('JWT Token:', token);
+        const token = cookieString.substring(4);
+        console.log('JWT Token', token);
     
         if (!token) {
             console.error('JWT token not found');
@@ -468,6 +512,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } catch (error) {
             console.error('Error:', error);
+        } finally
+        {
+            loadChildren();
         }
     });
 
@@ -551,7 +598,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         const cookieString = document.cookie;
-        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+        const token = cookieString.substring(4);
 
         if (!token) {
             console.error('JWT token not found');
@@ -588,7 +635,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchAccountData() {
         const cookieString = document.cookie;
-        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+        const token = cookieString.substring(4);
 
         if (!token) {
             console.error('JWT token not found');
@@ -629,6 +676,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const location = `Localizare: ${userData.Location}`;
         const language = `Limbă: ${userData.Language}`;
         const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType)}`;
+        console.log(`http://localhost:5000/api/src/${userData.PictureRef}`);
         const profilePhoto = userData.PictureRef ? `http://localhost:5000/api/src/${userData.PictureRef}` : 'default-profile-photo-url.jpg';
 
     
@@ -705,7 +753,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
         // Retrieve the JWT token from cookies
         const cookieString = document.cookie;
-        const token = cookieString.split('; ').find(row => row.startsWith('JWT=')).split('=')[1];
+        const token = cookieString.substring(4);
     
         if (!token) {
             console.error('JWT token not found');

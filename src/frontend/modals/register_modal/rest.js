@@ -1,4 +1,4 @@
-import config from './../../../config.js';
+import config from './../../../../config.js';
 import { sha256 } from './../../workers/crypto_worker.js';
 
 const register_fname = document.getElementById('register_fname');
@@ -12,6 +12,7 @@ const register_form = document.getElementById('registerFormId');
 const register_response = document.getElementById('register_response');
 const confirm_register_bttn = document.getElementById('confirm_register');
 
+console.log("improted js")
 register_form.addEventListener('submit', (e) =>
 {
   e.preventDefault();

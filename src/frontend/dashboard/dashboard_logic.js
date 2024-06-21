@@ -1,5 +1,5 @@
 import { setCookie, getCookie, deleteCookie } from '../workers/cookie_worker.js';
-import config from './../../config.js';
+import config from './../../../../config.js';
 
 const logged_user_profile_name = document.getElementById("user-profile-name");
 const logged_user_profile_type = document.getElementById("user-profile-type");
@@ -21,15 +21,16 @@ confirm_add_child_bttn.addEventListener('click', () =>
     const birthdate = add_child_input_birthdate.value;
 
     const jwtToken = getCookie('JWT');
-
+    const token = cookieString.substring(4);
     fetch(`${config.apiUrl}/insert_children`, {
         mode: 'no-cors',
         method: 'POST',
         headers: 
         {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ChildrenInfo: {FirstName: fname, LastName: lname, Sex: sex, Birthdate: birthdate}, JWT: jwtToken}),
+        body: JSON.stringify({ChildrenInfo: {FirstName: fname, LastName: lname, Sex: sex, Birthdate: birthdate}}),
         })
         .then(response =>
             {
@@ -46,9 +47,9 @@ confirm_add_child_bttn.addEventListener('click', () =>
                     method: 'POST',
                     headers: 
                     {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
                     },
-                    body: JSON.stringify(currentJWTToken),
                     })
                     .then(response =>
                         {
@@ -90,9 +91,9 @@ document.addEventListener('DOMContentLoaded', (e) =>
         method: 'POST',
         headers: 
         {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwtToken
         },
-        body: JSON.stringify(currentJWTToken),
         })
         .then(response =>
             {
