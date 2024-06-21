@@ -65,7 +65,7 @@ async function getSelfInfo(req, res) {
         let imageUrl = null;
         if (user.PictureRef) {
             const relativePath = user.PictureRef.replace(/\\/g, '/');
-            imageUrl = `${req.protocol}://${req.headers.host}/api/${relativePath}`;
+            imageUrl = `${relativePath}`;
         }
 
         // Respond with user info and the image URL
@@ -86,6 +86,7 @@ async function getSelfInfo(req, res) {
 async function getUser(req, res) {
     console.log('getUser called');
 
+    console.log(req.headers);
     const authHeader = req.headers['authorization'];
     console.log('Authorization Header:', authHeader);
 
@@ -177,6 +178,7 @@ async function editAccountSettings(req, res) {
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
+
 }
 
 async function loadSelfChildren(req, res) {
@@ -228,7 +230,7 @@ async function getFeedingEntriesByDate(req, res) {
             return;
         }
 
-        const feedingEntries = await childreninfodb_logic.getFeedingEntriesByDate(date, user.ID);
+        const feedingEntries = await childreninfodb_logic.getFeedingEntriesByDate(date, user.ID, parsedUrl.searchParams.get('childID'));
 
         if (!feedingEntries || feedingEntries.length === 0) {
             res.writeHead(404, { 'Content-Type': 'application/json' });

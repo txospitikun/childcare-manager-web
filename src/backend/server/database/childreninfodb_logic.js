@@ -29,11 +29,12 @@ async function getFeedingEntry(entryId, userID)
         throw error;
     }
 }
-async function getFeedingEntriesByDate(date, userID) {
+async function getFeedingEntriesByDate(date, userID, childID) {
     try {
         const connection = await pool.getConnection();
-        const query = 'SELECT * FROM Feeding WHERE Date = ? AND UserID = ?';
-        const [rows] = await connection.query(query, [date, userID]);
+        const query = 'SELECT * FROM Feeding WHERE Date = ? AND UserID = ? AND ChildrenID = ?';
+        console.log(date + " " + userID);
+        const [rows] = await connection.query(query, [date, userID, childID]);
         connection.release();
         return rows;
     } catch (error) {
