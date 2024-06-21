@@ -19,11 +19,10 @@ async function getFeedingEntry(entryId, userID)
 {
     try {
         const connection = await pool.getConnection();
-        const query = 'SELECT * FROM Feeding WHERE ChildrenID = ? AND UserID = ?';
-        console.log(entryId, userID);
+        const query = 'SELECT * FROM Feeding WHERE ID = ? AND UserID = ?';
         const [rows] = await connection.query(query, [entryId, userID]);
         connection.release();
-        return rows;
+        return rows[0];
     } catch (error) {
         console.error('Error getting feeding entry:', error);
         throw error;

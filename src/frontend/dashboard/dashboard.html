@@ -118,44 +118,82 @@
                   <div class="calendar-container" id="calendarContainer" style="display:none;">
                     <div class="upper-content">
                       <div class="left-upper-content">
-                        <button class="calendar-bttn default-button" id="add-table-bttn">Adaugă</button>
+                        <button class="calendar-bttn default-button" id="add-meal-bttn">Adaugă</button>
                         <div class="main-modal" id="add-meal-modal">
                           <div class="popup-form-wrapper">
-                            <button class="close-button">&times;</button>
-                            <h2 class="popup-title">Adauga o noua masa</h2>
-                            <form class="popup-form" id="add-meal-form">
-                              <div class="form-group"> 
-                                <div > 
-                                  <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
-                                  <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> 
-                                </div> 
-                              </div>
-                              <div class="form-group" id="date-and-time-inputs-add-table" style="display: none;">
-                                <label for="data">Data:</label>
-                                <input type="date" id="data_add_table" name="data">
-                                <label for="timp">Timp:</label> <br>
-                                <input type="time" id="time_add_table" name="timp">
-                              </div>
-                              <div class="form-group">
-                                <label for="mass-selector">Unitate de cântărire:</label>
-                                <select id="mass-selector" name="mass-selector">
-                                  <option value="grame">Grame</option>
-                                  <option value="miligrame">Miligrame</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <label for="mass-input">Cantitate:</label>
-                                <input type="number" id="mass-input" name="mass-input" min="0" required>
-                              </div>
-                              <div class="form-group">
-                                <label for="food">Aliment:</label>
-                                <input type="text" id="food" name="food" required>
-                              </div>
-                              <button type="submit" class="confirm-button" id="confirm-add-table-bttn">Adaugă</button>
-                            </form>
+                              <button class="close-button">&times;</button>
+                              <h2 class="popup-title" id="add-meal-modal-title">Adaugă o nouă masă</h2>
+                              <form class="popup-form" id="add-meal-form">
+                                  <div class="form-group"> 
+                                      <div> 
+                                          <label for="use-current-date-time-checkbox-add" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
+                                          <input type="checkbox" id="use-current-date-time-checkbox-add" name="use-current-date-time-checkbox" checked> 
+                                      </div> 
+                                  </div>
+                                  <div class="form-group" id="date-and-time-inputs-add-meal" style="display: none;">
+                                      <label for="data-add">Data:</label>
+                                      <input type="date" id="data_add_meal" name="data">
+                                      <label for="timp-add">Timp:</label> <br>
+                                      <input type="time" id="time_add_meal" name="timp">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="mass-selector-add">Unitate de cântărire:</label>
+                                      <select id="mass-selector-add" name="mass-selector">
+                                          <option value="grame">Grame</option>
+                                          <option value="miligrame">Miligrame</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="mass-input-add">Cantitate:</label>
+                                      <input type="number" id="mass-input-add" name="mass-input" min="0" required>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="food-add">Aliment:</label>
+                                      <input type="text" id="food-add" name="food" required>
+                                  </div>
+                                  <button type="submit" class="confirm-button" id="confirm-add-meal-bttn">Adaugă</button>
+                              </form>
                           </div>
-                        </div>
-                        <button class="calendar-bttn default-button">Modifică</button>
+                      </div>
+                      
+                        <button class="calendar-bttn default-button" id="edit-meal-bttn">Modifică</button>
+                        <div class="main-modal" id="edit-meal-modal">
+                          <div class="popup-form-wrapper">
+                              <button class="close-button">&times;</button>
+                              <h2 class="popup-title" id="edit-meal-modal-title">Modifică o masă curentă</h2>
+                              <form class="popup-form" id="edit-meal-form">
+                                  <div class="form-group"> 
+                                      <div> 
+                                          <label for="use-current-date-time-checkbox-edit" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
+                                          <input type="checkbox" id="use-current-date-time-checkbox-edit" name="use-current-date-time-checkbox" checked> 
+                                      </div> 
+                                  </div>
+                                  <div class="form-group" id="date-and-time-inputs-edit-meal" style="display: none;">
+                                      <label for="data-edit">Data:</label>
+                                      <input type="date" id="data_edit_meal" name="data">
+                                      <label for="timp-edit">Timp:</label> <br>
+                                      <input type="time" id="time_edit_meal" name="timp">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="mass-selector-edit">Unitate de cântărire:</label>
+                                      <select id="mass-selector-edit" name="mass-selector">
+                                          <option value="grame">Grame</option>
+                                          <option value="miligrame">Miligrame</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="mass-input-edit">Cantitate:</label>
+                                      <input type="number" id="mass-input-edit" name="mass-input" min="0" required>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="food-edit">Aliment:</label>
+                                      <input type="text" id="food-edit" name="food" required>
+                                  </div>
+                                  <button type="submit" class="confirm-button" id="confirm-edit-meal-bttn">Modifică</button>
+                              </form>
+                          </div>
+                      </div>
+                      
                         <button class="calendar-bttn default-button" id="delete-meal-bttn">Elimină</button>
                       </div>
                       <div class="right-upper-content">
