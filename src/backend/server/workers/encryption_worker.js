@@ -55,10 +55,12 @@ function decode(str) {
 
     const head = jwtArr[0];
     const body = jwtArr[1];
-    const hash = jwtArr[2];
+    let hash = jwtArr[2];
 
-    const checkSum = checkSumGen(head, body).replace(/=+$/, ''); // Remove padding
-
+    const checkSum = checkSumGen(head, body).replace(/=+$/, '');
+    hash = hash.replace(/=+$/, '');
+    console.log("hash:", hash);
+    console.log("checkSum:", checkSum);
     if (hash === checkSum) {
         const payload = JSON.parse(decodeBase64(body));
 

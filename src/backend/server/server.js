@@ -49,9 +49,6 @@ http.createServer((req, res) =>
                 case '/login':
                     authentification_worker.handle_login(req, res);
                     break;
-                case '/load_user':
-                    user_worker.loadUser(req, res);
-                    break;
                 case '/insert_children':
                     user_worker.insertChildren(req, res);
                     break;
