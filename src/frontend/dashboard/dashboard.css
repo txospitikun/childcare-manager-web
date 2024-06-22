@@ -765,6 +765,12 @@ textarea {
   }
 }
 
+@media only screen and (min-width:769px) and (max-width:1572px){
+	.info-container{
+		display:none;
+	}
+}
+
 @media only screen and (max-width: 1200px) {
   .dashboard-button span {
     display: none;
