@@ -224,14 +224,15 @@ CREATE TABLE Sleeping (
     FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID)
 );
 
-CREATE TABLE Photos (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ChildrenID INT,
-    UserID INT,
+CREATE TABLE medias (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    ChildrenID INT NOT NULL,
+    UserID INT NOT NULL,
     Date DATE NOT NULL,
     Time TIME NOT NULL,
-    InTimeline BOOLEAN NOT NULL,
-    PictureRef VARCHAR(255) NOT NULL,
+    InTimeline TINYINT(1) NOT NULL,
+    MediaType VARCHAR(255) NOT NULL,
+    PictureRef VARCHAR(255) NOT NULL
     FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
     FOREIGN KEY (UserID) REFERENCES Users(ID)
 );
