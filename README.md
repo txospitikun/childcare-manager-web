@@ -213,6 +213,29 @@ EditFeedingEntryResponse: 300 if edited sucesfully
 
 # SQL Tabels:
 ```
+CREATE TABLE Sleeping (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Date DATE,
+    SleepTime TIME,
+    AwakeTime TIME,
+    UserID INT,
+    ChildrenID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID)
+);
+
+CREATE TABLE Photos (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ChildrenID INT,
+    UserID INT,
+    Date DATE NOT NULL,
+    Time TIME NOT NULL,
+    InTimeline BOOLEAN NOT NULL,
+    PictureRef VARCHAR(255) NOT NULL,
+    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
 CREATE TABLE Users (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Email VARCHAR(255) NOT NULL,
