@@ -533,6 +533,13 @@ textarea {
   font-weight: 500;
 }
 
+.media-container{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+}
+
 .default-button-slim {
   font-family: Montreal;
   display: flex;
@@ -1116,13 +1123,17 @@ textarea:focus {
 }
 
 .checkbox-group {
-  display: flex;
-  align-items: center;
-  width: 100%;
+  display:flex;
+  align-items:center;
+  gap:1rem;
 }
 
-.checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
+.checkbox-group input {
+  width:auto;
+}
+
+.checkbox-group label {
+  margin-left: 5px;
 }
 
 label {
@@ -1138,4 +1149,27 @@ label {
 .confirm-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.modal-content-container {
+  width: 80%;
+  height: auto;
+}
+
+.modal-content {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.modal-content-container img {
+  display: block;
+}
+
+.modal-content-container video {
+  display: block;
+}
+
+.modal-content-container audio {
+  display: block;
 }

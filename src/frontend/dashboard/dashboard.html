@@ -205,7 +205,7 @@
                   class="delete-child-bttn default-button"
                   id="delete-bttn"
                 >
-                  <span>Delete</span>
+                  <span>Elimină copil</span>
                 </button>
               </div>
 
@@ -231,10 +231,9 @@
                           </h2>
                           <form class="popup-form" id="meal-form">
                             <div class="form-group">
-                              <div>
+                              <div class="checkbox-group">
                                 <label
                                   for="use-current-date-time-checkbox"
-                                  style="margin-left: 5px"
                                   >Folosește timpul și data actuală:</label
                                 >
                                 <input
@@ -252,7 +251,7 @@
                             >
                               <label for="data">Data:</label>
                               <input type="date" id="data_table" name="data" />
-                              <label for="timp">Timp:</label> <br />
+                              <label for="timp">Timp:</label>
                               <input type="time" id="time_table" name="timp" />
                             </div>
                             <div class="form-group">
@@ -307,10 +306,9 @@
                           </h2>
                           <form class="popup-form" id="sleeping-form">
                             <div class="form-group">
-                              <div>
+                              <div class="checkbox-group">
                                 <label
                                   for="use-current-date-checkbox-sleep"
-                                  style="margin-left: 5px"
                                   >Folosește data actuală:</label
                                 >
                                 <input
@@ -410,13 +408,88 @@
                   id="mediaElement"
                   style="display: none"
                 >
+                <div class="dashboard-info-first-row">
+                  <div class="dashboard-info-first-row-buttons">
+                    <button
+                      class="default-button"
+                      id="add-photo-bttn"
+                    >
+                      <span>Adaugă</span>
+                    </button>
+                    <div class="main-modal" id="add-photo-modal">
+                      <div class="popup-form-wrapper">
+                        <button class="close-button">&times;</button>
+                        <h2 class="popup-title">Adaugă un element media</h2>
+                        <form class="popup-form">
+                          <div class="form-group">
+                            <div class="checkbox-group">
+                              <label
+                                for="use-current-date-time-checkbox-media"
+                                >Folosește timpul și data actuală:</label
+                              >
+                              <input
+                                type="checkbox"
+                                id="use-current-date-time-checkbox-media"
+                                name="use-current-date-time-checkbox-media"
+                                checked
+                              />
+                            </div>
+                          </div>
+                          <div
+                            class="form-group"
+                            id="date-and-time-inputs-media"
+                            style="display: none"
+                          >
+                            <label for="data">Data:</label>
+                            <input type="date" id="data_media" name="data" />
+                            <label for="timp">Timp:</label>
+                            <input type="time" id="time_media" name="timp" />
+                          </div>
+                          <div class="form-group">
+                            <div class="checkbox-group">
+                              <label
+                                for="add-to-timeline-checkbox"
+                                >Adaugă la timeline?</label
+                              >
+                              <input
+                                type="checkbox"
+                                id="add-to-timeline-checkbox"
+                                name="add-to-timeline-checkbox"
+                                checked
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="mediaInput">Selectează fișier:</label>
+                            <input
+                              type="file"
+                              id="mediaInput"
+                              name="mediaInput"
+                              required
+                            />
+                          </div>
+                          <div class="form-group">
+                            <button type="submit" class="confirm-button">
+                              Adaugă fișier
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
                   <div class="gallery"></div>
                   <div id="myModal" class="modal">
                     <span class="close">&times;</span>
-                    <img class="modal-content" id="img01" />
+                    <div class="modal-content-container">
+                        <img class="modal-content" id="img01" />
+                        <video class="modal-content" id="vid01" controls></video>
+                        <audio class="modal-content" id="aud01" controls></audio>
+                    </div>
                     <div id="caption"></div>
-                    <button id="delete">Delete Photo</button>
-                  </div>
+                    <button id="delete">Șterge fotografie</button>
+                </div>
                 </div>
 
                 <div

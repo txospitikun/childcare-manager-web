@@ -104,19 +104,11 @@ document.querySelectorAll('.attribute-button').forEach(function (button) {
 
 document.getElementById('feeding-bttn').click();
 
-var modal = document.getElementById("myModal");
+
 
 var span = document.getElementsByClassName("close")[0];
 
-span.onclick = function () {
-    modal.style.display = "none";
-}
 
-var deleteBtn = document.getElementById("delete");
-
-deleteBtn.onclick = function () {
-    modal.style.display = "none";
-}
 
 var btn = document.getElementById("addPhoto");
 
@@ -623,6 +615,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    document.getElementById('add-photo-bttn').addEventListener('click', () => {
+        resetMediaForm();
+        showModal('add-photo-modal');
+    });
+
     function openMealModal(title, buttonText, submitHandler) {
         document.getElementById('meal-modal-title').textContent = title;
         document.getElementById('confirm-meal-bttn').textContent = buttonText;
@@ -645,6 +642,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('date-and-time-inputs-meal').style.display = 'none';
     }
 
+    function resetMediaForm() {
+        document.getElementById('add-photo-modal').querySelector('form').reset();
+        document.getElementById('use-current-date-time-checkbox-media').checked = true;
+        document.getElementById('date-and-time-inputs-media').style.display = 'none';
+    }
+
     document.getElementById('use-current-date-checkbox-sleep').addEventListener('change', function() {
         const dateInput = document.getElementById('date-input-sleep');
         if (this.checked) {
@@ -656,6 +659,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('use-current-date-time-checkbox').addEventListener('change', function() {
         const dateAndTimeInputs = document.getElementById('date-and-time-inputs-meal');
+        if (this.checked) {
+            dateAndTimeInputs.style.display = 'none';
+        } else {
+            dateAndTimeInputs.style.display = 'block';
+        }
+    });
+
+    document.getElementById('use-current-date-time-checkbox-media').addEventListener('change', function() {
+        const dateAndTimeInputs = document.getElementById('date-and-time-inputs-media');
         if (this.checked) {
             dateAndTimeInputs.style.display = 'none';
         } else {
@@ -1173,7 +1185,223 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('food').value = entry.FoodType;
     }
 
+    document.getElementById('add-photo-modal').querySelector('form').addEventListener('submit', async function (e) {
+        e.preventDefault();
     
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox-media').checked;
+        const addToTimeline = document.getElementById('add-to-timeline-checkbox').checked;
+        let date, time;
+    
+        if (useCurrentDateTime) {
+            const now = new Date();
+            date = now.toISOString().split('T')[0];
+            time = now.toTimeString().split(' ')[0];
+        } else {
+            date = document.getElementById('data_media').value;
+            time = document.getElementById('time_media').value + ":00";
+        }
+    
+        const fileInput = document.getElementById('mediaInput');
+        if (fileInput.files.length === 0) {
+            alert('Please select a file.');
+            return;
+        }
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('ChildrenID', selectedChildId);
+        formData.append('Date', date);
+        formData.append('Time', time);
+        formData.append('InTimeline', addToTimeline ? '1' : '0');
+        formData.append('MediaType', file.type);
+        formData.append('mediaInput', file);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_media_entry', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+    
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                alert('Media entry added successfully.');
+                fetchMediaEntries(selectedDate, selectedChildId);
+                document.getElementById('add-photo-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the media entry.');
+        }
+    });
+
+    document.getElementById('delete').addEventListener('click', async function() {
+        const entryId = this.dataset.entryId;
+    
+        if (!entryId) {
+            alert("No media entry selected.");
+            return;
+        }
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5000/api/delete_media_entry?id=${entryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchChildrenMedia(selectedChildId);
+                document.getElementById('myModal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred while deleting the media entry.');
+        }
+    });
+    
+    function fetchChildrenMedia(childID) {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        fetch(`http://localhost:5000/api/get_children_media?childID=${childID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Result:', result);
+            if (result.mediaEntries) {
+                displayMediaEntries(result.mediaEntries);
+            } else {
+                displayMediaEntries([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayMediaEntries([]);
+        });
+    }
+
+    function displayMediaEntries(entries) {
+        const gallery = document.querySelector('.gallery');
+        gallery.innerHTML = ""; 
+    
+        if (entries.length === 0) {
+            gallery.innerHTML = "<p>No entries for the selected child.</p>";
+            return;
+        }
+    
+        entries.forEach(entry => {
+            const figureElement = document.createElement('figure');
+    
+            const mediaType = entry.MediaType.toLowerCase();
+            let mediaElement;
+    
+            if (mediaType.includes('image')) {
+                mediaElement = document.createElement('img');
+                mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+                mediaElement.classList.add('modal-image');
+            } else if (mediaType.includes('video')) {
+                mediaElement = document.createElement('video');
+                mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+                mediaElement.controls = true;
+                mediaElement.classList.add('modal-video');
+            } else if (mediaType.includes('audio')) {
+                mediaElement = document.createElement('audio');
+                mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+                mediaElement.controls = true;
+                mediaElement.classList.add('modal-audio');
+            }
+    
+            figureElement.appendChild(mediaElement);
+    
+            const figcaption = document.createElement('figcaption');
+            figcaption.textContent = `${entry.Date.split('T')[0]} ${entry.Time.slice(0, 5)}`;
+            figureElement.appendChild(figcaption);
+    
+            gallery.appendChild(figureElement);
+    
+            mediaElement.addEventListener('click', function () {
+                openMediaModal(mediaElement, figcaption.textContent, entry.ID);
+            });
+        });
+    }
+    
+    function openMediaModal(mediaElement, caption, entryId) {
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("img01");
+        const modalVideo = document.getElementById("vid01");
+        const modalAudio = document.getElementById("aud01");
+        const captionText = document.getElementById("caption");
+        const deleteButton = document.getElementById("delete");
+    
+        modal.style.display = "block";
+        captionText.innerHTML = caption;
+        deleteButton.dataset.entryId = entryId;
+    
+        if (mediaElement.tagName === 'IMG') {
+            modalImg.src = mediaElement.src;
+            modalImg.style.display = 'block';
+            modalVideo.style.display = 'none';
+            modalAudio.style.display = 'none';
+        } else if (mediaElement.tagName === 'VIDEO') {
+            modalVideo.src = mediaElement.src;
+            modalVideo.style.display = 'block';
+            modalImg.style.display = 'none';
+            modalAudio.style.display = 'none';
+        } else if (mediaElement.tagName === 'AUDIO') {
+            modalAudio.src = mediaElement.src;
+            modalAudio.style.display = 'block';
+            modalImg.style.display = 'none';
+            modalVideo.style.display = 'none';
+        }
+    }
 
     function mapAccountTypeToString(accountType) {
         switch (accountType) {
@@ -1340,46 +1568,103 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+function displayMediaEntries(entries) {
+    const gallery = document.querySelector('.gallery');
+    gallery.innerHTML = "";
 
-const figures = [
-    { src: '../placeholders/child1.jpg', caption: '17 Mai 2024' },
-    { src: '../placeholders/child2.jpg', caption: '23 aprilie 2023' },
-    { src: '../placeholders/child3.jpg', caption: '19 decembrie 2022' },
-    { src: '../placeholders/child4.jpg', caption: '14 mai 2024' },
-    { src: '../placeholders/user1.jpg', caption: '23 august 2005' },
-    { src: '../placeholders/user1.jpg', caption: '3 martie 2024' },
-    { src: '../placeholders/user1.jpg', caption: '8 martie 2023' },
-    { src: '../placeholders/user1.jpg', caption: '29 februarie 2020' },
-    { src: '../placeholders/child1.jpg', caption: '30 iulie 2023' },
-    { src: '../placeholders/child2.jpg', caption: '1 iunie 2022' },
-    { src: '../placeholders/child3.jpg', caption: '26 septembrie 2022' },
-    { src: '../placeholders/child4.jpg', caption: '2 octombrie 2023' },
-];
-
-const gallery = document.querySelector('.gallery');
-
-for (const figure of figures) {
-    const figureElement = document.createElement('figure');
-
-    const img = document.createElement('img');
-    img.src = figure.src;
-    img.classList.add('modal-image');
-    figureElement.appendChild(img);
-
-    const figcaption = document.createElement('figcaption');
-    figcaption.textContent = figure.caption;
-    figureElement.appendChild(figcaption);
-
-    gallery.appendChild(figureElement);
-}
-
-var img = document.getElementsByClassName('modal-image');
-var modalImg = document.getElementById("img01");
-var captionText = document.getElementById("caption");
-for (let i = 0; i < img.length; i++) {
-    img[i].onclick = function () {
-        modal.style.display = "block";
-        modalImg.src = this.src;
-        captionText.innerHTML = this.nextElementSibling.innerHTML;
+    if (entries.length === 0) {
+        gallery.innerHTML = "<p>No entries for the selected child.</p>";
+        return;
     }
+
+    entries.forEach(entry => {
+        const figureElement = document.createElement('figure');
+
+        const mediaType = entry.MediaType.toLowerCase();
+        let mediaElement;
+
+        if (mediaType.includes('image')) {
+            mediaElement = document.createElement('img');
+            mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+            mediaElement.classList.add('modal-image');
+        } else if (mediaType.includes('video')) {
+            mediaElement = document.createElement('video');
+            mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+            mediaElement.controls = true;
+            mediaElement.classList.add('modal-video');
+        } else if (mediaType.includes('audio')) {
+            mediaElement = document.createElement('audio');
+            mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+            mediaElement.controls = true;
+            mediaElement.classList.add('modal-audio');
+        }
+
+        figureElement.appendChild(mediaElement);
+
+        const figcaption = document.createElement('figcaption');
+        figcaption.textContent = `${entry.Date.split('T')[0]} ${entry.Time.slice(0, 5)}`;
+        figureElement.appendChild(figcaption);
+
+        gallery.appendChild(figureElement);
+
+        mediaElement.addEventListener('click', function () {
+            openMediaModal(mediaElement, figcaption.textContent, entry.ID);
+        });
+    });
 }
+
+// var modal = document.getElementById("myModal");
+
+// span.onclick = function () {
+//     modal.style.display = "none";
+// }
+
+// var deleteBtn = document.getElementById("delete");
+
+// deleteBtn.onclick = function () {
+//     modal.style.display = "none";
+// }
+
+
+// const figures = [
+//     { src: '../placeholders/child1.jpg', caption: '17 Mai 2024' },
+//     { src: '../placeholders/child2.jpg', caption: '23 aprilie 2023' },
+//     { src: '../placeholders/child3.jpg', caption: '19 decembrie 2022' },
+//     { src: '../placeholders/child4.jpg', caption: '14 mai 2024' },
+//     { src: '../placeholders/user1.jpg', caption: '23 august 2005' },
+//     { src: '../placeholders/user1.jpg', caption: '3 martie 2024' },
+//     { src: '../placeholders/user1.jpg', caption: '8 martie 2023' },
+//     { src: '../placeholders/user1.jpg', caption: '29 februarie 2020' },
+//     { src: '../placeholders/child1.jpg', caption: '30 iulie 2023' },
+//     { src: '../placeholders/child2.jpg', caption: '1 iunie 2022' },
+//     { src: '../placeholders/child3.jpg', caption: '26 septembrie 2022' },
+//     { src: '../placeholders/child4.jpg', caption: '2 octombrie 2023' },
+// ];
+
+// const gallery = document.querySelector('.gallery');
+
+// for (const figure of figures) {
+//     const figureElement = document.createElement('figure');
+
+//     const img = document.createElement('img');
+//     img.src = figure.src;
+//     img.classList.add('modal-image');
+//     figureElement.appendChild(img);
+
+//     const figcaption = document.createElement('figcaption');
+//     figcaption.textContent = figure.caption;
+//     figureElement.appendChild(figcaption);
+
+//     gallery.appendChild(figureElement);
+// }
+
+// var img = document.getElementsByClassName('modal-image');
+// var modalImg = document.getElementById("img01");
+// var captionText = document.getElementById("caption");
+// for (let i = 0; i < img.length; i++) {
+//     img[i].onclick = function () {
+//         modal.style.display = "block";
+//         modalImg.src = this.src;
+//         captionText.innerHTML = this.nextElementSibling.innerHTML;
+//     }
+// }
