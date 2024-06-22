@@ -553,7 +553,7 @@ async function deleteMedia(req, res)
         if (!user) return;
 
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-        const mediaID = parsedUrl.searchParams.get('mediaID');
+        const mediaID = parsedUrl.searchParams.get('id');
 
         await childreninfodb_logic.deleteMedia(user.ID, mediaID);
 

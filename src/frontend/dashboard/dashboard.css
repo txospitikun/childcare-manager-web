@@ -1173,3 +1173,14 @@ label {
 .modal-content-container audio {
   display: block;
 }
+
+.modal-content.modal-image {
+  width: 80%;
+  height: auto;
+}
+
+.modal-content.modal-video,
+.modal-content.modal-audio {
+  width: 80%;
+  height: auto;
+}

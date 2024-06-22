@@ -103,14 +103,9 @@ document.querySelectorAll('.attribute-button').forEach(function (button) {
 
 document.getElementById('feeding-bttn').click();
 
-
-
 var span = document.getElementsByClassName("close")[0];
 
-
-
 var btn = document.getElementById("addPhoto");
-
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -743,7 +738,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result (addMeal):', result);
     
             if (response.ok) {
-                alert('Meal added successfully.');
                 fetchFeedingEntries(selectedDate, selectedChildId);
                 document.getElementById('meal-modal').style.display = 'none';
             } else {
@@ -815,7 +809,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result (editMeal):', result);
     
             if (response.ok) {
-                alert('Meal updated successfully.');
                 fetchFeedingEntries(selectedDate, selectedChildId);
                 document.getElementById('meal-modal').style.display = 'none';
             } else {
@@ -942,7 +935,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result:', result);
     
             if (response.ok) {
-                alert('Sleeping entry added successfully.');
                 fetchSleepingEntries(selectedDate, selectedChildId);
                 document.getElementById('sleeping-modal').style.display = 'none';
             } else {
@@ -1010,7 +1002,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result:', result);
     
             if (response.ok) {
-                alert('Sleeping entry updated successfully.');
                 fetchSleepingEntries(selectedDate, selectedChildId);
                 document.getElementById('sleeping-modal').style.display = 'none';
             } else {
@@ -1246,7 +1237,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result:', result);
     
             if (response.ok) {
-                alert('Media entry added successfully.');
                 fetchChildrenMedia(selectedChildId);
                 document.getElementById('add-photo-modal').style.display = 'none';
             } else {
@@ -1277,6 +1267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
         try {
+            console.log('Deleting media entry with ID:', entryId);
             const response = await fetch(`http://localhost:5000/api/delete_media?id=${entryId}`, {
                 method: 'DELETE',
                 headers: {
@@ -1554,6 +1545,7 @@ function openMediaModal(mediaElement, caption, entryId) {
     const modalAudio = document.getElementById("aud01");
     const captionText = document.getElementById("caption");
     const deleteButton = document.getElementById("delete");
+    const closeButton = modal.querySelector('.close');
 
     modal.style.display = "block";
     captionText.innerHTML = caption;
@@ -1575,60 +1567,15 @@ function openMediaModal(mediaElement, caption, entryId) {
         modalImg.style.display = 'none';
         modalVideo.style.display = 'none';
     }
+
+    closeButton.addEventListener('click', function() {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById("myModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
 }
-
-// var modal = document.getElementById("myModal");
-
-// span.onclick = function () {
-//     modal.style.display = "none";
-// }
-
-// var deleteBtn = document.getElementById("delete");
-
-// deleteBtn.onclick = function () {
-//     modal.style.display = "none";
-// }
-
-
-// const figures = [
-//     { src: '../placeholders/child1.jpg', caption: '17 Mai 2024' },
-//     { src: '../placeholders/child2.jpg', caption: '23 aprilie 2023' },
-//     { src: '../placeholders/child3.jpg', caption: '19 decembrie 2022' },
-//     { src: '../placeholders/child4.jpg', caption: '14 mai 2024' },
-//     { src: '../placeholders/user1.jpg', caption: '23 august 2005' },
-//     { src: '../placeholders/user1.jpg', caption: '3 martie 2024' },
-//     { src: '../placeholders/user1.jpg', caption: '8 martie 2023' },
-//     { src: '../placeholders/user1.jpg', caption: '29 februarie 2020' },
-//     { src: '../placeholders/child1.jpg', caption: '30 iulie 2023' },
-//     { src: '../placeholders/child2.jpg', caption: '1 iunie 2022' },
-//     { src: '../placeholders/child3.jpg', caption: '26 septembrie 2022' },
-//     { src: '../placeholders/child4.jpg', caption: '2 octombrie 2023' },
-// ];
-
-// const gallery = document.querySelector('.gallery');
-
-// for (const figure of figures) {
-//     const figureElement = document.createElement('figure');
-
-//     const img = document.createElement('img');
-//     img.src = figure.src;
-//     img.classList.add('modal-image');
-//     figureElement.appendChild(img);
-
-//     const figcaption = document.createElement('figcaption');
-//     figcaption.textContent = figure.caption;
-//     figureElement.appendChild(figcaption);
-
-//     gallery.appendChild(figureElement);
-// }
-
-// var img = document.getElementsByClassName('modal-image');
-// var modalImg = document.getElementById("img01");
-// var captionText = document.getElementById("caption");
-// for (let i = 0; i < img.length; i++) {
-//     img[i].onclick = function () {
-//         modal.style.display = "block";
-//         modalImg.src = this.src;
-//         captionText.innerHTML = this.nextElementSibling.innerHTML;
-//     }
-// }
