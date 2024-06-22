@@ -55,6 +55,9 @@ http.createServer((req, res) =>
                 case '/insert_feeding_entry':
                     user_worker.insertFeedingEntry(req, res);
                     break;
+                case '/insert_sleeping_entry':
+                    user_worker.insertSleepingEntry(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -71,6 +74,12 @@ http.createServer((req, res) =>
                     break;
                 case '/get_feeding_entries_by_date':
                     user_worker.getFeedingEntriesByDate(req, res);
+                    break;
+                case '/get_sleeping_entry':
+                    user_worker.getSleepingEntry(req, res);
+                    break;
+                case '/get_sleeping_entries_by_date':
+                    user_worker.getSleepingEntriesByDate(req, res);
                     break;
                 case '/get_self_info':
                     user_worker.getSelfInfo(req, res);
@@ -89,6 +98,9 @@ http.createServer((req, res) =>
                 case '/edit_feeding_entry':
                     user_worker.editFeedingEntry(req, res);
                     break;
+                case '/edit_sleeping_entry':
+                    user_worker.editSleepingEntry(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -100,6 +112,9 @@ http.createServer((req, res) =>
             {
                 case '/delete_feeding_entry':
                     user_worker.deleteFeedingEntry(req, res);
+                    break;
+                case '/delete_sleeping_entry':
+                    user_worker.deleteSleepingEntry(req, res);
                     break;
                 case '/delete_children':
                     user_worker.deleteChildren(req, res);

@@ -118,8 +118,8 @@
                   <div class="calendar-container" id="calendarContainer" style="display:none;">
                     <div class="upper-content">
                       <div class="left-upper-content">
-                        <button class="calendar-bttn default-button" id="add-meal-bttn">Adaugă</button>
-                        <button class="calendar-bttn default-button" id="edit-meal-bttn">Modifică</button>
+                        <button class="calendar-bttn default-button" id="add-entry-bttn">Adaugă</button>
+                        <button class="calendar-bttn default-button" id="edit-entry-bttn">Modifică</button>
                         <div class="main-modal" id="meal-modal">
                           <div class="popup-form-wrapper">
                               <button class="close-button">&times;</button>
@@ -128,7 +128,7 @@
                                   <div class="form-group"> 
                                       <div> 
                                           <label for="use-current-date-time-checkbox" style="margin-left: 5px;">Folosește timpul și data actuală:</label> 
-                                          <input type="checkbox" id="use-current-date-time-checkbox" name="use-current-date-time-checkbox" checked> 
+                                          <input type="checkbox" id="use-current-date-time-checkbox-meal" name="use-current-date-time-checkbox" checked> 
                                       </div> 
                                   </div>
                                   <div class="form-group" id="date-and-time-inputs-meal" style="display: none;">
@@ -156,8 +156,34 @@
                               </form>
                           </div>
                       </div>
-                        <button class="calendar-bttn default-button" id="delete-meal-bttn">Elimină</button>
-                      </div>
+                      <div class="main-modal" id="sleeping-modal">
+                        <div class="popup-form-wrapper">
+                            <button class="close-button">&times;</button>
+                            <h2 class="popup-title" id="sleeping-modal-title">Adaugă o perioadă de somn</h2>
+                            <form class="popup-form" id="sleeping-form">
+                                <div class="form-group">
+                                    <div>
+                                        <label for="use-current-date-checkbox-sleep" style="margin-left: 5px;">Folosește data actuală:</label>
+                                        <input type="checkbox" id="use-current-date-checkbox-sleep" name="use-current-date-checkbox-sleep" checked>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="date-input-sleep" style="display: none;">
+                                    <label for="data">Data:</label>
+                                    <input type="date" id="data_sleep" name="data">
+                                </div>
+                                <div class="form-group">
+                                    <label for="time-sleep">Ora de somn:</label>
+                                    <input type="time" id="time_sleep" name="time-sleep">
+                                    <label for="time-awake">Ora de trezire:</label>
+                                    <input type="time" id="time_awake" name="time-awake">
+                                </div>
+                                <button type="submit" class="confirm-button" id="confirm-sleeping-bttn">Adaugă</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                        <button class="calendar-bttn default-button" id="delete-entry-bttn">Elimină</button>
+                    </div>
                       <div class="right-upper-content">
                         <div class="current-month">
                           <button class="month-change-button" id="previous-month-button">&lt;</button>
@@ -179,12 +205,8 @@
                       <div class="calendar-container-info">
                         <div class="current-day-title" id="current-day-title"> </div>
                         <div class="calendar-items" id="feeding_items"></div>
-                        <div class="calendar-items" id="sleeping_items" style="display: none;">
-                          <div class="calendar-item">
-                            <p>22:00</p>
-                            <p>- Slept for 8 hours</p>
-                          </div>
-                        </div>
+                        <div class="calendar-items" id="sleeping_items" style="display: none;"></div>
+                        
                       </div>
                       <div class="calendar-dates" id="calendarElement"></div>
                     </div>

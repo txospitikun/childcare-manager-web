@@ -8,9 +8,12 @@ const fetch_worker = require('./fetch_worker');
 
 const ChildrenForm = require('./../request_modals/childrenform_modal');
 const ChildrenFeedingForm = require('./../request_modals/feedingentryform_modal');
+const ChildrenSleepingForm = require("../request_modals/sleepingentryform_modal");
+
 const json_worker = require('./json_worker');
 const cookie_worker = require('./cookie_worker');
 const FeedingEntryForm = require("../request_modals/feedingentryform_modal");
+const SleepingEntryForm = require("../request_modals/sleepingentryform_modal");
 const UpdateAccount = require("../request_modals/updateaccountform_modal");
 const {parseFormData} = require("./fetch_worker");
 
@@ -357,4 +360,143 @@ async function deleteFeedingEntry(req, res) {
     }
 }
 
-module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+async function insertSleepingEntry(req, res) {
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedData = await fetch_worker.handle_request(req);
+        const childrenform = new ChildrenSleepingForm(parsedData);
+
+        await childreninfodb_logic.insertSleepingEntry(user.ID, childrenform);
+
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Sleeping entry added successfully" }));
+    } catch (err) {
+        console.log("Server error: Couldn't insert sleeping entry in the database! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+async function getSleepingEntriesByDate(req, res){
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const date = parsedUrl.searchParams.get('date');
+
+        if (!date) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: "Date parameter is missing" }));
+            return;
+        }
+
+        const sleepingEntries = await childreninfodb_logic.getSleepingEntriesByDate(date, user.ID, parsedUrl.searchParams.get('childID'));
+
+        if (!sleepingEntries || sleepingEntries.length === 0) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: "No sleeping entries found for the specified date" }));
+            return;
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ sleepingEntries }));
+    } catch (err) {
+        console.log("Server error: Couldn't retrieve sleeping entries from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
+}
+
+async function getSleepingEntry(req, res) {
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const entryId = parsedUrl.searchParams.get('id');
+
+        if (!entryId) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: "ID parameter is missing" }));
+            return;
+        }
+
+        const sleepingEntry = await childreninfodb_logic.getSleepingEntry(entryId, user.ID);
+
+        if (sleepingEntry.length === 0) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: "Sleeping entry not found" }));
+            return;
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ sleepingEntry }));
+    } catch (err) {
+        console.log("Server error: Couldn't retrieve sleeping entry from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+async function editSleepingEntry(req,res){
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedData = await fetch_worker.handle_request(req);
+        const sleepingEntryForm = new SleepingEntryForm(parsedData);
+
+        const result = await childreninfodb_logic.editSleepingEntry(parsedData.ID, sleepingEntryForm, user.ID);
+
+        if (result.affectedRows === 0) {
+            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({ message: "Sleeping entry not found" }));
+            return;
+        }
+
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Sleeping entry updated successfully" }));
+    } catch (err) {
+        console.log("Server error: Couldn't edit sleeping entry in the database! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
+}
+
+async function deleteSleepingEntry(req,res){
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const entryId = parsedUrl.searchParams.get('id');
+
+        if (!entryId) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: "ID parameter is missing" }));
+            return;
+        }
+
+        const response = await childreninfodb_logic.deleteSleepingEntry(entryId, user.ID);
+
+        if (response.affectedRows === 0) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: "Sleeping entry not found" }));
+            return;
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Sleeping entry deleted successfully" }));
+    } catch (err) {
+        console.log("Server error: Couldn't delete sleeping entry from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};

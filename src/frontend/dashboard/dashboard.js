@@ -97,6 +97,7 @@ document.querySelectorAll('.attribute-button').forEach(function (button) {
         }
 
         currentSelectedAttribute = this;
+        console.log(currentSelectedAttribute.id);
         this.style.border = "2px solid black";
     });
 });
@@ -301,6 +302,7 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedDate = date;
             const selectedChildId = currentSelectedChild.dataset.childId;
             fetchFeedingEntries(date, selectedChildId);
+            fetchSleepingEntries(date, selectedChildId);
         });
 
         return dateDiv;
@@ -394,45 +396,6 @@ document.addEventListener("DOMContentLoaded", function () {
             feedingItemsContainer.appendChild(entryDiv);
         });
     }
-
-    document.getElementById('delete-meal-bttn').addEventListener('click', async function() {
-        if (!selectedEntryId) {
-            alert("Please select a feeding entry first.");
-            return;
-        }
-    
-        const cookieString = document.cookie;
-        const token = cookieString.substring(4);
-    
-        if (!token) {
-            console.error('JWT token not found');
-            alert('JWT token not found');
-            return;
-        }
-    
-        try {
-            const response = await fetch(`http://localhost:5000/api/delete_feeding_entry?id=${selectedEntryId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-    
-            const result = await response.json();
-            console.log('Result:', result);
-    
-            if (response.ok) {
-                const selectedChildId = currentSelectedChild.dataset.childId;
-                fetchFeedingEntries(selectedDate, selectedChildId);
-            } else {
-                alert(`Error: ${result.message}`);
-            }
-        } catch (error) {
-            alert('An error occurred while deleting the feeding entry.');
-        }
-    });
-    
-
 
     function loadChildren() {
         const cookieString = document.cookie;
@@ -536,6 +499,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 currentSelectedChild = button;
                 const selectedChildId = currentSelectedChild.dataset.childId;
                 fetchFeedingEntries(selectedDate, selectedChildId);
+                fetchSleepingEntries(selectedDate, selectedChildId);
                 button.style.border = "2px solid gray";
             }
 
@@ -621,19 +585,42 @@ document.addEventListener("DOMContentLoaded", function () {
         fetchAccountData();
     });
 
-    document.getElementById('add-meal-bttn').addEventListener('click', () => {
-        resetMealForm();
-        openMealModal('Adaugă o masă', 'Adaugă', addMeal);
+    document.getElementById('add-entry-bttn').addEventListener('click', () => {
+        if (currentSelectedAttribute.id === 'feeding-bttn') {
+            resetMealForm();
+            openMealModal('Adaugă o nouă masă', 'Adaugă', addMeal);
+        } else if (currentSelectedAttribute.id === 'sleeping-bttn') {
+            resetSleepingForm();
+            openSleepingModal('Adaugă o perioadă de somn', 'Adaugă', addSleeping);
+        }
     });
-
-    document.getElementById('edit-meal-bttn').addEventListener('click', () => {
+    
+    document.getElementById('edit-entry-bttn').addEventListener('click', () => {
         if (!selectedEntryId) {
-            alert("Please select a feeding entry first.");
+            alert("Please select an entry first.");
             return;
         }
     
-        openMealModal('Modifică o masă curentă', 'Modifică', editMeal);
-        fetchFeedingEntryData();
+        if (currentSelectedAttribute.id === 'feeding-bttn') {
+            openMealModal('Modifică o masă curentă', 'Modifică', editMeal);
+            fetchFeedingEntryData();
+        } else if (currentSelectedAttribute.id === 'sleeping-bttn') {
+            openSleepingModal('Modifică o perioadă de somn', 'Modifică', editSleeping);
+            fetchSleepingEntryData();
+        }
+    });
+
+    document.getElementById('delete-entry-bttn').addEventListener('click', () => {
+        if (!selectedEntryId) {
+            alert("Please select an entry first.");
+            return;
+        }
+    
+        if (currentSelectedAttribute.id === 'feeding-bttn') {
+            deleteFeedingEntry();
+        } else if (currentSelectedAttribute.id === 'sleeping-bttn') {
+            deleteSleepingEntry();
+        }
     });
 
     function openMealModal(title, buttonText, submitHandler) {
@@ -644,12 +631,43 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal('meal-modal');
     }
 
+    function openSleepingModal(title, buttonText, submitHandler) {
+        document.getElementById('sleeping-modal-title').textContent = title;
+        document.getElementById('confirm-sleeping-bttn').textContent = buttonText;
+        const form = document.getElementById('sleeping-form');
+        form.onsubmit = submitHandler;
+        showModal('sleeping-modal');
+    }
+
     function resetMealForm() {
         document.getElementById('meal-form').reset();
-        document.getElementById('use-current-date-time-checkbox').checked = true;
+        document.getElementById('use-current-date-time-checkbox-meal').checked = true;
         document.getElementById('date-and-time-inputs-meal').style.display = 'none';
     }
 
+    document.getElementById('use-current-date-checkbox-sleep').addEventListener('change', function() {
+        const dateInput = document.getElementById('date-input-sleep');
+        if (this.checked) {
+            dateInput.style.display = 'none';
+        } else {
+            dateInput.style.display = 'block';
+        }
+    });
+
+    document.getElementById('use-current-date-time-checkbox-meal').addEventListener('change', function() {
+        const dateAndTimeInputs = document.getElementById('date-and-time-inputs-meal');
+        if (this.checked) {
+            dateAndTimeInputs.style.display = 'none';
+        } else {
+            dateAndTimeInputs.style.display = 'block';
+        }
+    });
+
+    function resetSleepingForm() {
+        document.getElementById('sleeping-form').reset();
+        document.getElementById('use-current-date-checkbox-sleep').checked = true;
+        document.getElementById('date-input-sleep').style.display = 'none';
+    }
     
     async function addMeal(e) {
         e.preventDefault();
@@ -822,6 +840,328 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error('Error fetching entry details:', error);
             alert('An error occurred while fetching the entry details.');
         });
+    }
+
+    async function deleteFeedingEntry() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5000/api/delete_feeding_entry?id=${selectedEntryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchFeedingEntries(selectedDate, selectedChildId);
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred while deleting the feeding entry.');
+        }
+    }
+
+    async function addSleeping(e) {
+        e.preventDefault();
+    
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+    
+        const useCurrentDateTime = document.getElementById('use-current-date-checkbox-sleep').checked;
+        let date, sleepTime, awakeTime;
+    
+        if (useCurrentDateTime) {
+            date = getLocalISOString().split(' ')[0];
+        } else {
+            date = document.getElementById('data_sleep').value;
+        }
+        sleepTime = document.getElementById('time_sleep').value + ":00";
+            awakeTime = document.getElementById('time_awake').value + ":00";
+    
+        const payload = {
+            ID: selectedChildId,
+            Date: date,
+            SleepTime: sleepTime,
+            AwakeTime: awakeTime
+        };
+    
+        console.log(payload);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_sleeping_entry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                alert('Sleeping entry added successfully.');
+                fetchSleepingEntries(selectedDate, selectedChildId);
+                document.getElementById('sleeping-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the sleeping entry.');
+        }
+    }
+    
+    async function editSleeping(e) {
+        e.preventDefault();
+    
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+    
+        const useCurrentDateTime = document.getElementById('use-current-date-checkbox-sleep').checked;
+        let date, sleepTime, awakeTime;
+    
+        if (useCurrentDateTime) {
+            date = getLocalISOString().split(' ')[0];
+        } else {
+            date = document.getElementById('data_sleep').value;
+            
+        }
+
+        sleepTime = document.getElementById('time_sleep').value + ":00";
+        awakeTime = document.getElementById('time_awake').value + ":00";
+    
+        const payload = {
+            ID: selectedEntryId,
+            Date: date,
+            SleepTime: sleepTime,
+            AwakeTime: awakeTime
+        };
+    
+        console.log(payload);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/edit_sleeping_entry', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                alert('Sleeping entry updated successfully.');
+                fetchSleepingEntries(selectedDate, selectedChildId);
+                document.getElementById('sleeping-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating the sleeping entry.');
+        }
+    }
+    
+    function fetchSleepingEntryData() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        fetch(`http://localhost:5000/api/get_sleeping_entry?id=${selectedEntryId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.sleepingEntry) {
+                autoCompleteSleepingForm(result.sleepingEntry);
+            } else {
+                alert('Sleeping entry not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching entry details:', error);
+            alert('An error occurred while fetching the entry details.');
+        });
+    }
+
+    function fetchSleepingEntries(date, childID) {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        const dateString = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0];
+    
+        fetch(`http://localhost:5000/api/get_sleeping_entries_by_date?date=${dateString}&childID=${childID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Result:', result);
+            if (result.sleepingEntries) {
+                displaySleepingEntries(result.sleepingEntries);
+            } else {
+                displaySleepingEntries([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displaySleepingEntries([]);
+        });
+    }
+
+    async function deleteSleepingEntry() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5000/api/delete_sleeping_entry?id=${selectedEntryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchSleepingEntries(selectedDate, selectedChildId);
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred while deleting the sleeping entry.');
+        }
+    }
+    
+    function displaySleepingEntries(entries) {
+        const sleepingItemsContainer = document.getElementById("sleeping_items");
+        sleepingItemsContainer.innerHTML = "";
+    
+        if (entries.length === 0) {
+            sleepingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
+            return;
+        }
+    
+        entries.forEach(entry => {
+            const entryDiv = document.createElement("div");
+            entryDiv.className = "calendar-item";
+            entryDiv.dataset.entryId = entry.ID;
+    
+            const sleepTime = entry.SleepTime.slice(0, 5);
+            const awakeTime = entry.AwakeTime.slice(0, 5); 
+    
+            const sleepDuration = calculateSleepDuration(entry.SleepTime, entry.AwakeTime);
+    
+            const timeP = document.createElement("p");
+            timeP.textContent = `${sleepTime} - ${awakeTime}`;
+    
+            const durationP = document.createElement("p");
+            durationP.textContent = `- ${sleepDuration}`;
+    
+            entryDiv.appendChild(timeP);
+            entryDiv.appendChild(durationP);
+            entryDiv.addEventListener('click', function() {
+                document.querySelectorAll('.calendar-item.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                entryDiv.classList.add('selected');
+                selectedEntryId = entry.ID;
+            });
+            sleepingItemsContainer.appendChild(entryDiv);
+        });
+    }
+    
+    function calculateSleepDuration(sleepTime, awakeTime) {
+        const sleepDate = new Date(`1970-01-01T${sleepTime}Z`);
+        const awakeDate = new Date(`1970-01-01T${awakeTime}Z`);
+    
+        if (awakeDate < sleepDate) {
+            awakeDate.setDate(awakeDate.getDate() + 1);
+        }
+    
+        const durationMs = awakeDate - sleepDate;
+        const hours = Math.floor(durationMs / 1000 / 60 / 60);
+        const minutes = Math.floor((durationMs / 1000 / 60) % 60);
+    
+        return `${hours} hours and ${minutes} minutes`;
+    }
+    
+    
+    function autoCompleteSleepingForm(entry) {
+        document.getElementById('data_sleep').value = entry.Date.split('T')[0];
+        document.getElementById('time_sleep').value = entry.SleepTime.slice(0, 5);
+        document.getElementById('time_awake').value = entry.AwakeTime.slice(0, 5);
     }
     
     function autoCompleteEditForm(entry) {
