@@ -70,12 +70,12 @@ async function deleteFeedingEntry(entryId, userID) {
 }
 
 
-async function insertPhoto(ID, photoForm)
+async function insertMedia(ID, photoForm)
 {
     try {
         const connection = await pool.getConnection();
-        const query = 'INSERT INTO Photos (Date, Time, PictureRef, UserID, InTimeline, ChildrenID) VALUES (?, ?, ?, ?, ?, ?)';
-        const [result] = await connection.query(query, [photoForm.Date, photoForm.Time, photoForm.PictureRef, ID, photoForm.InTimeline, photoForm.ChildrenID]);
+        const query = 'INSERT INTO Medias (Date, Time, PictureRef, UserID, InTimeline, MediaType, ChildrenID) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const [result] = await connection.query(query, [photoForm.Date, photoForm.Time, photoForm.PictureRef.path, ID, photoForm.InTimeline, photoForm.PictureRef.extension, photoForm.ChildrenID]);
         connection.release();
         return result;
     } catch (error) {
@@ -151,5 +151,33 @@ async function deleteSleepingEntry(entryId, userID) {
     }
 }
 
-module.exports = { insertPhoto, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry};
+async function getChildrenMedia(ID, ChildrenID)
+{
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM Medias WHERE UserID = ? AND ChildrenID = ? ORDER BY Date DESC, Time DESC';
+        const [rows] = await connection.query(query, [ID, ChildrenID]);
+        connection.release();
+        return rows;
+    } catch (error) {
+        console.error('Error getting children media:', error);
+        throw error;
+    }
+}
+
+async function deleteMedia(ID, mediaID)
+{
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM Medias WHERE ID = ? AND UserID = ?';
+        const [result] = await connection.query(query, [mediaID, ID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error deleting media:', error);
+        throw error;
+    }
+}
+
+module.exports = { getChildrenMedia, insertMedia, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry};
 

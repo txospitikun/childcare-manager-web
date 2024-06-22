@@ -52,8 +52,8 @@ http.createServer((req, res) =>
                 case '/insert_children':
                     user_worker.insertChildren(req, res);
                     break;
-                case '/insert_photo':
-                    user_worker.insertPhoto(req, res);
+                case '/insert_media':
+                    user_worker.insertMedia(req, res);
                     break;
                 case '/insert_feeding_entry':
                     user_worker.insertFeedingEntry(req, res);
@@ -86,6 +86,9 @@ http.createServer((req, res) =>
                     break;
                 case '/get_self_info':
                     user_worker.getSelfInfo(req, res);
+                    break;
+                case '/get_children_media':
+                    user_worker.getChildrenMedia(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -121,6 +124,9 @@ http.createServer((req, res) =>
                     break;
                 case '/delete_children':
                     user_worker.deleteChildren(req, res);
+                    break;
+                case '/delete_media':
+                    user_worker.deleteMedia(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });

@@ -153,14 +153,16 @@ function parseFormData(req) {
                         const uniqueSuffix = Date.now() + '-' + crypto.randomBytes(6).toString('hex');
                         const savedFilename = path.join('uploads', `${uniqueSuffix}-${filename}`);
 
-                        // Ensure the uploads directory exists
                         const uploadDir = path.join(__dirname, '..', '..', '..', 'uploads');
                         if (!fs.existsSync(uploadDir)) {
                             fs.mkdirSync(uploadDir, { recursive: true });
                         }
 
                         fs.writeFileSync(path.join(uploadDir, `${uniqueSuffix}-${filename}`), fileContent, 'binary');
-                        fields[key] = savedFilename.replace(/\\/g, '/'); // Convert to forward slashes for consistency
+                        fields[key] = {
+                            path: savedFilename.replace(/\\/g, '/'),
+                            extension: path.extname(filename)
+                        };
                     } else {
                         const value = part.slice(part.indexOf('\r\n\r\n') + 4, part.lastIndexOf('\r\n')).toString();
                         fields[key] = value;

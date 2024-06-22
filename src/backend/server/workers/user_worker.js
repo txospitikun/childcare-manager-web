@@ -242,7 +242,7 @@ async function insertFeedingEntry(req, res) {
     }
 }
 
-async function insertPhoto(req, res)
+async function insertMedia(req, res)
 {
     try
     {
@@ -250,8 +250,9 @@ async function insertPhoto(req, res)
         if (!user) return;
 
         const parsedData = await parseFormData(req);
+        console.log(parsedData);
 
-        await childreninfodb_logic.insertPhoto(user.ID, parsedData);
+        await childreninfodb_logic.insertMedia(user.ID, parsedData);
 
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Photo added successfully" }));
@@ -521,5 +522,52 @@ async function deleteSleepingEntry(req,res){
     }
 }
 
-module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+async function getChildrenMedia(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const childID = parsedUrl.searchParams.get('childID');
+
+        const media = await childreninfodb_logic.getChildrenMedia(user.ID, childID);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ media }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't retrieve media from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+async function deleteMedia(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const mediaID = parsedUrl.searchParams.get('mediaID');
+
+        await childreninfodb_logic.deleteMedia(user.ID, mediaID);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Media deleted successfully" }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't delete media from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
+}
+
+module.exports = { deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
 
