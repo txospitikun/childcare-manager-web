@@ -19,11 +19,10 @@ async function getFeedingEntry(entryId, userID)
 {
     try {
         const connection = await pool.getConnection();
-        const query = 'SELECT * FROM Feeding WHERE ChildrenID = ? AND UserID = ?';
-        console.log(entryId, userID);
+        const query = 'SELECT * FROM Feeding WHERE ID = ? AND UserID = ?';
         const [rows] = await connection.query(query, [entryId, userID]);
         connection.release();
-        return rows;
+        return rows[0];
     } catch (error) {
         console.error('Error getting feeding entry:', error);
         throw error;
@@ -70,6 +69,7 @@ async function deleteFeedingEntry(entryId, userID) {
     }
 }
 
+
 async function insertPhoto(ID, photoForm)
 {
     try {
@@ -85,4 +85,71 @@ async function insertPhoto(ID, photoForm)
 
 }
 
-module.exports = { insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertPhoto};
+async function insertSleepingEntry(ID, sleepingEntryForm){
+    try {
+        const connection = await pool.getConnection();
+        const query = 'INSERT INTO Sleeping (Date, SleepTime, AwakeTime, UserID, ChildrenID) VALUES (?, ?, ?, ?, ?)';
+        const [result] = await connection.query(query, [sleepingEntryForm.Date, sleepingEntryForm.SleepTime, sleepingEntryForm.AwakeTime, ID, sleepingEntryForm.ID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error inserting sleeping entry:', error);
+        throw error;
+    }
+}
+
+async function getSleepingEntry(entryId, userID){
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM Sleeping WHERE ID = ? AND UserID = ?';
+        const [rows] = await connection.query(query, [entryId, userID]);
+        connection.release();
+        return rows[0];
+    } catch (error) {
+        console.error('Error getting sleeping entry:', error);
+        throw error;
+    }
+}
+
+async function getSleepingEntriesByDate(date, userID, childID) {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM Sleeping WHERE Date = ? AND UserID = ? AND ChildrenID = ? ORDER BY Date ASC, SleepTime ASC';
+        const [rows] = await connection.query(query, [date, userID, childID]);
+        connection.release();
+        return rows;
+    } catch (error) {
+        console.error('Error getting sleeping entries by date:', error);
+        throw error;
+    }
+}
+
+async function editSleepingEntry(entryId, sleepingEntryForm, userID) {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'UPDATE Sleeping SET Date = ?, SleepTime = ?, AwakeTime = ? WHERE ID = ? AND UserID = ?';
+        const values = [sleepingEntryForm.Date, sleepingEntryForm.SleepTime, sleepingEntryForm.AwakeTime, entryId, userID];
+        const [result] = await connection.query(query, values);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error editing sleeping entry:', error);
+        throw error;
+    }
+}
+
+async function deleteSleepingEntry(entryId, userID) {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM Sleeping WHERE ID = ? AND UserID = ?';
+        const [result] = await connection.query(query, [entryId, userID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error deleting sleeping entry:', error);
+        throw error;
+    }
+}
+
+module.exports = { insertPhoto, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry};
+

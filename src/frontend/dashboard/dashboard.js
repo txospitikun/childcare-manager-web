@@ -12,14 +12,19 @@ const dashboardGroups = document.querySelector('#dashboard-groups');
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
-        modal.style.display = 'flex'; // Set display to flex for centering
+        modal.style.display = 'flex';
     }
+}
+
+function getLocalISOString() {
+    const now = new Date();
+    const timezoneOffset = now.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(now - timezoneOffset).toISOString().slice(0, 19);
+    return localISOTime.replace('T', ' ');
 }
 
 const addChildForm = document.querySelector('.add-child-bttn');
 const addTableForm = document.querySelector('.add-table-bttn');
-
-
 
 document.getElementById('casatorit').addEventListener('change', function() {
     const partnerNameGroup = document.getElementById('nume-partener-group');
@@ -30,10 +35,6 @@ document.getElementById('casatorit').addEventListener('change', function() {
     }
 });
 
-
-
-
-// Close button functionality
 document.querySelectorAll('.close-button').forEach(button => {
     button.addEventListener('click', function() {
         this.closest('.main-modal').style.display = 'none';
@@ -46,7 +47,6 @@ document.querySelectorAll('.confirm-button').forEach(button => {
     });
 });
 
-// Close the modal when clicking outside of it
 window.addEventListener('click', (event) => {
     document.querySelectorAll('.main-modal').forEach(modal => {
         if (event.target === modal) {
@@ -97,6 +97,7 @@ document.querySelectorAll('.attribute-button').forEach(function (button) {
         }
 
         currentSelectedAttribute = this;
+        console.log(currentSelectedAttribute.id);
         this.style.border = "2px solid black";
     });
 });
@@ -135,9 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
         currentSelectedChild = null;
 
         const cookieString = document.cookie;
-        console.log('Cookie string:', cookieString);
         const token = cookieString.substring(4);
-        console.log('JWT Token:', token);
 
         if (!token) {
             console.error('JWT token not found');
@@ -301,6 +300,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             updateCurrentDayTitle(date);
             selectedDate = date;
+            const selectedChildId = currentSelectedChild.dataset.childId;
+            fetchFeedingEntries(date, selectedChildId);
+            fetchSleepingEntries(date, selectedChildId);
         });
 
         return dateDiv;
@@ -323,24 +325,87 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     
+    
     updateCalendar();
     updateCurrentDayTitle(selectedDate);
 
-
-    function loadChildren() {
-        // Retrieve the JWT token from cookies
+    function fetchFeedingEntries(date, childID) {
         const cookieString = document.cookie;
-        console.log('Cookie string:', cookieString);
         const token = cookieString.substring(4);
-        console.log('JWT Token:', token);
-
+    
         if (!token) {
             console.error('JWT token not found');
             alert('JWT token not found');
             return;
         }
+    
+        const dateString = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0];
+    
+        fetch(`http://localhost:5000/api/get_feeding_entries_by_date?date=${dateString}&childID=${childID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Result:', result);
+            if (result.feedingEntries) {
+                displayFeedingEntries(result.feedingEntries);
+            } else {
+                displayFeedingEntries([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayFeedingEntries([]);
+        });
+    }
 
-        // Fetch the children data
+    let selectedEntryId=null;
+
+    function displayFeedingEntries(entries) {
+        const feedingItemsContainer = document.getElementById("feeding_items");
+        feedingItemsContainer.innerHTML = "";
+
+        if (entries.length === 0) {
+            feedingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
+        }
+    
+        entries.forEach(entry => {
+            const entryDiv = document.createElement("div");
+            entryDiv.className = "calendar-item";
+            entryDiv.dataset.entryId = entry.ID;
+    
+            const timeP = document.createElement("p");
+            timeP.textContent = entry.Time.slice(0, 5);
+    
+            const foodP = document.createElement("p");
+            foodP.textContent = `- ${entry.Quantity}${entry.Unit} ${entry.FoodType}`;
+    
+            entryDiv.appendChild(timeP);
+            entryDiv.appendChild(foodP);
+            entryDiv.addEventListener('click', function() {
+                document.querySelectorAll('.calendar-item.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                entryDiv.classList.add('selected');
+                selectedEntryId = entry.ID;
+            });
+            feedingItemsContainer.appendChild(entryDiv);
+        });
+    }
+
+    function loadChildren() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+
+        if (!token) {
+            alert('JWT token not found');
+            return;
+        }
+
         fetch('http://localhost:5000/api/get_user_children', {
             method: 'GET',
             headers: {
@@ -349,7 +414,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
         .then(response => {
-            console.log('Response status:', response.status);
             return response.json();
         })
         .then(result => {
@@ -366,18 +430,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Function to display children in the HTML
     function displayChildren(children) {
         const dashboardChildren = document.getElementById('user-children-id');
         const childrenAddButton = document.getElementById('add-child-bttn');
         console.log('Children:', children);
 
-        // Remove existing children elements
         while (dashboardChildren.firstChild && dashboardChildren.firstChild !== childrenAddButton) {
             dashboardChildren.removeChild(dashboardChildren.firstChild);
         }
 
-        // Re-append the header and add button
         const header = document.createElement('p');
         header.textContent = 'Copiii tăi inregistrați';
         dashboardChildren.insertBefore(header, childrenAddButton);
@@ -388,7 +449,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Function to create a child element
     function createChildElement(child) {
         const childContainer = document.createElement('div');
         childContainer.className = 'children-container';
@@ -417,7 +477,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return childContainer;
     }
 
-    // Function to calculate age
     function calculateAge(dateOfBirth) {
         const dob = new Date(dateOfBirth);
         const diff_ms = Date.now() - dob.getTime();
@@ -426,7 +485,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return Math.abs(age_dt.getUTCFullYear() - 1970);
     }
 
-    // Function to get age category
     function getAgeCategory(age) {
         if (age < 3) return 'infant';
         if (age < 13) return 'copil';
@@ -434,12 +492,14 @@ document.addEventListener("DOMContentLoaded", function () {
         return 'adult';
     }
 
-    // Function to add event listeners for child selection
     function addChildSelectionHandler() {
         document.querySelectorAll('.children-container').forEach(function(button) {
 
             if (!currentSelectedChild) {
                 currentSelectedChild = button;
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchFeedingEntries(selectedDate, selectedChildId);
+                fetchSleepingEntries(selectedDate, selectedChildId);
                 button.style.border = "2px solid gray";
             }
 
@@ -453,28 +513,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Load children on page load
     loadChildren();
 
     document.getElementById('add-child-form').addEventListener('submit', async function(e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
     
         const form = document.getElementById('add-child-form');
         const formData = new FormData(form);
     
         const cookieString = document.cookie;
-        console.log('Cookie string:', cookieString);
         const token = cookieString.substring(4);
-        console.log('JWT Token', token);
     
         if (!token) {
-            console.error('JWT token not found');
             alert('JWT token not found');
             return;
         }
     
-        // Log form data for debugging
-        console.log('Form data entries:');
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
@@ -498,7 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     LastName: formData.get('nume'),
                     Gender: formData.get('sex'),
                     DateOfBirth: formData.get('data-nasterii'),
-                    PictureRef: result.PictureRef // Assuming the server returns the saved picture path
+                    PictureRef: result.PictureRef
                 });
                 document.getElementById('user-children-id').insertBefore(newChild, document.getElementById('add-child-bttn'));
                 addChildSelectionHandler();
@@ -522,10 +576,6 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal('add-child-modal');
     });
     
-    document.getElementById('add-table-bttn').addEventListener('click', () => {
-        showModal('add-meal-modal');
-    });
-    
     document.getElementById('add-group-bttn').addEventListener('click', () => {
         showModal('add-group-modal');
     });
@@ -534,6 +584,596 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal('edit-account-modal');
         fetchAccountData();
     });
+
+    document.getElementById('add-entry-bttn').addEventListener('click', () => {
+        if (currentSelectedAttribute.id === 'feeding-bttn') {
+            resetMealForm();
+            openMealModal('Adaugă o nouă masă', 'Adaugă', addMeal);
+        } else if (currentSelectedAttribute.id === 'sleeping-bttn') {
+            resetSleepingForm();
+            openSleepingModal('Adaugă o perioadă de somn', 'Adaugă', addSleeping);
+        }
+    });
+    
+    document.getElementById('edit-entry-bttn').addEventListener('click', () => {
+        if (!selectedEntryId) {
+            alert("Please select an entry first.");
+            return;
+        }
+    
+        if (currentSelectedAttribute.id === 'feeding-bttn') {
+            openMealModal('Modifică o masă curentă', 'Modifică', editMeal);
+            fetchFeedingEntryData();
+        } else if (currentSelectedAttribute.id === 'sleeping-bttn') {
+            openSleepingModal('Modifică o perioadă de somn', 'Modifică', editSleeping);
+            fetchSleepingEntryData();
+        }
+    });
+
+    document.getElementById('delete-entry-bttn').addEventListener('click', () => {
+        if (!selectedEntryId) {
+            alert("Please select an entry first.");
+            return;
+        }
+    
+        if (currentSelectedAttribute.id === 'feeding-bttn') {
+            deleteFeedingEntry();
+        } else if (currentSelectedAttribute.id === 'sleeping-bttn') {
+            deleteSleepingEntry();
+        }
+    });
+
+    function openMealModal(title, buttonText, submitHandler) {
+        document.getElementById('meal-modal-title').textContent = title;
+        document.getElementById('confirm-meal-bttn').textContent = buttonText;
+        const form = document.getElementById('meal-form');
+        form.onsubmit = submitHandler;
+        showModal('meal-modal');
+    }
+
+    function openSleepingModal(title, buttonText, submitHandler) {
+        document.getElementById('sleeping-modal-title').textContent = title;
+        document.getElementById('confirm-sleeping-bttn').textContent = buttonText;
+        const form = document.getElementById('sleeping-form');
+        form.onsubmit = submitHandler;
+        showModal('sleeping-modal');
+    }
+
+    function resetMealForm() {
+        document.getElementById('meal-form').reset();
+        document.getElementById('use-current-date-time-checkbox').checked = true;
+        document.getElementById('date-and-time-inputs-meal').style.display = 'none';
+    }
+
+    document.getElementById('use-current-date-checkbox-sleep').addEventListener('change', function() {
+        const dateInput = document.getElementById('date-input-sleep');
+        if (this.checked) {
+            dateInput.style.display = 'none';
+        } else {
+            dateInput.style.display = 'block';
+        }
+    });
+
+    document.getElementById('use-current-date-time-checkbox').addEventListener('change', function() {
+        const dateAndTimeInputs = document.getElementById('date-and-time-inputs-meal');
+        if (this.checked) {
+            dateAndTimeInputs.style.display = 'none';
+        } else {
+            dateAndTimeInputs.style.display = 'block';
+        }
+    });
+
+    function resetSleepingForm() {
+        document.getElementById('sleeping-form').reset();
+        document.getElementById('use-current-date-checkbox-sleep').checked = true;
+        document.getElementById('date-input-sleep').style.display = 'none';
+    }
+    
+    async function addMeal(e) {
+        e.preventDefault();
+    
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+    
+        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
+        let date, time;
+    
+        if (useCurrentDateTime) {
+            date = getLocalISOString().split(' ')[0];
+            time = getLocalISOString().split(' ')[1];
+        } else {
+            date = document.getElementById('data_table').value;
+            time = document.getElementById('time_table').value + ":00";
+        }
+    
+        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
+        const quantity = document.getElementById('mass-input').value;
+        const foodType = document.getElementById('food').value;
+    
+        const payload = {
+            ID: selectedChildId,
+            Date: date,
+            Time: time,
+            Unit: unit,
+            Quantity: parseInt(quantity, 10),
+            FoodType: foodType,
+        };
+    
+        console.log('Add meal payload:', payload);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_feeding_entry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            console.log('Response status (addMeal):', response.status);
+            const result = await response.json();
+            console.log('Result (addMeal):', result);
+    
+            if (response.ok) {
+                alert('Meal added successfully.');
+                fetchFeedingEntries(selectedDate, selectedChildId);
+                document.getElementById('meal-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error (addMeal):', error);
+            alert('An error occurred while adding the meal.');
+        }
+    }
+    
+    async function editMeal(e) {
+        e.preventDefault();
+    
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+    
+        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
+        let date, time;
+    
+        if (useCurrentDateTime) {
+            date = getLocalISOString().split(' ')[0];
+            time = getLocalISOString().split(' ')[1];
+        } else {
+            date = document.getElementById('data_table').value;
+            time = document.getElementById('time_table').value + ":00";
+        }
+    
+        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
+        const quantity = document.getElementById('mass-input').value;
+        const foodType = document.getElementById('food').value;
+    
+        const payload = {
+            ID: selectedEntryId,
+            Date: date,
+            Time: time,
+            Unit: unit,
+            Quantity: parseInt(quantity, 10),
+            FoodType: foodType,
+        };
+    
+        console.log('Edit meal payload:', payload);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/edit_feeding_entry', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            console.log('Response status (editMeal):', response.status);
+            const result = await response.json();
+            console.log('Result (editMeal):', result);
+    
+            if (response.ok) {
+                alert('Meal updated successfully.');
+                fetchFeedingEntries(selectedDate, selectedChildId);
+                document.getElementById('meal-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error (editMeal):', error);
+            alert('An error occurred while updating the meal.');
+        }
+    }
+
+    function fetchFeedingEntryData() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            alert('JWT token not found');
+            return;
+        }
+    
+        fetch(`http://localhost:5000/api/get_feeding_entry?id=${selectedEntryId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.feedingEntry) {
+                autoCompleteEditForm(result.feedingEntry);
+            } else {
+                alert('Feeding entry not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching entry details:', error);
+            alert('An error occurred while fetching the entry details.');
+        });
+    }
+
+    async function deleteFeedingEntry() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5000/api/delete_feeding_entry?id=${selectedEntryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchFeedingEntries(selectedDate, selectedChildId);
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred while deleting the feeding entry.');
+        }
+    }
+
+    async function addSleeping(e) {
+        e.preventDefault();
+    
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+    
+        const useCurrentDateTime = document.getElementById('use-current-date-checkbox-sleep').checked;
+        let date, sleepTime, awakeTime;
+    
+        if (useCurrentDateTime) {
+            date = getLocalISOString().split(' ')[0];
+        } else {
+            date = document.getElementById('data_sleep').value;
+        }
+        sleepTime = document.getElementById('time_sleep').value + ":00";
+            awakeTime = document.getElementById('time_awake').value + ":00";
+    
+        const payload = {
+            ID: selectedChildId,
+            Date: date,
+            SleepTime: sleepTime,
+            AwakeTime: awakeTime
+        };
+    
+        console.log(payload);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_sleeping_entry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                alert('Sleeping entry added successfully.');
+                fetchSleepingEntries(selectedDate, selectedChildId);
+                document.getElementById('sleeping-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the sleeping entry.');
+        }
+    }
+    
+    async function editSleeping(e) {
+        e.preventDefault();
+    
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+    
+        const selectedChildId = currentSelectedChild.dataset.childId;
+    
+        const useCurrentDateTime = document.getElementById('use-current-date-checkbox-sleep').checked;
+        let date, sleepTime, awakeTime;
+    
+        if (useCurrentDateTime) {
+            date = getLocalISOString().split(' ')[0];
+        } else {
+            date = document.getElementById('data_sleep').value;
+            
+        }
+
+        sleepTime = document.getElementById('time_sleep').value + ":00";
+        awakeTime = document.getElementById('time_awake').value + ":00";
+    
+        const payload = {
+            ID: selectedEntryId,
+            Date: date,
+            SleepTime: sleepTime,
+            AwakeTime: awakeTime
+        };
+    
+        console.log(payload);
+    
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:5000/api/edit_sleeping_entry', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                alert('Sleeping entry updated successfully.');
+                fetchSleepingEntries(selectedDate, selectedChildId);
+                document.getElementById('sleeping-modal').style.display = 'none';
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating the sleeping entry.');
+        }
+    }
+    
+    function fetchSleepingEntryData() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        fetch(`http://localhost:5000/api/get_sleeping_entry?id=${selectedEntryId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.sleepingEntry) {
+                autoCompleteSleepingForm(result.sleepingEntry);
+            } else {
+                alert('Sleeping entry not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching entry details:', error);
+            alert('An error occurred while fetching the entry details.');
+        });
+    }
+
+    function fetchSleepingEntries(date, childID) {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        const dateString = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0];
+    
+        fetch(`http://localhost:5000/api/get_sleeping_entries_by_date?date=${dateString}&childID=${childID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Result:', result);
+            if (result.sleepingEntries) {
+                displaySleepingEntries(result.sleepingEntries);
+            } else {
+                displaySleepingEntries([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displaySleepingEntries([]);
+        });
+    }
+
+    async function deleteSleepingEntry() {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+    
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5000/api/delete_sleeping_entry?id=${selectedEntryId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            const result = await response.json();
+            console.log('Result:', result);
+    
+            if (response.ok) {
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchSleepingEntries(selectedDate, selectedChildId);
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert('An error occurred while deleting the sleeping entry.');
+        }
+    }
+    
+    function displaySleepingEntries(entries) {
+        const sleepingItemsContainer = document.getElementById("sleeping_items");
+        sleepingItemsContainer.innerHTML = "";
+    
+        if (entries.length === 0) {
+            sleepingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
+            return;
+        }
+    
+        entries.forEach(entry => {
+            const entryDiv = document.createElement("div");
+            entryDiv.className = "calendar-item";
+            entryDiv.dataset.entryId = entry.ID;
+    
+            const sleepTime = entry.SleepTime.slice(0, 5);
+            const awakeTime = entry.AwakeTime.slice(0, 5); 
+    
+            const sleepDuration = calculateSleepDuration(entry.SleepTime, entry.AwakeTime);
+    
+            const timeP = document.createElement("p");
+            timeP.textContent = `${sleepTime} - ${awakeTime}`;
+    
+            const durationP = document.createElement("p");
+            durationP.textContent = `- ${sleepDuration}`;
+    
+            entryDiv.appendChild(timeP);
+            entryDiv.appendChild(durationP);
+            entryDiv.addEventListener('click', function() {
+                document.querySelectorAll('.calendar-item.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                entryDiv.classList.add('selected');
+                selectedEntryId = entry.ID;
+            });
+            sleepingItemsContainer.appendChild(entryDiv);
+        });
+    }
+    
+    function calculateSleepDuration(sleepTime, awakeTime) {
+        const sleepDate = new Date(`1970-01-01T${sleepTime}Z`);
+        const awakeDate = new Date(`1970-01-01T${awakeTime}Z`);
+    
+        if (awakeDate < sleepDate) {
+            awakeDate.setDate(awakeDate.getDate() + 1);
+        }
+    
+        const durationMs = awakeDate - sleepDate;
+        const hours = Math.floor(durationMs / 1000 / 60 / 60);
+        const minutes = Math.floor((durationMs / 1000 / 60) % 60);
+    
+        return `${hours} hours and ${minutes} minutes`;
+    }
+    
+    
+    function autoCompleteSleepingForm(entry) {
+        document.getElementById('data_sleep').value = entry.Date.split('T')[0];
+        document.getElementById('time_sleep').value = entry.SleepTime.slice(0, 5);
+        document.getElementById('time_awake').value = entry.AwakeTime.slice(0, 5);
+    }
+    
+    function autoCompleteEditForm(entry) {
+        console.log('Auto-completing form with entry:', entry);
+        document.getElementById('data_table').value = entry.Date.split('T')[0];
+        document.getElementById('time_table').value = entry.Time.slice(0, 5);
+        document.getElementById('mass-selector').value = entry.Unit === 'g' ? 'grame' : 'miligrame';
+        document.getElementById('mass-input').value = entry.Quantity;
+        document.getElementById('food').value = entry.FoodType;
+    }
+
+    
 
     function mapAccountTypeToString(accountType) {
         switch (accountType) {
@@ -553,83 +1193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    document.getElementById('use-current-date-time-checkbox').addEventListener('change', function() {
-        const dateTimeInputs = document.getElementById('date-and-time-inputs-add-table');
-        if (this.checked) {
-            dateTimeInputs.style.display = 'none';
-        } else {
-            dateTimeInputs.style.display = 'block';
-        }
-    });
-
-    document.getElementById('add-meal-form').addEventListener('submit', async function(e) {
-        e.preventDefault(); 
-
-        if (!currentSelectedChild) {
-            alert("Please select a child first.");
-            return;
-        }
-
-        const selectedChildId = currentSelectedChild.dataset.childId;
-
-        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
-        let date, time;
-        
-        if (useCurrentDateTime) {
-            const now = new Date();
-            date = now.toISOString().split('T')[0];
-            time = now.toTimeString().split(' ')[0];
-        } else {
-            date = document.getElementById('data_add_table').value;
-            time = document.getElementById('time_add_table').value + ":00";
-        }
-
-        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
-        const quantity = document.getElementById('mass-input').value;
-        const foodType = document.getElementById('food').value;
-
-        const payload = {
-            SelectedChildren: selectedChildId,
-            Date: date,
-            Time: time,
-            Unit: unit,
-            Quantity: parseInt(quantity, 10),
-            FoodType: foodType,
-        };
-
-        const cookieString = document.cookie;
-        const token = cookieString.substring(4);
-
-        if (!token) {
-            console.error('JWT token not found');
-            alert('JWT token not found');
-            return;
-        }
-
-        try {
-            const response = await fetch('http://localhost:5000/api/insert_feeding_entry', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-
-            console.log('Response status:', response.status);
-            const result = await response.json();
-            console.log('Result:', result);
-
-            if (response.ok) {
-                alert('Meal added successfully.');
-            } else {
-                alert(`Error: ${result.message}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while adding the meal.');
-        }
-    });
+    
 
     addChildSelectionHandler();
 
@@ -638,9 +1202,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const token = cookieString.substring(4);
 
         if (!token) {
-            console.error('JWT token not found');
             alert('JWT token not found');
-            return;
+            return null;
         }
 
         try {
@@ -655,32 +1218,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 const data = await response.json();
                 fillFormData(data);
                 populateProfileData(data.user);
+                return data.user;
             } else {
-                console.error('Error fetching account data');
                 alert('Error fetching account data');
+                return null;
             }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while fetching account data');
+            return null;
         }
     }
 
     function populateProfileData(userData) {
-        console.log(userData);
         const fullName = `${userData.FirstName} ${userData.LastName}`;
         const email = `Email: ${userData.Email}`;
         const phoneNo = `Telefon: ${userData.PhoneNo}`;
         const maritalStatus = `Căsătorit: ${userData.CivilState === 1 ? 'Da' : 'Nu'}`;
-        const birthDate = `Data nașterii: ${userData.BirthDate}`;
-        const gender = `Gen: ${userData.Gender}`;
         const location = `Localizare: ${userData.Location}`;
         const language = `Limbă: ${userData.Language}`;
         const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType)}`;
         console.log(`http://localhost:5000/api/src/${userData.PictureRef}`);
         const profilePhoto = userData.PictureRef ? `http://localhost:5000/api/src/${userData.PictureRef}` : 'default-profile-photo-url.jpg';
 
-    
-        // Populate the profile data in the HTML
         document.querySelector('.profile-settings-container h1').textContent = fullName;
         document.querySelector('.profile-settings-container:nth-of-type(2) p:nth-of-type(2)').textContent = email;
         document.querySelector('.profile-settings-container:nth-of-type(2) p:nth-of-type(3)').textContent = phoneNo;
@@ -690,15 +1250,13 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector('.profile-settings-container:nth-of-type(9) p:nth-of-type(2)').textContent = accountType;
         document.getElementById('user-profile-name').textContent = fullName;
         document.getElementById('user-profile-type').textContent = accountType;
-        const profilePhotoElement = document.querySelector('.profile-photo'); // Adjust selector as needed
+        const profilePhotoElement = document.querySelector('.profile-photo');
         if (profilePhotoElement) {
             profilePhotoElement.src = profilePhoto;
         }
 
     }
     
-
-    // Fill the form with fetched data
     function fillFormData(data) {
         const userData = data.user;
         document.getElementById('lastname').value = userData.LastName;
@@ -720,7 +1278,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Show or hide partner name input based on the checkbox
     document.getElementById('casatorit').addEventListener('change', function() {
         const numePartenerGroup = document.getElementById('nume-partener-group');
         if (this.checked) {
@@ -731,13 +1288,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById('edit-account-form').addEventListener('submit', async function(e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault(); 
     
-        // Collect form data
         const form = document.getElementById('edit-account-form');
         const formData = new FormData(form);
     
-        // Handle checkbox and partner name
         const civilStateCheckbox = document.getElementById('casatorit');
         formData.append('civilState', civilStateCheckbox.checked ? '1' : '0');
         
@@ -745,18 +1300,16 @@ document.addEventListener("DOMContentLoaded", function () {
         if (civilStateCheckbox.checked) {
             formData.append('civilPartner', numePartenerInput.value || '');
         } else {
-            formData.append('civilPartner', '-1'); // Indicate no partner if not married
+            formData.append('civilPartner', '-1');
         }
 
         const accountTypeInput = document.getElementById('accountType');
         formData.set('accountType', mapAccountTypeToInteger(accountTypeInput.value));
     
-        // Retrieve the JWT token from cookies
         const cookieString = document.cookie;
         const token = cookieString.substring(4);
     
         if (!token) {
-            console.error('JWT token not found');
             alert('JWT token not found');
             return;
         }
@@ -785,8 +1338,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    
-    
 });
 
 
@@ -832,4 +1383,3 @@ for (let i = 0; i < img.length; i++) {
         captionText.innerHTML = this.nextElementSibling.innerHTML;
     }
 }
-
