@@ -641,7 +641,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function resetMealForm() {
         document.getElementById('meal-form').reset();
-        document.getElementById('use-current-date-time-checkbox-meal').checked = true;
+        document.getElementById('use-current-date-time-checkbox').checked = true;
         document.getElementById('date-and-time-inputs-meal').style.display = 'none';
     }
 
@@ -654,7 +654,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    document.getElementById('use-current-date-time-checkbox-meal').addEventListener('change', function() {
+    document.getElementById('use-current-date-time-checkbox').addEventListener('change', function() {
         const dateAndTimeInputs = document.getElementById('date-and-time-inputs-meal');
         if (this.checked) {
             dateAndTimeInputs.style.display = 'none';
