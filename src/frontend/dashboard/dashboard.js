@@ -1,6 +1,9 @@
+import { currentSelectedChild, setCurrentSelectedChild, getCurrentSelectedChild  } from './shared.js';
+import { selectedDate } from './calendar.js';
+
 let currentDashboardButton = null;
-let currentSelectedChild = null;
 let currentSelectedAttribute = null;
+let selectedEntryId=null;
 
 let deleteChildrenButton = document.getElementById('delete-bttn');
 
@@ -107,53 +110,7 @@ var span = document.getElementsByClassName("close")[0];
 
 var btn = document.getElementById("addPhoto");
 
-document.addEventListener("DOMContentLoaded", function () {
-
     fetchAccountData();
-
-    deleteChildrenButton.addEventListener('click', function()
-    {
-        if (!currentSelectedChild) {
-            alert("Please select a child first.");
-            return;
-        }
-
-        const selectedChildId = currentSelectedChild.dataset.childId;
-        currentSelectedChild = null;
-
-        const cookieString = document.cookie;
-        const token = cookieString.substring(4);
-
-        if (!token) {
-            console.error('JWT token not found');
-            alert('JWT token not found');
-            return;
-        }
-
-        fetch(`http://localhost:5000/api/delete_children?childID=${selectedChildId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                console.log('Response status:', response.status);
-                return response.json();
-            })
-            .then(result => {
-                console.log('Result:', result);
-                if (result) {
-                } else {
-                    console.error('Error: ' + result.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
-            .finally(() => {
-                loadChildren()});
-    });
 
     document.querySelectorAll('.dashboard-button').forEach(function (button) {
 
@@ -201,121 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    const calendarContainer = document.getElementById("calendarElement");
-    const monthYearDisplay = document.getElementById("month-year");
-    const previousMonthButton = document.getElementById("previous-month-button");
-    const nextMonthButton = document.getElementById("next-month-button");
-    const currentDayTitle = document.getElementById("current-day-title");
-
-    let currentDate = new Date();
-    let today = new Date();
-    let selectedDate = new Date();
-
-    function updateCalendar() {
-        calendarContainer.innerHTML = "";
-
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-
-        let dateString = currentDate.toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' });
-        dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
-        monthYearDisplay.textContent = dateString;
-
-        const firstDayOfMonth = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        const prevMonthDays = (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1);
-        const prevMonthLastDate = new Date(year, month, 0).getDate();
-
-        for (let i = prevMonthLastDate - prevMonthDays + 1; i <= prevMonthLastDate; i++) {
-            calendarContainer.appendChild(createCalendarDate(i, "not-current", new Date(year, month - 1, i)));
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const isToday = date.toDateString() === today.toDateString();
-            const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
-            calendarContainer.appendChild(createCalendarDate(day, isSelected ? "current" : "", date));
-            if (isToday && !selectedDate) {
-                updateCurrentDayTitle(date);
-            }
-        }
-
-        const totalDays = prevMonthDays + daysInMonth;
-        let nextMonthDays = 35 - totalDays;
-        if (nextMonthDays < 0) {
-            nextMonthDays = 42 - totalDays;
-        }
-
-        
-        for (let i = 1; i <= nextMonthDays; i++) {
-            const date = new Date(year, month + 1, i);
-            const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
-            calendarContainer.appendChild(createCalendarDate(i, "not-current", date));
-            if (isSelected && date.getMonth() === month + 1) {
-                const dateDiv = calendarContainer.lastChild;
-                dateDiv.classList.add('current');
-            }
-        }
-
-        const numRows = Math.ceil((prevMonthDays + daysInMonth + nextMonthDays) / 7);
-
-        calendarContainer.style.gridTemplateRows = `repeat(${numRows}, 1fr)`;
-    }
-
-    function createCalendarDate(day, additionalClass, date) {
-        const dateDiv = document.createElement("div");
-        dateDiv.className = `calendar-date ${additionalClass}`;
-
-        const dayDiv = document.createElement("div");
-        dayDiv.className = "calendar-date-day";
-        dayDiv.textContent = day;
-
-        const feedCountDiv = document.createElement("div");
-        feedCountDiv.className = "calendar-date-feed-count";
-        feedCountDiv.textContent = "5*";
-
-        dateDiv.appendChild(dayDiv);
-        dateDiv.appendChild(feedCountDiv);
-
-        dateDiv.addEventListener("click", function () {
-            document.querySelectorAll('.calendar-date.current').forEach(el => {
-                el.classList.remove('current');
-            });
-            dateDiv.classList.add('current');
-
-            updateCurrentDayTitle(date);
-            selectedDate = date;
-            const selectedChildId = currentSelectedChild.dataset.childId;
-            fetchFeedingEntries(date, selectedChildId);
-            fetchSleepingEntries(date, selectedChildId);
-        });
-
-        return dateDiv;
-    }
-
-    function updateCurrentDayTitle(date) {
-        const dayOfWeek = date.toLocaleDateString('ro-RO', { weekday: 'long' });
-        const dayAndMonth = date.toLocaleDateString('ro-RO', { day: 'numeric', month: 'long' });
-        currentDayTitle.innerHTML = `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)}<br>${dayAndMonth.charAt(0).toUpperCase() + dayAndMonth.slice(1)}`;
-    }
-
-    previousMonthButton.addEventListener("click", function () {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        updateCalendar();
-    });
-
-    nextMonthButton.addEventListener("click", function () {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        updateCalendar();
-    });
-
     
-    
-    updateCalendar();
-    updateCurrentDayTitle(selectedDate);
 
-    function fetchFeedingEntries(date, childID) {
+    export function fetchFeedingEntries(date, childID) {
         const cookieString = document.cookie;
         const token = cookieString.substring(4);
     
@@ -349,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    let selectedEntryId=null;
+    
 
     function displayFeedingEntries(entries) {
         const feedingItemsContainer = document.getElementById("feeding_items");
@@ -382,6 +227,50 @@ document.addEventListener("DOMContentLoaded", function () {
             feedingItemsContainer.appendChild(entryDiv);
         });
     }
+
+    deleteChildrenButton.addEventListener('click', function()
+    {
+        if (!currentSelectedChild) {
+            alert("Please select a child first.");
+            return;
+        }
+
+        const selectedChildId = currentSelectedChild.dataset.childId;
+        currentSelectedChild = null;
+
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+
+        if (!token) {
+            console.error('JWT token not found');
+            alert('JWT token not found');
+            return;
+        }
+
+        fetch(`http://localhost:5000/api/delete_children?childID=${selectedChildId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(result => {
+                console.log('Result:', result);
+                if (result) {
+                } else {
+                    console.error('Error: ' + result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                loadChildren()});
+    });
 
     function loadChildren() {
         const cookieString = document.cookie;
@@ -482,7 +371,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.children-container').forEach(function(button) {
 
             if (!currentSelectedChild) {
-                currentSelectedChild = button;
+                setCurrentSelectedChild(button);
                 const selectedChildId = currentSelectedChild.dataset.childId;
                 fetchFeedingEntries(selectedDate, selectedChildId);
                 fetchSleepingEntries(selectedDate, selectedChildId);
@@ -494,9 +383,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (currentSelectedChild) {
                     currentSelectedChild.style.border = "";
                 }
-                currentSelectedChild = this;
+                setCurrentSelectedChild(this);
                 this.style.border = "2px solid gray";
                 const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchFeedingEntries(selectedDate, selectedChildId);
+                fetchSleepingEntries(selectedDate, selectedChildId);
                 fetchChildrenMedia(selectedChildId);
             });
         });
@@ -1043,7 +934,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function fetchSleepingEntries(date, childID) {
+    export function fetchSleepingEntries(date, childID) {
         const cookieString = document.cookie;
         const token = cookieString.substring(4);
     
@@ -1489,7 +1380,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-});
+
 
 function displayMediaEntries(entries) {
     const gallery = document.querySelector('.gallery');
