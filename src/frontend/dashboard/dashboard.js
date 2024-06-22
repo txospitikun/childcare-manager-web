@@ -89,7 +89,6 @@ document.querySelectorAll('.attribute-button').forEach(function (button) {
             buttonDisplayMap[this.id].style.display = "";
         }
 
-        
         if (this.id === 'feeding-bttn' || this.id === 'sleeping-bttn') {
             document.getElementById('calendarContainer').style.display = "";
         } else {
@@ -492,6 +491,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const selectedChildId = currentSelectedChild.dataset.childId;
                 fetchFeedingEntries(selectedDate, selectedChildId);
                 fetchSleepingEntries(selectedDate, selectedChildId);
+                fetchChildrenMedia(selectedChildId);
                 button.style.border = "2px solid gray";
             }
 
@@ -501,6 +501,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 currentSelectedChild = this;
                 this.style.border = "2px solid gray";
+                const selectedChildId = currentSelectedChild.dataset.childId;
+                fetchChildrenMedia(selectedChildId);
             });
         });
     }
@@ -1185,7 +1187,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('food').value = entry.FoodType;
     }
 
-    document.getElementById('add-photo-modal').querySelector('form').addEventListener('submit', async function (e) {
+    document.getElementById('add-media-form').addEventListener('submit', async function(e) {
         e.preventDefault();
     
         if (!currentSelectedChild) {
@@ -1219,7 +1221,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('Time', time);
         formData.append('InTimeline', addToTimeline ? '1' : '0');
         formData.append('MediaType', file.type);
-        formData.append('mediaInput', file);
+        formData.append('PictureRef', file);
     
         const cookieString = document.cookie;
         const token = cookieString.substring(4);
@@ -1231,7 +1233,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
         try {
-            const response = await fetch('http://localhost:5000/api/insert_media_entry', {
+            const response = await fetch('http://localhost:5000/api/insert_media', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -1245,7 +1247,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
             if (response.ok) {
                 alert('Media entry added successfully.');
-                fetchMediaEntries(selectedDate, selectedChildId);
+                fetchChildrenMedia(selectedChildId);
                 document.getElementById('add-photo-modal').style.display = 'none';
             } else {
                 alert(`Error: ${result.message}`);
@@ -1255,6 +1257,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('An error occurred while adding the media entry.');
         }
     });
+    
 
     document.getElementById('delete').addEventListener('click', async function() {
         const entryId = this.dataset.entryId;
@@ -1274,7 +1277,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     
         try {
-            const response = await fetch(`http://localhost:5000/api/delete_media_entry?id=${entryId}`, {
+            const response = await fetch(`http://localhost:5000/api/delete_media?id=${entryId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -1313,12 +1316,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Fetch response status:', response.status);
+            return response.json();
+        })
         .then(result => {
-            console.log('Result:', result);
-            if (result.mediaEntries) {
-                displayMediaEntries(result.mediaEntries);
+            console.log('Fetch result:', result);
+            if (result.media) {
+                console.log('Media entries found:', result.media);
+                displayMediaEntries(result.media);
             } else {
+                console.log('No media entries found.');
                 displayMediaEntries([]);
             }
         })
@@ -1328,80 +1336,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function displayMediaEntries(entries) {
-        const gallery = document.querySelector('.gallery');
-        gallery.innerHTML = ""; 
-    
-        if (entries.length === 0) {
-            gallery.innerHTML = "<p>No entries for the selected child.</p>";
-            return;
-        }
-    
-        entries.forEach(entry => {
-            const figureElement = document.createElement('figure');
-    
-            const mediaType = entry.MediaType.toLowerCase();
-            let mediaElement;
-    
-            if (mediaType.includes('image')) {
-                mediaElement = document.createElement('img');
-                mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
-                mediaElement.classList.add('modal-image');
-            } else if (mediaType.includes('video')) {
-                mediaElement = document.createElement('video');
-                mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
-                mediaElement.controls = true;
-                mediaElement.classList.add('modal-video');
-            } else if (mediaType.includes('audio')) {
-                mediaElement = document.createElement('audio');
-                mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
-                mediaElement.controls = true;
-                mediaElement.classList.add('modal-audio');
-            }
-    
-            figureElement.appendChild(mediaElement);
-    
-            const figcaption = document.createElement('figcaption');
-            figcaption.textContent = `${entry.Date.split('T')[0]} ${entry.Time.slice(0, 5)}`;
-            figureElement.appendChild(figcaption);
-    
-            gallery.appendChild(figureElement);
-    
-            mediaElement.addEventListener('click', function () {
-                openMediaModal(mediaElement, figcaption.textContent, entry.ID);
-            });
-        });
-    }
-    
-    function openMediaModal(mediaElement, caption, entryId) {
-        const modal = document.getElementById("myModal");
-        const modalImg = document.getElementById("img01");
-        const modalVideo = document.getElementById("vid01");
-        const modalAudio = document.getElementById("aud01");
-        const captionText = document.getElementById("caption");
-        const deleteButton = document.getElementById("delete");
-    
-        modal.style.display = "block";
-        captionText.innerHTML = caption;
-        deleteButton.dataset.entryId = entryId;
-    
-        if (mediaElement.tagName === 'IMG') {
-            modalImg.src = mediaElement.src;
-            modalImg.style.display = 'block';
-            modalVideo.style.display = 'none';
-            modalAudio.style.display = 'none';
-        } else if (mediaElement.tagName === 'VIDEO') {
-            modalVideo.src = mediaElement.src;
-            modalVideo.style.display = 'block';
-            modalImg.style.display = 'none';
-            modalAudio.style.display = 'none';
-        } else if (mediaElement.tagName === 'AUDIO') {
-            modalAudio.src = mediaElement.src;
-            modalAudio.style.display = 'block';
-            modalImg.style.display = 'none';
-            modalVideo.style.display = 'none';
-        }
-    }
 
     function mapAccountTypeToString(accountType) {
         switch (accountType) {
@@ -1420,8 +1354,6 @@ document.addEventListener("DOMContentLoaded", function () {
             default: return 0;
         }
     }
-
-    
 
     addChildSelectionHandler();
 
@@ -1572,6 +1504,8 @@ function displayMediaEntries(entries) {
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = "";
 
+    console.log('Displaying media entries:', entries);
+
     if (entries.length === 0) {
         gallery.innerHTML = "<p>No entries for the selected child.</p>";
         return;
@@ -1583,18 +1517,18 @@ function displayMediaEntries(entries) {
         const mediaType = entry.MediaType.toLowerCase();
         let mediaElement;
 
-        if (mediaType.includes('image')) {
+        if (mediaType.includes('.jpg') || mediaType.includes('.jpeg') || mediaType.includes('.png') || mediaType.includes('.gif')) {
             mediaElement = document.createElement('img');
-            mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
             mediaElement.classList.add('modal-image');
-        } else if (mediaType.includes('video')) {
+        } else if (mediaType.includes('.mp4') || mediaType.includes('.webm') || mediaType.includes('.ogg')) {
             mediaElement = document.createElement('video');
-            mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
             mediaElement.controls = true;
             mediaElement.classList.add('modal-video');
-        } else if (mediaType.includes('audio')) {
+        } else if (mediaType.includes('.mp3') || mediaType.includes('.wav') || mediaType.includes('.ogg')) {
             mediaElement = document.createElement('audio');
-            mediaElement.src = `http://localhost:5000/api/${entry.PictureRef}`;
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
             mediaElement.controls = true;
             mediaElement.classList.add('modal-audio');
         }
@@ -1611,6 +1545,36 @@ function displayMediaEntries(entries) {
             openMediaModal(mediaElement, figcaption.textContent, entry.ID);
         });
     });
+}
+
+function openMediaModal(mediaElement, caption, entryId) {
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("img01");
+    const modalVideo = document.getElementById("vid01");
+    const modalAudio = document.getElementById("aud01");
+    const captionText = document.getElementById("caption");
+    const deleteButton = document.getElementById("delete");
+
+    modal.style.display = "block";
+    captionText.innerHTML = caption;
+    deleteButton.dataset.entryId = entryId;
+
+    if (mediaElement.tagName === 'IMG') {
+        modalImg.src = mediaElement.src;
+        modalImg.style.display = 'block';
+        modalVideo.style.display = 'none';
+        modalAudio.style.display = 'none';
+    } else if (mediaElement.tagName === 'VIDEO') {
+        modalVideo.src = mediaElement.src;
+        modalVideo.style.display = 'block';
+        modalImg.style.display = 'none';
+        modalAudio.style.display = 'none';
+    } else if (mediaElement.tagName === 'AUDIO') {
+        modalAudio.src = mediaElement.src;
+        modalAudio.style.display = 'block';
+        modalImg.style.display = 'none';
+        modalVideo.style.display = 'none';
+    }
 }
 
 // var modal = document.getElementById("myModal");

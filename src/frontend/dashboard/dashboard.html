@@ -420,7 +420,7 @@
                       <div class="popup-form-wrapper">
                         <button class="close-button">&times;</button>
                         <h2 class="popup-title">Adaugă un element media</h2>
-                        <form class="popup-form">
+                        <form class="popup-form" id="add-media-form">
                           <div class="form-group">
                             <div class="checkbox-group">
                               <label
@@ -464,7 +464,7 @@
                             <input
                               type="file"
                               id="mediaInput"
-                              name="mediaInput"
+                              name="PictureRef"
                               required
                             />
                           </div>
@@ -482,11 +482,9 @@
                   <div class="gallery"></div>
                   <div id="myModal" class="modal">
                     <span class="close">&times;</span>
-                    <div class="modal-content-container">
-                        <img class="modal-content" id="img01" />
-                        <video class="modal-content" id="vid01" controls></video>
-                        <audio class="modal-content" id="aud01" controls></audio>
-                    </div>
+                    <img class="modal-content" id="img01" />
+                    <video class="modal-content" id="vid01" controls style="display:none;"></video>
+                    <audio class="modal-content" id="aud01" controls style="display:none;"></audio>
                     <div id="caption"></div>
                     <button id="delete">Șterge fotografie</button>
                 </div>
