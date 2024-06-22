@@ -569,5 +569,76 @@ async function deleteMedia(req, res)
 
 }
 
-module.exports = { deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+async function insertHealth(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedData = await fetch_worker.parseFormData(req);
+        await childreninfodb_logic.insertHealth(user.ID, parsedData);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Health information added successfully" }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't insert health information in the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
+}
+
+async function getHealth(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+
+        const childID = parsedUrl.searchParams.get('childID');
+        const typeOf = parsedUrl.searchParams.get('typeOf');
+
+        const health = await childreninfodb_logic.getHealth(user.ID, childID, typeOf);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ health }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't retrieve health information from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
+}
+
+async function deleteHealth(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const healthID = parsedUrl.searchParams.get('id');
+
+        await childreninfodb_logic.deleteHealth(user.ID, healthID);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Health information deleted successfully" }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't delete health information from the database! ", err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+
+}
+
+module.exports = {deleteHealth, getHealth, insertHealth, deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
 

@@ -61,6 +61,9 @@ http.createServer((req, res) =>
                 case '/insert_sleeping_entry':
                     user_worker.insertSleepingEntry(req, res);
                     break;
+                case '/insert_health':
+                    user_worker.insertHealth(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -89,6 +92,9 @@ http.createServer((req, res) =>
                     break;
                 case '/get_children_media':
                     user_worker.getChildrenMedia(req, res);
+                    break;
+                case '/get_health':
+                    user_worker.getHealth(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -127,6 +133,9 @@ http.createServer((req, res) =>
                     break;
                 case '/delete_media':
                     user_worker.deleteMedia(req, res);
+                    break;
+                case '/delete_health':
+                    user_worker.deleteHealth(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });

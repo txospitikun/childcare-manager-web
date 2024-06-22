@@ -107,7 +107,7 @@ async function editUser(updateaccount, userId) {
         }
         if (updateaccount.pictureRef !== 'N/A' && updateaccount.pictureRef !== -1) {
             fields.push('PictureRef = ?');
-            values.push(updateaccount.pictureRef);
+            values.push(updateaccount.pictureRef.path);
         }
 
         if (fields.length === 0) {

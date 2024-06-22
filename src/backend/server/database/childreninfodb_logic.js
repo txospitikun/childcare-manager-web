@@ -179,5 +179,49 @@ async function deleteMedia(ID, mediaID)
     }
 }
 
-module.exports = { getChildrenMedia, insertMedia, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry};
+async function insertHealth(ID, healthForm)
+{
+    try {
+        const connection = await pool.getConnection();
+        const query = 'INSERT INTO Healthcare (ChildID, Date, TypeOf, Title, Description, FileRef, UserID) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const [result] = await connection.query(query, [healthForm.ChildID, healthForm.Date, healthForm.TypeOf, healthForm.Title, healthForm.Description, healthForm.FileRef.path, ID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error inserting health entry:', error);
+        throw error;
+    }
+}
+
+async function getHealth(ID, ChildID, TypeOf)
+{
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM Healthcare WHERE UserID = ? AND ChildID = ? AND TypeOf = ? ORDER BY Date DESC';
+        const [rows] = await connection.query(query, [ID, ChildID, TypeOf]);
+        connection.release();
+        return rows;
+    } catch (error) {
+        console.error('Error getting health entries:', error);
+        throw error;
+    }
+
+}
+
+async function deleteHealth(ID, healthID)
+{
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM Healthcare WHERE ID = ? AND UserID = ?';
+        const [result] = await connection.query(query, [healthID, ID]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error deleting health entry:', error);
+        throw error;
+    }
+
+}
+
+module.exports = {deleteHealth, getHealth, insertHealth, getChildrenMedia, insertMedia, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry};
 
