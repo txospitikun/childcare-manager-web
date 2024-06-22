@@ -623,7 +623,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('add-meal-bttn').addEventListener('click', () => {
         resetMealForm();
-        showModal('add-meal-modal');
+        openMealModal('Adaugă o masă', 'Adaugă', addMeal);
     });
 
     document.getElementById('edit-meal-bttn').addEventListener('click', () => {
@@ -631,18 +631,27 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Please select a feeding entry first.");
             return;
         }
-        showModal('edit-meal-modal');
+    
+        openMealModal('Modifică o masă curentă', 'Modifică', editMeal);
         fetchFeedingEntryData();
     });
 
+    function openMealModal(title, buttonText, submitHandler) {
+        document.getElementById('meal-modal-title').textContent = title;
+        document.getElementById('confirm-meal-bttn').textContent = buttonText;
+        const form = document.getElementById('meal-form');
+        form.onsubmit = submitHandler;
+        showModal('meal-modal');
+    }
+
     function resetMealForm() {
-        document.getElementById('add-meal-form').reset();
-        document.getElementById('use-current-date-time-checkbox-add').checked = true;
-        document.getElementById('date-and-time-inputs-add-meal').style.display = 'none';
+        document.getElementById('meal-form').reset();
+        document.getElementById('use-current-date-time-checkbox').checked = true;
+        document.getElementById('date-and-time-inputs-meal').style.display = 'none';
     }
 
     
-    document.getElementById('add-meal-form').addEventListener('submit', async function(e) {
+    async function addMeal(e) {
         e.preventDefault();
     
         if (!currentSelectedChild) {
@@ -652,20 +661,20 @@ document.addEventListener("DOMContentLoaded", function () {
     
         const selectedChildId = currentSelectedChild.dataset.childId;
     
-        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox-add').checked;
+        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
         let date, time;
     
         if (useCurrentDateTime) {
             date = getLocalISOString().split(' ')[0];
             time = getLocalISOString().split(' ')[1];
         } else {
-            date = document.getElementById('data_add_meal').value;
-            time = document.getElementById('time_add_meal').value + ":00";
+            date = document.getElementById('data_table').value;
+            time = document.getElementById('time_table').value + ":00";
         }
     
-        const unit = document.getElementById('mass-selector-add').value === 'grame' ? 'g' : 'mg';
-        const quantity = document.getElementById('mass-input-add').value;
-        const foodType = document.getElementById('food-add').value;
+        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
+        const quantity = document.getElementById('mass-input').value;
+        const foodType = document.getElementById('food').value;
     
         const payload = {
             ID: selectedChildId,
@@ -702,18 +711,20 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result (addMeal):', result);
     
             if (response.ok) {
+                alert('Meal added successfully.');
                 fetchFeedingEntries(selectedDate, selectedChildId);
-                document.getElementById('add-meal-modal').style.display = 'none';
+                document.getElementById('meal-modal').style.display = 'none';
             } else {
                 alert(`Error: ${result.message}`);
             }
         } catch (error) {
+            console.error('Error (addMeal):', error);
             alert('An error occurred while adding the meal.');
         }
-    });
+    }
     
-    document.getElementById('edit-meal-form').addEventListener('submit', async function(e) {
-        e.preventDefault(); 
+    async function editMeal(e) {
+        e.preventDefault();
     
         if (!currentSelectedChild) {
             alert("Please select a child first.");
@@ -722,20 +733,20 @@ document.addEventListener("DOMContentLoaded", function () {
     
         const selectedChildId = currentSelectedChild.dataset.childId;
     
-        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox-edit').checked;
+        const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox').checked;
         let date, time;
     
         if (useCurrentDateTime) {
             date = getLocalISOString().split(' ')[0];
             time = getLocalISOString().split(' ')[1];
         } else {
-            date = document.getElementById('data_edit_meal').value;
-            time = document.getElementById('time_edit_meal').value + ":00";
+            date = document.getElementById('data_table').value;
+            time = document.getElementById('time_table').value + ":00";
         }
     
-        const unit = document.getElementById('mass-selector-edit').value === 'grame' ? 'g' : 'mg';
-        const quantity = document.getElementById('mass-input-edit').value;
-        const foodType = document.getElementById('food-edit').value;
+        const unit = document.getElementById('mass-selector').value === 'grame' ? 'g' : 'mg';
+        const quantity = document.getElementById('mass-input').value;
+        const foodType = document.getElementById('food').value;
     
         const payload = {
             ID: selectedEntryId,
@@ -752,6 +763,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const token = cookieString.substring(4);
     
         if (!token) {
+            console.error('JWT token not found');
             alert('JWT token not found');
             return;
         }
@@ -771,15 +783,17 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Result (editMeal):', result);
     
             if (response.ok) {
+                alert('Meal updated successfully.');
                 fetchFeedingEntries(selectedDate, selectedChildId);
-                document.getElementById('edit-meal-modal').style.display = 'none';
+                document.getElementById('meal-modal').style.display = 'none';
             } else {
                 alert(`Error: ${result.message}`);
             }
         } catch (error) {
+            console.error('Error (editMeal):', error);
             alert('An error occurred while updating the meal.');
         }
-    });
+    }
 
     function fetchFeedingEntryData() {
         const cookieString = document.cookie;
@@ -811,11 +825,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     function autoCompleteEditForm(entry) {
-        document.getElementById('data_edit_meal').value = entry.Date.split('T')[0];
-        document.getElementById('time_edit_meal').value = entry.Time.slice(0, 5);
-        document.getElementById('mass-selector-edit').value = entry.Unit === 'g' ? 'grame' : 'miligrame';
-        document.getElementById('mass-input-edit').value = entry.Quantity;
-        document.getElementById('food-edit').value = entry.FoodType;
+        console.log('Auto-completing form with entry:', entry);
+        document.getElementById('data_table').value = entry.Date.split('T')[0];
+        document.getElementById('time_table').value = entry.Time.slice(0, 5);
+        document.getElementById('mass-selector').value = entry.Unit === 'g' ? 'grame' : 'miligrame';
+        document.getElementById('mass-input').value = entry.Quantity;
+        document.getElementById('food').value = entry.FoodType;
     }
 
     
@@ -838,21 +853,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function handleDateTimeCheckboxChange(checkboxId, dateTimeInputsId) {
-        const checkbox = document.getElementById(checkboxId);
-        const dateTimeInputs = document.getElementById(dateTimeInputsId);
     
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                dateTimeInputs.style.display = 'none';
-            } else {
-                dateTimeInputs.style.display = 'block';
-            }
-        });
-    }
-
-    handleDateTimeCheckboxChange('use-current-date-time-checkbox-add', 'date-and-time-inputs-add-meal');
-    handleDateTimeCheckboxChange('use-current-date-time-checkbox-edit', 'date-and-time-inputs-edit-meal');
 
     addChildSelectionHandler();
 
