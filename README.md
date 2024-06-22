@@ -255,6 +255,19 @@ CREATE TABLE Feeding (
     FOREIGN KEY (ChildrenID) REFERENCES Children(ID)
 );
 
+CREATE TABLE Photos (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ChildrenID INT,
+    UserID INT,
+    Date DATE NOT NULL,
+    Time TIME NOT NULL,
+    InTimeline BOOLEAN NOT NULL,
+    PictureRef VARCHAR(255) NOT NULL,
+    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+
 CREATE TABLE Relations (
     ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     First INT,

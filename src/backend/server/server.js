@@ -52,6 +52,9 @@ http.createServer((req, res) =>
                 case '/insert_children':
                     user_worker.insertChildren(req, res);
                     break;
+                case '/insert_photo':
+                    user_worker.insertPhoto(req, res);
+                    break;
                 case '/insert_feeding_entry':
                     user_worker.insertFeedingEntry(req, res);
                     break;

@@ -242,6 +242,28 @@ async function insertFeedingEntry(req, res) {
     }
 }
 
+async function insertPhoto(req, res)
+{
+    try
+    {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedData = await parseFormData(req);
+
+        await childreninfodb_logic.insertPhoto(user.ID, parsedData);
+
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Photo added successfully" }));
+    }
+    catch (err)
+    {
+        console.log("Server error: Couldn't insert photo in the database! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
 async function getFeedingEntriesByDate(req, res) {
     try {
         const user = await getUser(req, res);
@@ -500,3 +522,4 @@ async function deleteSleepingEntry(req,res){
 }
 
 module.exports = { loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+
