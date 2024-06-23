@@ -21,9 +21,13 @@ export function fetchFeedingEntries(date, childID) {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 204)
+                return null;
+            return response.json();
+        })
         .then(result => {
-            console.log('Result:', result);
+            if(result === null) return;
             if (result.feedingEntries) {
                 displayFeedingEntries(result.feedingEntries);
             } else {
@@ -102,7 +106,6 @@ export async function addMeal(e) {
         FoodType: foodType,
     };
 
-    console.log('Add meal payload:', payload);
 
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
@@ -123,9 +126,7 @@ export async function addMeal(e) {
             body: JSON.stringify(payload)
         });
 
-        console.log('Response status (addMeal):', response.status);
         const result = await response.json();
-        console.log('Result (addMeal):', result);
 
         if (response.ok) {
             fetchFeedingEntries(selectedDate, selectedChildId);
@@ -173,7 +174,6 @@ export async function editMeal(e) {
         FoodType: foodType,
     };
 
-    console.log('Edit meal payload:', payload);
 
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
@@ -194,9 +194,7 @@ export async function editMeal(e) {
             body: JSON.stringify(payload)
         });
 
-        console.log('Response status (editMeal):', response.status);
         const result = await response.json();
-        console.log('Result (editMeal):', result);
 
         if (response.ok) {
             fetchFeedingEntries(selectedDate, selectedChildId);
@@ -225,8 +223,13 @@ export function fetchFeedingEntryData() {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 204)
+                return null;
+            return response.json();
+        })
         .then(result => {
+            if(result === null) return;
             if (result.feedingEntry) {
                 autoCompleteFeedingForm(result.feedingEntry);
             } else {
@@ -258,7 +261,6 @@ export async function deleteFeedingEntry() {
         });
 
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             const selectedChildId = getCurrentSelectedChild().dataset.childId;
@@ -280,7 +282,6 @@ export function openMealModal(title, buttonText, submitHandler) {
 }
 
 export function autoCompleteFeedingForm(entry) {
-    console.log('Auto-completing form with entry:', entry);
     document.getElementById('data_meal').value = entry.Date.split('T')[0];
     document.getElementById('time_meal').value = entry.Time.slice(0, 5);
     document.getElementById('mass-selector').value = entry.Unit === 'g' ? 'grame' : 'miligrame';

@@ -10,6 +10,18 @@ import {
 import {addMedia, deleteMedia, resetMediaForm} from './mediaOperations.js';
 import { fetchAccountData } from './accountOperations.js';
 
+import {deleteCookie, getCookie} from './../workers/cookie_worker.js';
+
+(function() {
+    const jwt = getCookie('JWT');
+    if (!jwt) {
+        console.error('JWT token not found');
+        window.location.href = '/childcare-manager-web/src/frontend/modals/login_modal/login.html';
+        return;
+    } else {
+
+    }
+})();
 export let selectedEntryId = null;
 let currentSelectedAttribute = null;
 
@@ -119,6 +131,8 @@ function addEventListeners() {
     });
 }
 
+
+
 function setupAttributeButtons() {
     currentSelectedAttribute = document.getElementById('feeding-bttn');
 
@@ -162,6 +176,8 @@ function setupAttributeButtons() {
         });
     });
 
+
+
     document.getElementById('feeding-bttn').click();
 }
 
@@ -186,11 +202,21 @@ function setupDashboardButtons() {
     }
 
     document.querySelectorAll('.dashboard-button').forEach(button => {
+
+        if(!currentDashboardButton && localStorage.getItem('currentDashboardButton') !== null) {
+            currentDashboardButton = document.getElementById(localStorage.getItem('currentDashboardButton'));
+            hideAllSections();
+            showSection(currentDashboardButton.id);
+            currentDashboardButton.style.backgroundColor = 'var(--button-color)';
+            console.log('a')
+        }
+
         if (!currentDashboardButton && button.id === 'dashboard_bttn') {
             hideAllSections();
             showSection(button.id);
             currentDashboardButton = button;
-            button.style.backgroundColor = 'var(--button-color)';
+            currentDashboardButton.style.backgroundColor = 'var(--button-color)';
+            console.log('b')
         }
 
         button.addEventListener('click', function () {
@@ -199,7 +225,7 @@ function setupDashboardButtons() {
             }
 
             showSection(this.id);
-
+            localStorage.setItem('currentDashboardButton', this.id);
             currentDashboardButton = this;
             this.style.backgroundColor = 'var(--button-color)';
         });
@@ -216,11 +242,17 @@ function toggleDateTimeInputs(checkboxId, inputContainerId) {
         }
     });
 }
+const editform = document.querySelector('edit-account-form');
+
 
 toggleDateTimeInputs('use-current-date-checkbox-sleep', 'date-input-sleep');
 toggleDateTimeInputs('use-current-date-time-checkbox-meal', 'date-and-time-inputs-meal');
 toggleDateTimeInputs('use-current-date-time-checkbox-media', 'date-and-time-inputs-media');
 
+document.getElementById('logout_bttn').addEventListener('click', function () {
+    deleteCookie('JWT');
+    window.location.href = "/childcare-manager-web/src/frontend/modals/login_modal/login.html";
+});
 
 document.addEventListener('DOMContentLoaded', async function () {
     await fetchAccountData();

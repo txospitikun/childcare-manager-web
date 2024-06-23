@@ -32,7 +32,6 @@ async function getFeedingEntriesByDate(date, userID, childID) {
     try {
         const connection = await pool.getConnection();
         const query = 'SELECT * FROM Feeding WHERE Date = ? AND UserID = ? AND ChildrenID = ? ORDER BY Date ASC, Time ASC';
-        console.log(date + " " + userID);
         const [rows] = await connection.query(query, [date, userID, childID]);
         connection.release();
         return rows;

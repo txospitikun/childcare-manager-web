@@ -19,6 +19,7 @@ export async function fetchAccountData() {
             const data = await response.json();
             fillFormData(data);
             populateProfileData(data.user);
+            document.getElementById('white-panel').style="display: none";
             return data.user;
         } else {
             alert('Error fetching account data');
@@ -39,7 +40,6 @@ export function populateProfileData(userData) {
     const location = `Localizare: ${userData.Location}`;
     const language = `Limbă: ${userData.Language}`;
     const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType)}`;
-    console.log(`http://localhost:5000/api/src/${userData.PictureRef}`);
     const profilePhoto = userData.PictureRef ? `http://localhost:5000/api/src/${userData.PictureRef}` : 'default-profile-photo-url.jpg';
 
     document.querySelector('.profile-settings-container h1').textContent = fullName;
@@ -54,6 +54,11 @@ export function populateProfileData(userData) {
     const profilePhotoElement = document.querySelector('.profile-photo');
     if (profilePhotoElement) {
         profilePhotoElement.src = profilePhoto;
+    }
+
+    if(userData.Privilege === 1)
+    {
+        document.getElementById('dashboard_admin_bttn').style.display = 'block';
     }
 }
 
@@ -114,9 +119,7 @@ export async function updateAccount(e) {
             body: formData
         });
 
-        console.log('Response status:', response.status);
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             alert('Account updated successfully');

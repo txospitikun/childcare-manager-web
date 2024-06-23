@@ -17,48 +17,6 @@ const SleepingEntryForm = require("../request_modals/sleepingentryform_modal");
 const UpdateAccount = require("../request_modals/updateaccountform_modal");
 const {parseFormData} = require("./fetch_worker");
 
-// async function getUser(req, res) {
-//
-//
-//     const authHeader = req.headers['authorization'];
-//
-//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-//         console.log('JWT token not found in Authorization header');
-//         res.writeHead(401, { 'Content-Type': 'application/json' });
-//         res.end(JSON.stringify({ message: "No authentication token" }));
-//         return null;
-//     }
-//
-//     const jwtToken = authHeader.split(' ')[1];
-//
-//     let decoded_jwt_token;
-//     try {
-//         decoded_jwt_token = encryption_worker.decode(jwtToken);
-//     } catch (error) {
-//         console.log('Error decoding JWT token:', error);
-//         res.writeHead(401, { 'Content-Type': 'application/json' });
-//         res.end(JSON.stringify({ message: "Invalid authentication token" }));
-//         return null;
-//     }
-//
-//     if (decoded_jwt_token === false) {
-//         console.log('Invalid JWT token');
-//         res.writeHead(401, { 'Content-Type': 'application/json' });
-//         res.end(JSON.stringify({ message: "Invalid authentication token" }));
-//         return null;
-//     }
-//
-//     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
-//
-//     if (User == null) {
-//         console.log('User not found, backend error.');
-//         throw new Error("Backend error.");
-//     }
-//
-//     return User;
-// }
-
-
 async function getSelfInfo(req, res) {
     try {
         const user = await getUser(req, res);
@@ -80,52 +38,39 @@ async function getSelfInfo(req, res) {
             }
         }));
     } catch (err) {
-        console.log("Server error: Couldn't load user! ", err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Backend error" }));
     }
 }
 
 async function getUser(req, res) {
-    console.log('getUser called');
-
-    console.log(req.headers);
     const authHeader = req.headers['authorization'];
-    console.log('Authorization Header:', authHeader);
-
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        console.log('JWT token not found in Authorization header');
         res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "No authentication token" }));
         return null;
     }
 
     const jwtToken = authHeader.split(' ')[1];
-    console.log('JWT Token:', jwtToken);
 
     let decoded_jwt_token;
     try {
         decoded_jwt_token = encryption_worker.decode(jwtToken);
     } catch (error) {
-        console.log('Error decoding JWT token:', error);
         res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Invalid authentication token" }));
         return null;
     }
-    console.log('Decoded JWT Token:', decoded_jwt_token);
 
     if (decoded_jwt_token === false) {
-        console.log('Invalid JWT token');
         res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Invalid authentication token" }));
         return null;
     }
 
     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
-    console.log('Retrieved User:', User);
 
     if (User == null) {
-        console.log('User not found, backend error.');
         throw new Error("Backend error.");
     }
 
@@ -157,7 +102,6 @@ async function insertChildren(req, res) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Children added successfully" }));
     } catch (err) {
-        console.log("Server error: Couldn't insert children in the database! ", err);
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
@@ -180,7 +124,6 @@ async function deleteChildren(req, res)
     }
     catch (err)
     {
-        console.log("Server error: Couldn't delete children in the database! ", err);
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
@@ -193,7 +136,6 @@ async function editAccountSettings(req, res) {
 
         const parsedData = await parseFormData(req);
         const updateaccount = new UpdateAccount(parsedData);
-        console.log(updateaccount);
 
         await userdb_logic.editUser(updateaccount, user.ID);
 
@@ -250,7 +192,6 @@ async function insertMedia(req, res)
         if (!user) return;
 
         const parsedData = await parseFormData(req);
-        console.log(parsedData);
 
         await childreninfodb_logic.insertMedia(user.ID, parsedData);
 
@@ -282,7 +223,7 @@ async function getFeedingEntriesByDate(req, res) {
         const feedingEntries = await childreninfodb_logic.getFeedingEntriesByDate(date, user.ID, parsedUrl.searchParams.get('childID'));
 
         if (!feedingEntries || feedingEntries.length === 0) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: "No feeding entries found for the specified date" }));
             return;
         }
@@ -313,7 +254,7 @@ async function getFeedingEntry(req, res) {
         const feedingEntry = await childreninfodb_logic.getFeedingEntry(entryId, user.ID);
 
         if (feedingEntry.length === 0) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: "Feeding entry not found" }));
             return;
         }
@@ -338,7 +279,7 @@ async function editFeedingEntry(req, res) {
         const result = await childreninfodb_logic.editFeedingEntry(parsedData.ID, feedingEntryForm, user.ID);
 
         if (result.affectedRows === 0) {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "Feeding entry not found" }));
             return;
         }
@@ -369,7 +310,7 @@ async function deleteFeedingEntry(req, res) {
         const response = await childreninfodb_logic.deleteFeedingEntry(entryId, user.ID);
 
         if (response.affectedRows === 0) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: "Feeding entry not found" }));
             return;
         }
@@ -419,7 +360,7 @@ async function getSleepingEntriesByDate(req, res){
         const sleepingEntries = await childreninfodb_logic.getSleepingEntriesByDate(date, user.ID, parsedUrl.searchParams.get('childID'));
 
         if (!sleepingEntries || sleepingEntries.length === 0) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: "No sleeping entries found for the specified date" }));
             return;
         }
@@ -451,7 +392,7 @@ async function getSleepingEntry(req, res) {
         const sleepingEntry = await childreninfodb_logic.getSleepingEntry(entryId, user.ID);
 
         if (sleepingEntry.length === 0) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: "Sleeping entry not found" }));
             return;
         }
@@ -476,7 +417,7 @@ async function editSleepingEntry(req,res){
         const result = await childreninfodb_logic.editSleepingEntry(parsedData.ID, sleepingEntryForm, user.ID);
 
         if (result.affectedRows === 0) {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "Sleeping entry not found" }));
             return;
         }
@@ -508,7 +449,7 @@ async function deleteSleepingEntry(req,res){
         const response = await childreninfodb_logic.deleteSleepingEntry(entryId, user.ID);
 
         if (response.affectedRows === 0) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: "Sleeping entry not found" }));
             return;
         }

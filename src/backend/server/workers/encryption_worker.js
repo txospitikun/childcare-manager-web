@@ -59,8 +59,6 @@ function decode(str) {
 
     const checkSum = checkSumGen(head, body).replace(/=+$/, '');
     hash = hash.replace(/=+$/, '');
-    console.log("hash:", hash);
-    console.log("checkSum:", checkSum);
     if (hash === checkSum) {
         const payload = JSON.parse(decodeBase64(body));
 
@@ -68,7 +66,6 @@ function decode(str) {
         const time_difference = date - new Date();
 
         if(time_difference / (24 * 60 * 60 * 1000) > 5) {
-            console.log('Token expired');
             return false;
         }
         
@@ -76,7 +73,6 @@ function decode(str) {
             payload: payload,
         };
     } else {
-        console.log('Checksum mismatch');
         return false;
     }
 }
