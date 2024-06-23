@@ -17,46 +17,46 @@ const SleepingEntryForm = require("../request_modals/sleepingentryform_modal");
 const UpdateAccount = require("../request_modals/updateaccountform_modal");
 const {parseFormData} = require("./fetch_worker");
 
-async function getUser(req, res) {
-    
-
-    const authHeader = req.headers['authorization'];
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        console.log('JWT token not found in Authorization header');
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: "No authentication token" }));
-        return null;
-    }
-
-    const jwtToken = authHeader.split(' ')[1];
-
-    let decoded_jwt_token;
-    try {
-        decoded_jwt_token = encryption_worker.decode(jwtToken);
-    } catch (error) {
-        console.log('Error decoding JWT token:', error);
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: "Invalid authentication token" }));
-        return null;
-    }
-
-    if (decoded_jwt_token === false) {
-        console.log('Invalid JWT token');
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: "Invalid authentication token" }));
-        return null;
-    }
-
-    const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
-
-    if (User == null) {
-        console.log('User not found, backend error.');
-        throw new Error("Backend error.");
-    }
-
-    return User;
-}
+// async function getUser(req, res) {
+//
+//
+//     const authHeader = req.headers['authorization'];
+//
+//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+//         console.log('JWT token not found in Authorization header');
+//         res.writeHead(401, { 'Content-Type': 'application/json' });
+//         res.end(JSON.stringify({ message: "No authentication token" }));
+//         return null;
+//     }
+//
+//     const jwtToken = authHeader.split(' ')[1];
+//
+//     let decoded_jwt_token;
+//     try {
+//         decoded_jwt_token = encryption_worker.decode(jwtToken);
+//     } catch (error) {
+//         console.log('Error decoding JWT token:', error);
+//         res.writeHead(401, { 'Content-Type': 'application/json' });
+//         res.end(JSON.stringify({ message: "Invalid authentication token" }));
+//         return null;
+//     }
+//
+//     if (decoded_jwt_token === false) {
+//         console.log('Invalid JWT token');
+//         res.writeHead(401, { 'Content-Type': 'application/json' });
+//         res.end(JSON.stringify({ message: "Invalid authentication token" }));
+//         return null;
+//     }
+//
+//     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
+//
+//     if (User == null) {
+//         console.log('User not found, backend error.');
+//         throw new Error("Backend error.");
+//     }
+//
+//     return User;
+// }
 
 
 async function getSelfInfo(req, res) {
@@ -640,5 +640,5 @@ async function deleteHealth(req, res)
 
 }
 
-module.exports = {deleteHealth, getHealth, insertHealth, deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+module.exports = {getUser, deleteHealth, getHealth, insertHealth, deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
 

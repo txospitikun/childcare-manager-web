@@ -4,6 +4,7 @@ var querystring = require('querystring');
 
 const authentification_worker = require('./workers/auth_worker.js');
 const user_worker = require('./workers/user_worker.js');
+const group_worker = require('./workers/group_worker.js');
 const {serveStaticFiles} = require("./workers/fetch_worker");
 
 http.createServer((req, res) =>
@@ -64,6 +65,18 @@ http.createServer((req, res) =>
                 case '/insert_health':
                     user_worker.insertHealth(req, res);
                     break;
+                case '/insert_group':
+                    group_worker.insertGroup(req, res);
+                    break;
+                case '/insert_children_group':
+                    group_worker.insertChildrenGroup(req, res);
+                    break;
+                case '/insert_group_relation':
+                    group_worker.insertGroupRelation(req, res);
+                    break;
+                case '/insert_group_chat':
+                    group_worker.insertGroupChat(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -93,8 +106,14 @@ http.createServer((req, res) =>
                 case '/get_children_media':
                     user_worker.getChildrenMedia(req, res);
                     break;
+                case '/get_user_groups':
+                    group_worker.getUserGroups(req, res);
+                    break;
                 case '/get_health':
                     user_worker.getHealth(req, res);
+                    break;
+                case '/get_group_chat':
+                    group_worker.getGroupChatByGroupId(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -112,6 +131,12 @@ http.createServer((req, res) =>
                     break;
                 case '/edit_sleeping_entry':
                     user_worker.editSleepingEntry(req, res);
+                    break;
+                case '/edit_group':
+                    group_worker.editGroup(req, res);
+                    break;
+                case '/edit_group_relation':
+                    group_worker.editGroupRelation(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -136,6 +161,18 @@ http.createServer((req, res) =>
                     break;
                 case '/delete_health':
                     user_worker.deleteHealth(req, res);
+                    break;
+                case '/delete_group':
+                    group_worker.deleteGroup(req, res);
+                    break;
+                case '/delete_children_group':
+                    group_worker.deleteChildrenGroup(req, res);
+                    break;
+                case '/delete_group_relation':
+                    group_worker.deleteGroupRelation(req, res);
+                    break;
+                case '/delete_group_chat':
+                    group_worker.deleteGroupChat(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
