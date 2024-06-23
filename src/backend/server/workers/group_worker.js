@@ -139,8 +139,6 @@ async function insertChildrenGroup(req, res)
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
-
-
 }
 
 
@@ -153,11 +151,15 @@ async function deleteChildrenGroup(req, res)
 
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
         const groupId = parsedUrl.searchParams.get('groupId');
-        const childrenId = parsedUrl.searchParams.get('groupId');
+        const childrenId = parsedUrl.searchParams.get('childrenId');
 
-
-        const data = await parseFormData(req);
-        await groupdb_logic.deleteChildrenGroup(user.ID, data);
+        const result = await groupdb_logic.deleteChildrenGroup(user.ID, groupId, childrenId);
+        if(result.affectedRows === 0)
+        {
+            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({ message: "Children not found in group or no permissions!" }));
+            return;
+        }
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Children deleted from group successfully!" }));
     }
@@ -166,19 +168,19 @@ async function deleteChildrenGroup(req, res)
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
-
-
 }
 
-async function insertGroupRelation(res, req)
+
+
+async function insertGroupRelation(req, res)
 {
     try
     {
-        const user = await user_worker.getUser();
+        const user = await user_worker.getUser(req, res);
         if(!user) return;
 
         const data = await parseFormData(req);
-        await groupdb_logic.insertGroupRelation(user.ID, data);
+        await groupdb_logic.insertGroupRelation(data);
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Group relation added successfully!" }));
     }
@@ -191,11 +193,11 @@ async function insertGroupRelation(res, req)
 
 }
 
-async function editGroupRelation(res, req)
+async function editGroupRelation(req, res)
 {
     try
     {
-        const user = await user_worker.getUser();
+        const user = await user_worker.getUser(req, res);
         if(!user) return;
 
         const data = await parseFormData(req);
@@ -208,19 +210,19 @@ async function editGroupRelation(res, req)
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
-
-
 }
 
-async function deleteGroupRelation(res, req)
+async function deleteGroupRelation(req, res)
 {
     try
     {
-        const user = await user_worker.getUser();
+        const user = await user_worker.getUser(req, res);
         if(!user) return;
 
-        const data = await parseFormData(req);
-        await groupdb_logic.deleteGroupRelation(user.ID, data);
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const relationId = parsedUrl.searchParams.get('relationId');
+
+        await groupdb_logic.deleteGroupRelation(relationId);
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Group relation deleted successfully!" }));
     }
@@ -292,8 +294,56 @@ async function getGroupChatByGroupId(res, req)
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
+}
 
+async function getGroupChildrenInfo(req, res)
+{
+    try
+    {
+        const user = await user_worker.getUser(req, res);
+        if(!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const groupId = parsedUrl.searchParams.get('groupId');
+
+        const result = await groupdb_logic.getGroupChildrenInfo(user.ID, groupId);
+        if(result.affectedRows === 0)
+        {
+            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({ message: "No found childrens or no permissions!" }));
+            return;
+        }
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ foundChildrens: result}));
+    }
+    catch (err) {
+        console.log("Server error: Couldn't get group children info from the database! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
 
 }
 
-module.exports = {getUserGroups, getGroupChatByGroupId, insertGroup, editGroup, deleteGroup, insertChildrenGroup, deleteChildrenGroup, insertGroupRelation, editGroupRelation, deleteGroupRelation, insertGroupChat, deleteGroupChat};
+async function getGroupChildrenRelations(req, res)
+{
+    try
+    {
+        const user = await user_worker.getUser(req, res);
+        if(!user) return;
+
+        const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
+        const childrenId = parsedUrl.searchParams.get('childrenId');
+        const groupId = parsedUrl.searchParams.get('groupId');
+
+        const result = await groupdb_logic.getGroupChildrenRelations(user.ID, childrenId, groupId);
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ groupRelations: result }));
+    }
+    catch (err) {
+        console.log("Server error: Couldn't get group children relations from the database! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+module.exports = {getGroupChildrenRelations, getGroupChildrenInfo, getUserGroups, getGroupChatByGroupId, insertGroup, editGroup, deleteGroup, insertChildrenGroup, deleteChildrenGroup, insertGroupRelation, editGroupRelation, deleteGroupRelation, insertGroupChat, deleteGroupChat};
