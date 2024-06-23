@@ -149,7 +149,7 @@ export function fetchChildrenMedia(childID) {
 }
 
 function displayMediaEntries(entries) {
-    const gallery = document.querySelector('.gallery');
+    const gallery = document.getElementById('media-gallery');
     gallery.innerHTML = "";
 
     console.log('Displaying media entries:', entries);
