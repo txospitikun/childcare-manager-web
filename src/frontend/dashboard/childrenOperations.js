@@ -162,6 +162,159 @@ export function displayChildren(children) {
     });
 }
 
+document.getElementById('category').addEventListener('click', () =>
+{
+    const selectElement = document.getElementById('category');
+    const selectedValue = selectElement.value;
+    fetchMedical(getCurrentSelectedChild().dataset.childId);
+});
+
+// find me id category of a select and add event listener on the change of the value
+// fetch medical records based on the selected category
+// render the table with the fetched records
+// please complete with code
+// fetchMedicalRecords(categorySelect.value);
+// renderTable(data.health);
+// add event listener on the change of the value of the select
+// fetch medical records based on the selected category
+// render the table with the fetched records
+
+export function fetchMedical(selectedChild) {
+    const categorySelect = document.getElementById('category');
+    const medicalRecordsDiv = document.getElementById('medicalRecords');
+    const addButton = document.getElementById('addButton');
+    const addModal = document.getElementById('addModal');
+    const addForm = document.getElementById('addForm');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const selectedChildId = selectedChild;
+
+    let category = categorySelect.value;
+    console.log(selectedChildId);
+
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        console.error('JWT token not found');
+        alert('JWT token not found');
+        return;
+    }
+
+    categorySelect.onchange = async function () {
+        category = categorySelect.value;
+        document.getElementById('TypeOf').value = category;
+        await fetchMedicalRecords(category);
+    }
+
+    addButton.onclick = function () {
+        addModal.style.display = "block";
+    }
+
+    closeModal.onclick = function () {
+        addModal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+    }
+    fetchMedicalRecords(categorySelect.value);
+
+    addForm.onsubmit = async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(addForm);
+        formData.append('TypeOf', category);
+        formData.append('ChildID', selectedChildId);
+        console.log(formData);
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_health', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            addModal.style.display = "none";
+            const category = categorySelect.value;
+            await fetchMedicalRecords(category);
+        } catch (error) {
+            console.error('Error inserting medical record:', error);
+        }
+    }
+
+    async function fetchMedicalRecords(category) {
+        try {
+            const response = await fetch(`http://localhost:5000/api/get_health?childID=${selectedChildId}&typeOf=${category}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            renderTable(data.health);
+        } catch (error) {
+            console.error('Error fetching medical records:', error);
+        }
+    }
+
+    async function deleteMedicalRecord(recordId) {
+        try {
+            console.log(recordId);
+            const response = await fetch(`http://localhost:5000/api/delete_health?id=${recordId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const category = categorySelect.value;
+            await fetchMedicalRecords(category);
+        } catch (error) {
+            console.error('Error deleting medical record:', error);
+        }
+    }
+
+    function renderTable(records) {
+        let tableHtml = '<table><tr><th>Title</th><th>Description</th><th>Action</th><th>Delete</th></tr>';
+        for (const record of records) {
+            tableHtml += `<tr>
+                            <td>${record.Title}</td>
+                            <td>${record.Description}</td>
+                            <td>${record.FileRef ? `<a href="http://localhost:5000/api/src/${record.FileRef}" target="_blank">Download document</a>` : ''}</td>
+                            <td><button class="deleteButton" data-id="${record.ID}">Delete</button></td>
+                          </tr>`;
+        }
+        tableHtml += '</table>';
+        medicalRecordsDiv.innerHTML = tableHtml;
+
+        const deleteButtons = document.querySelectorAll('.deleteButton');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const recordId = this.getAttribute('data-id');
+                deleteMedicalRecord(recordId);
+            });
+        });
+    }
+}
+
 export function createChildElement(child) {
     const childContainer = document.createElement('div');
     childContainer.className = 'children-container';
@@ -213,6 +366,7 @@ export function addChildSelectionHandler() {
             fetchFeedingEntries(selectedDate, selectedChildId);
             fetchSleepingEntries(selectedDate, selectedChildId);
             fetchChildrenMedia(selectedChildId);
+            fetchMedical(selectedChildId);
             button.style.border = "2px solid gray";
         }
 
@@ -226,6 +380,7 @@ export function addChildSelectionHandler() {
             fetchFeedingEntries(selectedDate, selectedChildId);
             fetchSleepingEntries(selectedDate, selectedChildId);
             fetchChildrenMedia(selectedChildId);
+            fetchMedical(selectedChildId);
         });
     });
 }

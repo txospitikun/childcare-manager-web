@@ -213,6 +213,47 @@ EditFeedingEntryResponse: 300 if edited sucesfully
 
 # SQL Tabels:
 ```
+
+CREATE TABLE ChildrenGroups (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT NOT NULL,
+    Title VARCHAR(255) NOT NULL,
+    Creation_Date DATE NOT NULL,
+    PictureRef VARCHAR(255) NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+CREATE TABLE GroupEntries (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    GroupID INT NOT NULL,
+    ChildrenID INT NOT NULL,
+    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
+    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID)
+);
+
+CREATE TABLE GroupRelations (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    GroupID INT NOT NULL,
+    ChildrenRelationOne INT NOT NULL,
+    ChildrenRelationTwo INT NOT NULL,
+    TypeOfRelation VARCHAR(255),
+    FOREIGN KEY (ChildrenRelationOne) REFERENCES Childrens(ID),
+    FOREIGN KEY (ChildrenRelationTwo) REFERENCES Childrens(ID),
+    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID)
+);
+
+CREATE TABLE GroupChat (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    GroupID INT NOT NULL,
+    Message TEXT NOT NULL,
+    UserID INT NOT NULL,
+    Message_Date DATE NOT NULL,
+    Message_Time TIME NOT NULL,
+    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+
 CREATE TABLE Sleeping (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Date DATE,
