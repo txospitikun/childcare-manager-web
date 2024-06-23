@@ -201,10 +201,6 @@ export function fetchMedical(selectedChild) {
         await fetchMedicalRecords(category);
     }
 
-    addButton.onclick = function () {
-        addModal.style.display = "block";
-    }
-
     closeModal.onclick = function () {
         addModal.style.display = "none";
     }
