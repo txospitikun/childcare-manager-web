@@ -228,8 +228,10 @@ CREATE TABLE GroupEntries (
     GroupID INT NOT NULL,
     ChildrenID INT NOT NULL,
     FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
-    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID)
+    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID),
+    UNIQUE (GroupID, ChildrenID)
 );
+
 
 CREATE TABLE GroupRelations (
     ID INT AUTO_INCREMENT PRIMARY KEY,
