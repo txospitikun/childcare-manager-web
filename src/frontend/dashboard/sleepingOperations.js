@@ -21,9 +21,13 @@ export function fetchSleepingEntries(date, childID) {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 204)
+                return null;
+            return response.json();
+        })
         .then(result => {
-            console.log('Result:', result);
+            if(result === null) return;
             if (result.sleepingEntries) {
                 displaySleepingEntries(result.sleepingEntries);
             } else {
@@ -106,7 +110,6 @@ export async function addSleeping(e) {
         AwakeTime: awakeTime
     };
 
-    console.log('Add sleeping payload:', payload);
 
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
@@ -127,9 +130,7 @@ export async function addSleeping(e) {
             body: JSON.stringify(payload)
         });
 
-        console.log('Response status (addSleeping):', response.status);
         const result = await response.json();
-        console.log('Result (addSleeping):', result);
 
         if (response.ok) {
             fetchSleepingEntries(selectedDate, selectedChildId);
@@ -172,7 +173,6 @@ export async function editSleeping(e) {
         AwakeTime: awakeTime
     };
 
-    console.log('Edit sleeping payload:', payload);
 
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
@@ -195,7 +195,6 @@ export async function editSleeping(e) {
 
         console.log('Response status (editSleeping):', response.status);
         const result = await response.json();
-        console.log('Result (editSleeping):', result);
 
         if (response.ok) {
             fetchSleepingEntries(selectedDate, selectedChildId);
@@ -225,8 +224,13 @@ export function fetchSleepingEntryData() {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 204)
+                return null;
+            return response.json();
+        })
         .then(result => {
+            if(result === null) return;
             if (result.sleepingEntry) {
                 autoCompleteSleepingForm(result.sleepingEntry);
             } else {
@@ -258,7 +262,6 @@ export async function deleteSleepingEntry() {
         });
 
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             const selectedChildId = getCurrentSelectedChild().dataset.childId;

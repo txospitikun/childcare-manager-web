@@ -54,9 +54,7 @@ export async function addMedia(e) {
             body: formData
         });
 
-        console.log('Response status:', response.status);
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             fetchChildrenMedia(selectedChildId);
@@ -88,7 +86,6 @@ export async function deleteMedia() {
     }
 
     try {
-        console.log('Deleting media entry with ID:', entryId);
         const response = await fetch(`http://localhost:5000/api/delete_media?id=${entryId}`, {
             method: 'DELETE',
             headers: {
@@ -97,7 +94,6 @@ export async function deleteMedia() {
         });
 
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             const selectedChildId = getCurrentSelectedChild().dataset.childId;
@@ -129,16 +125,15 @@ export function fetchChildrenMedia(childID) {
         }
     })
         .then(response => {
-            console.log('Fetch response status:', response.status);
+            if (response.status === 204)
+                return null;
             return response.json();
         })
         .then(result => {
-            console.log('Fetch result:', result);
+            if(result === null) return;
             if (result.media) {
-                console.log('Media entries found:', result.media);
                 displayMediaEntries(result.media);
             } else {
-                console.log('No media entries found.');
                 displayMediaEntries([]);
             }
         })
@@ -152,7 +147,6 @@ function displayMediaEntries(entries) {
     const gallery = document.getElementById('media-gallery');
     gallery.innerHTML = "";
 
-    console.log('Displaying media entries:', entries);
 
     if (entries.length === 0) {
         gallery.innerHTML = "<p>No entries for the selected child.</p>";

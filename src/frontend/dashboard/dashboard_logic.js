@@ -14,7 +14,6 @@ const add_child_input_birthdate = document.getElementById("add_child_input_birth
 
 confirm_add_child_bttn.addEventListener('click', () =>
 {
-    console.log("b");
     const fname = add_child_input_fname.value;
     const lname = add_child_input_lname.value;
     const sex = add_child_input_sex.value;
@@ -41,7 +40,6 @@ confirm_add_child_bttn.addEventListener('click', () =>
             }
         ).then(data => 
             {
-                console.log(data);
                 fetch(`${config.apiUrl}/load_children`, {
                     mode: 'no-cors',
                     method: 'POST',
@@ -110,7 +108,6 @@ document.addEventListener('DOMContentLoaded', (e) =>
                         localStorage.setItem('userInfo', JSON.stringify(data["UserInfo"]));
                         break;
                     case 201:
-                        console.log("Failed to authentificate JWT Token.");
                         window.location.href = '/frontend/modals/login_modal/login.html'
                         break;
                 }

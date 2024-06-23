@@ -214,143 +214,157 @@ EditFeedingEntryResponse: 300 if edited sucesfully
 # SQL Tabels:
 ```
 
-CREATE TABLE ChildrenGroups (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    UserID INT NOT NULL,
-    Title VARCHAR(255) NOT NULL,
-    Creation_Date DATE NOT NULL,
-    PictureRef VARCHAR(255) NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES Users(ID)
+CREATE TABLE `Users` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `Email` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  `RegisterDate` date NOT NULL DEFAULT (curdate()),
+  `Privilege` int NOT NULL,
+  `Suspended` tinyint(1) NOT NULL,
+  `FirstName` varchar(255) NOT NULL,
+  `LastName` varchar(255) NOT NULL,
+  `PhoneNo` varchar(20) DEFAULT NULL,
+  `Location` varchar(255) DEFAULT NULL,
+  `Language` varchar(255) DEFAULT NULL,
+  `CivilState` tinyint(1) DEFAULT NULL,
+  `CivilPartner` int DEFAULT NULL,
+  `AccountType` int DEFAULT NULL,
+  `PictureRef` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 );
 
-CREATE TABLE GroupEntries (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    GroupID INT NOT NULL,
-    ChildrenID INT NOT NULL,
-    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
-    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID),
-    UNIQUE (GroupID, ChildrenID)
+CREATE TABLE `Childrens` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(255) NOT NULL,
+  `LastName` varchar(255) NOT NULL,
+  `Gender` varchar(255) NOT NULL,
+  `DateOfBirth` date NOT NULL,
+  `PictureRef` varchar(255) DEFAULT NULL,
+  `UserID` int NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `childrens_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE
 );
 
-
-CREATE TABLE GroupRelations (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    GroupID INT NOT NULL,
-    ChildrenRelationOne INT NOT NULL,
-    ChildrenRelationTwo INT NOT NULL,
-    TypeOfRelation VARCHAR(255),
-    FOREIGN KEY (ChildrenRelationOne) REFERENCES Childrens(ID),
-    FOREIGN KEY (ChildrenRelationTwo) REFERENCES Childrens(ID),
-    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID)
+CREATE TABLE `Childrengroups` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `UserID` int NOT NULL,
+  `Title` varchar(255) NOT NULL,
+  `Creation_Date` date NOT NULL,
+  `PictureRef` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `childrengroups_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE GroupChat (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    GroupID INT NOT NULL,
-    Message TEXT NOT NULL,
-    UserID INT NOT NULL,
-    Message_Date DATE NOT NULL,
-    Message_Time TIME NOT NULL,
-    FOREIGN KEY (GroupID) REFERENCES ChildrenGroups(ID),
-    FOREIGN KEY (UserID) REFERENCES Users(ID)
+CREATE TABLE `Feeding` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `Date` date DEFAULT NULL,
+  `Time` time DEFAULT NULL,
+  `Unit` varchar(50) DEFAULT NULL,
+  `Quantity` int DEFAULT NULL,
+  `FoodType` varchar(100) DEFAULT NULL,
+  `UserID` int DEFAULT NULL,
+  `ChildrenID` int DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  KEY `ChildrenID` (`ChildrenID`),
+  CONSTRAINT `feeding_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `feeding_ibfk_2` FOREIGN KEY (`ChildrenID`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE
 );
 
-
-CREATE TABLE Sleeping (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Date DATE,
-    SleepTime TIME,
-    AwakeTime TIME,
-    UserID INT,
-    ChildrenID INT,
-    FOREIGN KEY (UserID) REFERENCES Users(ID),
-    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID)
+CREATE TABLE `Groupentries` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `GroupID` int NOT NULL,
+  `ChildrenID` int NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `GroupID` (`GroupID`,`ChildrenID`),
+  KEY `ChildrenID` (`ChildrenID`),
+  CONSTRAINT `groupentries_ibfk_1` FOREIGN KEY (`ChildrenID`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `groupentries_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `childrengroups` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE medias (
-    ID INT PRIMARY KEY AUTO_INCREMENT,
-    ChildrenID INT NOT NULL,
-    UserID INT NOT NULL,
-    Date DATE NOT NULL,
-    Time TIME NOT NULL,
-    InTimeline TINYINT(1) NOT NULL,
-    MediaType VARCHAR(255) NOT NULL,
-    PictureRef VARCHAR(255) NOT NULL
-    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
-    FOREIGN KEY (UserID) REFERENCES Users(ID)
+CREATE TABLE `Grouprelations` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `GroupID` int NOT NULL,
+  `ChildrenRelationOne` int NOT NULL,
+  `ChildrenRelationTwo` int NOT NULL,
+  `TypeOfRelation` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ChildrenRelationOne` (`ChildrenRelationOne`),
+  KEY `ChildrenRelationTwo` (`ChildrenRelationTwo`),
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `grouprelations_ibfk_1` FOREIGN KEY (`ChildrenRelationOne`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `grouprelations_ibfk_2` FOREIGN KEY (`ChildrenRelationTwo`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `grouprelations_ibfk_3` FOREIGN KEY (`GroupID`) REFERENCES `childrengroups` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE Healthcare (
-    ID INT PRIMARY KEY AUTO_INCREMENT,
-    UserID INT NOT NULL,
-    ChildID INT NOT NULL,
-    Date DATE NOT NULL,
-    TypeOf INT NOT NULL,
-    Title TEXT NOT NULL,
-    Description TEXT,
-    FileRef VARCHAR(255)
+CREATE TABLE `Medias` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `ChildrenID` int DEFAULT NULL,
+  `UserID` int DEFAULT NULL,
+  `Date` date NOT NULL,
+  `Time` time NOT NULL,
+  `InTimeline` tinyint(1) NOT NULL,
+  `MediaType` varchar(255) NOT NULL,
+  `PictureRef` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ChildrenID` (`ChildrenID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `medias_ibfk_1` FOREIGN KEY (`ChildrenID`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `medias_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE Users (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Email VARCHAR(255) NOT NULL,
-    Password VARCHAR(255) NOT NULL,
-    RegisterDate DATE,
-    Privilege INT,
-    Suspended TINYINT(1),
-    FirstName VARCHAR(255),
-    LastName VARCHAR(255),
-    PhoneNo VARCHAR(20),
-    Location VARCHAR(255),
-    Language VARCHAR(255),
-    CivilState TINYINT(1),
-    CivilPartner INT,
-    AccountType INT,
-    PictureRef VARCHAR(255)
+CREATE TABLE `Healthcare` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `UserID` int NOT NULL,
+  `ChildID` int NOT NULL,
+  `Date` date NOT NULL,
+  `TypeOf` int NOT NULL,
+  `Title` text NOT NULL,
+  `Description` text,
+  `FileRef` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  CONSTRAINT `healthcare_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `healthcare_ibfk_2` FOREIGN KEY (`ChildID`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE Childrens (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    FirstName VARCHAR(255),
-    LastName VARCHAR(255),
-    Gender VARCHAR(255),
-    DateOfBirth DATE,
-    PictureRef VARCHAR(255),
-    UserID INT,
-    FOREIGN KEY (UserID) REFERENCES Users(ID)
+CREATE TABLE `Groupchat` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `GroupID` int NOT NULL,
+  `Message` text NOT NULL,
+  `UserID` int NOT NULL,
+  `Message_Date` date NOT NULL,
+  `Message_Time` time NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `GroupID` (`GroupID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `groupchat_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `childrengroups` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `groupchat_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE Feeding (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    Date DATE,
-    Time TIME,
-    Unit VARCHAR(50),
-    Quantity INT,
-    FoodType VARCHAR(100),
-    UserID INT,
-    ChildrenID INT,
-    FOREIGN KEY (UserID) REFERENCES Users(ID),
-    FOREIGN KEY (ChildrenID) REFERENCES Children(ID)
+CREATE TABLE `Sleeping` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `Date` date DEFAULT NULL,
+  `SleepTime` time DEFAULT NULL,
+  `AwakeTime` time DEFAULT NULL,
+  `UserID` int DEFAULT NULL,
+  `ChildrenID` int DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  KEY `ChildrenID` (`ChildrenID`),
+  CONSTRAINT `sleeping_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `sleeping_ibfk_2` FOREIGN KEY (`ChildrenID`) REFERENCES `childrens` (`ID`) ON DELETE CASCADE
 );
 
-CREATE TABLE Photos (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ChildrenID INT,
-    UserID INT,
-    Date DATE NOT NULL,
-    Time TIME NOT NULL,
-    InTimeline BOOLEAN NOT NULL,
-    PictureRef VARCHAR(255) NOT NULL,
-    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
-    FOREIGN KEY (UserID) REFERENCES Users(ID)
+CREATE TABLE `Relations` (
+  `ID` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `First` int NOT NULL,
+  `SECOND` int NOT NULL,
+  `RelationType` int NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `ID` (`ID`)
 );
 
-
-CREATE TABLE Relations (
-    ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    First INT,
-    Second INT,
-    RelationType INT
-);
 ```
 

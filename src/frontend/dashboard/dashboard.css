@@ -371,6 +371,14 @@ select {
   font-size: 16px;
 }
 
+.selected-user {
+  background-color: orange!important;
+}
+
+.selected-child {
+  background-color: orange!important;
+}
+
 .attribute-button:hover {
   background-color: #504538;
 }
@@ -704,14 +712,23 @@ select {
   flex-direction: column;
 }
 
+#white-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #D1BB9E;
+  z-index: 1000; /* Ensure it covers other content */
+}
+
 .grid-layout-content-admin {
   width: 100%;
   height: 95%;
-  margin-top: 3%;
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  margin-top: 1.5%;
+  grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(2, 1fr);
-  gap: 3%;
 }
 
 .admin-panel-settings-container {
@@ -731,7 +748,7 @@ select {
   min-height: 0;
   margin-left: 5%;
   margin-right: 5%;
-  gap: 1%;
+  gap: 10%;
 }
 
 .all-avalabile-users-container {
@@ -746,6 +763,7 @@ select {
 .found-user {
   background-color: rgb(233, 228, 228);
   border: 1px solid black;
+  height: fit-content;
 }
 
 .found-child {
@@ -762,15 +780,17 @@ select {
 }
 
 .found-user-info {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
   gap: 5%;
   margin-left: 5%;
 }
 
 .found-child-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  height: fit-content;
+  flex-direction: column;
   gap: 5%;
   margin-left: 5%;
 }

@@ -41,9 +41,7 @@ export async function deleteChild() {
             }
         });
 
-        console.log('Response status:', response.status);
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             loadChildren();
@@ -72,9 +70,13 @@ export function loadChildren() {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 204)
+                return null;
+            return response.json();
+        })
         .then(result => {
-            console.log('Result:', result);
+            if(result === null) return;
             if (result.childrenInfo) {
                 displayChildren(result.childrenInfo);
                 addChildSelectionHandler();
@@ -101,10 +103,6 @@ export async function addChild(e) {
         return;
     }
 
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-    }
-
     try {
         const response = await fetch('http://localhost:5000/api/insert_children', {
             method: 'POST',
@@ -114,9 +112,7 @@ export async function addChild(e) {
             body: formData
         });
 
-        console.log('Response status:', response.status);
         const result = await response.json();
-        console.log('Result:', result);
 
         if (response.ok) {
             const newChild = createChildElement({
@@ -146,7 +142,6 @@ export async function addChild(e) {
 export function displayChildren(children) {
     const dashboardChildren = document.getElementById('user-children-id');
     const childrenAddButton = document.getElementById('add-child-bttn');
-    console.log('Children:', children);
 
     while (dashboardChildren.firstChild && dashboardChildren.firstChild !== childrenAddButton) {
         dashboardChildren.removeChild(dashboardChildren.firstChild);
@@ -189,7 +184,6 @@ export function fetchMedical(selectedChild) {
     const selectedChildId = selectedChild;
 
     let category = categorySelect.value;
-    console.log(selectedChildId);
 
 
     const cookieString = document.cookie;
@@ -224,7 +218,6 @@ export function fetchMedical(selectedChild) {
         const formData = new FormData(addForm);
         formData.append('TypeOf', category);
         formData.append('ChildID', selectedChildId);
-        console.log(formData);
         try {
             const response = await fetch('http://localhost:5000/api/insert_health', {
                 method: 'POST',
@@ -269,7 +262,6 @@ export function fetchMedical(selectedChild) {
 
     async function deleteMedicalRecord(recordId) {
         try {
-            console.log(recordId);
             const response = await fetch(`http://localhost:5000/api/delete_health?id=${recordId}`, {
                 method: 'DELETE',
                 headers: {
