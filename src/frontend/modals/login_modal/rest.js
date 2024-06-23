@@ -43,23 +43,17 @@ confirm_login_bttn.addEventListener('click', () => {
     return response.json();
   })
   .then(loginData => {
-    console.log('Login data:', loginData);
     switch(loginData['LoginResponse'])
     {
         case 200:
-          console.log('Login data:', loginData);
             login_response.style.color = 'green';
             login_response.innerHTML = "Te-ai logat cu succes!";
 
             const jwtToken = loginData['JWT'];
-            console.log('JWT token:', jwtToken);
             if(jwtToken){
-              console.log('Setting JWT token:', jwtToken);
               setCookie('JWT', jwtToken, 1);
             }
             
-            localStorage.setItem('userInfo', JSON.stringify(loginData['UserInfo']));
-            console.log('Redirecting to dashboard...');
             window.location.href = '../../dashboard/dashboard.html';
             break;
         case 111:

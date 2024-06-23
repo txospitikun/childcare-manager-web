@@ -30,7 +30,6 @@ async function insertGroup(req, res)
         res.end(JSON.stringify({ message: "Group added sucesfully!" }));
     }
     catch (err) {
-        console.log("Server error: Couldn't insert group into the database! ", err);
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
     }
@@ -48,7 +47,7 @@ async function editGroup(req, res)
         const result = await groupdb_logic.editGroup(user.ID, data);
         if(result.affectedRows === 0)
         {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "Group not found or no permissions!" }));
             return;
         }
@@ -76,7 +75,7 @@ async function deleteGroup(req, res)
         const result = await groupdb_logic.deleteGroup(user.ID, groupId);
         if(result.affectedRows === 0)
         {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "Group not found or no permissions!" }));
             return;
         }
@@ -102,7 +101,7 @@ async function getUserGroups(req, res)
         const result = await groupdb_logic.getUserGroups(user.ID);
         if(result.length === 0)
         {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "No groups found or no permissions!" }));
             return;
         }
@@ -156,7 +155,7 @@ async function deleteChildrenGroup(req, res)
         const result = await groupdb_logic.deleteChildrenGroup(user.ID, groupId, childrenId);
         if(result.affectedRows === 0)
         {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "Children not found in group or no permissions!" }));
             return;
         }
@@ -309,7 +308,7 @@ async function getGroupChildrenInfo(req, res)
         const result = await groupdb_logic.getGroupChildrenInfo(user.ID, groupId);
         if(result.affectedRows === 0)
         {
-            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "No found childrens or no permissions!" }));
             return;
         }

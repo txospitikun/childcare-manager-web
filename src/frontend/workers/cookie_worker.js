@@ -6,12 +6,9 @@ export function setCookie(name, value, days)
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         expires = "; expires=" + date.toUTCString();
     }
-    console.log('cookie set');
 
     const cookie_value = name + "=" + (value || "") + expires + "; path=/";
-    console.log(cookie_value);
     document.cookie = cookie_value;
-    console.log('cookie set2');
 
 }
 
@@ -35,7 +32,6 @@ export function getCookie(name)
     }
 }
 
-export function deleteCookie(name)
-{
-    document.cookie = name + '=; Max-Age=-99999999;';
+export function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
 }

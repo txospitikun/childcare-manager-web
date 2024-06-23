@@ -40,13 +40,11 @@ async function handle_register(req, res)
 
             res.writeHead(200, {'Content-Type': 'application/json',});
             res.end(JSON.stringify({ RegisterResponse: Register.response_register_succesful, JWT: jwt_token}));
-            console.log(`Inserted user ${register.email}.`);
             return;
         }
     } 
     catch(err)
     {
-        console.log("Server error: Couldn't register user on database! ", err);
 
         res.writeHead(500, {'Content-Type': 'application/json',});
         res.end(JSON.stringify({ RegisterResponse: Register.response_backend_error }));

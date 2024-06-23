@@ -5,13 +5,14 @@ var querystring = require('querystring');
 const authentification_worker = require('./workers/auth_worker.js');
 const user_worker = require('./workers/user_worker.js');
 const group_worker = require('./workers/group_worker.js');
+const admin_worker = require('./workers/admin_worker.js');
 const {serveStaticFiles} = require("./workers/fetch_worker");
 
 http.createServer((req, res) =>
 {
-     res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+     res.setHeader('Access-Control-Allow-Origin', '*');
      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Include Authorization
+     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
  
      if (req.method === 'OPTIONS') {
          res.writeHead(204);
@@ -34,7 +35,6 @@ http.createServer((req, res) =>
 
     if(parsedUrl.pathname.startsWith('/src/uploads/'))
     {
-        console.log("test");
         serveStaticFiles(req, res);
     }
     else switch (req.method)
@@ -119,6 +119,12 @@ http.createServer((req, res) =>
                 case '/get_group_chat':
                     group_worker.getGroupChatByGroupId(req, res);
                     break;
+                case '/authorized/get_all_users':
+                    admin_worker.getAllUsers(req, res);
+                    break;
+                case '/authorized/get_all_children':
+                    admin_worker.getAllChildren(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
@@ -141,6 +147,12 @@ http.createServer((req, res) =>
                     break;
                 case '/edit_group_relation':
                     group_worker.editGroupRelation(req, res);
+                    break;
+                case '/authorized/edit_user':
+                    admin_worker.editUserParameter(req, res);
+                    break;
+                case '/authorized/edit_child':
+                    admin_worker.editChildParameters(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -180,6 +192,12 @@ http.createServer((req, res) =>
                     break;
                 case '/delete_relation':
                     group_worker.deleteGroupRelation(req, res);
+                    break;
+                case '/authorized/delete_user':
+                    admin_worker.deleteUser(req, res);
+                    break;
+                case '/authorized/delete_child':
+                    admin_worker.deleteChild(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });

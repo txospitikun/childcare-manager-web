@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  <div id="white-panel"></div>
   <main>
     <div class="main-wrapper">
       <div class="dashboard-left-panel">
@@ -28,7 +29,7 @@
             <img src="./assets/icons/dashboard_group_icon.svg" alt="Groups Icon" />
             <span class="dashboard-button-text">Grupuri</span>
           </button>
-          <button class="dashboard-button" id="dashboard_admin_bttn">
+          <button class="dashboard-button" id="dashboard_admin_bttn" style="display: none">
             <img src="./assets/icons/dashboard_admin_icon.svg" alt="Admin Icon" />
             <span class="dashboard-button-text">Admin Panel</span>
           </button>
@@ -40,11 +41,6 @@
       </div>
       <div class="dashboard-right-panel">
         <div class="dashboard-navbar">
-          <div class="dashboard-search-bar">
-            <img src="./assets/icons/dashboard_search_icon.svg" alt="Search Icon" />
-            <input id="search-content" />
-            <button id="search-button">Caută</button>
-          </div>
           <div class="dashboard-profile-container">
             <img src="../placeholders/user1.jpg" class="profile-photo" id="profile-photo" alt="Profile Photo" />
             <div class="profile-info-container">
@@ -385,13 +381,7 @@
           <div class="dashboard-info-profile">
             <div class="profile-buttons-category">
               <button class="default-button" id="profile-bttn-general">
-                General
-              </button>
-              <button class="default-button" id="profile-bttn-security">
-                Securitate
-              </button>
-              <button class="default-button" id="profile-bttn-notifications">
-                Notificări
+                Setările generale ale contului dumnneavoastră
               </button>
             </div>
             <div class="grid-layout-content">
@@ -404,7 +394,7 @@
                 <p>Telefon: +40 765928114</p>
               </div>
               <div class="profile-settings-container">
-                <button class="orange-bg" id="edit-account-bttn">
+                <button type="button" class="orange-bg" id="edit-account-bttn">
                   Modifică cont
                 </button>
               </div>
@@ -472,7 +462,6 @@
                 <p>Căsătorit: Nu</p>
               </div>
               <div class="profile-settings-container">
-                <button class="red-bg">Șterge cont</button>
               </div>
               <div class="profile-settings-container">
                 <p>Localizare & Limbă</p>
@@ -481,7 +470,6 @@
               </div>
 
               <div class="profile-settings-container">
-                <button class="red-bg">Dezactivează cont</button>
               </div>
 
               <div class="profile-settings-container">
@@ -494,125 +482,41 @@
         <div class="dashboard-control-panel" id="dashboard-admin-panel">
           <div class="dashboard-info-admin">
             <div class="grid-layout-content-admin">
-              <div class="profile-settings-container-admin">
-                <h3>
-                  Admin Panel - Cont administator (Niță Dennis-Alexandru)
-                </h3>
-              </div>
-              <div class="profile-settings-container-admin"></div>
+
               <div class="profile-settings-container-admin">
                 Selectează utilizatorul pe care vrei să îl modifici.
-                <input />Caută utilizator după nume
-                <div class="all-avalabile-users-container">
-                  <div class="found-user">
-                    <div class="found-user-photo"></div>
-                    <div class="found-user-info">
-                      <p>Merchez Raluca-Vintilă</p>
-                      <p>Părinte</p>
-                    </div>
-                  </div>
-                  <div class="found-user">
-                    <div class="found-user-photo"></div>
-                    <div class="found-user-info">
-                      <p>Niță Dennis-Alexandru</p>
-                      <p>Părinte</p>
-                    </div>
-                  </div>
-                  <div class="found-user">
-                    <div class="found-user-photo"></div>
-                    <div class="found-user-info">
-                      <p>Augustus Ionel-Valentin</p>
-                      <p>Părinte</p>
-                    </div>
-                  </div>
-                  <div class="found-user">
-                    <div class="found-user-photo"></div>
-                    <div class="found-user-info">
-                      <p>Tomești - Orfelinat copii</p>
-                      <p>Casă de plasament</p>
-                    </div>
-                  </div>
-                  <div class="found-user">
-                    <div class="found-user-photo"></div>
-                    <div class="found-user-info">
-                      <p>Niță Dennis-Alexandru</p>
-                      <p>Părinte</p>
-                    </div>
-                  </div>
+                <div id = 'all-users' class="all-avalabile-users-container" id="users-list">
                 </div>
               </div>
               <div class="profile-settings-container-admin">
-                Selectează copilul pe care vrei să îl modifici. <input />Caută
-                copilul după nume.
-                <div class="all-avalabile-users-container">
-                  <div class="found-child">
-                    <div class="found-child-photo"></div>
-                    <div class="found-child-info">
-                      <p>Cozloschi Luca</p>
-                      <p>Adolescent</p>
-                      <p>17 ani</p>
-                    </div>
-                  </div>
-                  <div class="found-child">
-                    <div class="found-child-photo"></div>
-                    <div class="found-child-info">
-                      <p>Ciotir Marian</p>
-                      <p>Copil</p>
-                      <p>13 ani</p>
-                    </div>
-                  </div>
-                  <div class="found-child">
-                    <div class="found-child-photo"></div>
-                    <div class="found-child-info">
-                      <p>Cazan Rareș</p>
-                      <p>Infant</p>
-                      <p>3 ani</p>
-                    </div>
-                  </div>
+                Selectează copilul pe care vrei să îl modifici.
+                <div id = 'children-list' class="all-avalabile-users-container" id="children-list">
                 </div>
               </div>
               <div class="admin-panel-settings-container">
                 <h3>Opțiuni editare cont selectat:</h3>
                 <br />
-                <button class="default-button-slim red-bg">Șterge</button>
-                <button class="default-button-slim orange-bg">
-                  Dezactivează
-                </button>
-                <button class="default-button-slim">
-                  Modifică data creării
-                </button>
-                <button class="default-button-slim">
-                  Modifică nume & prenume
-                </button>
-                <button class="default-button-slim">Modifică email</button>
-                <button class="default-button-slim">Modifică telefon</button>
-                <button class="default-button-slim">
-                  Modifică data nașterii
-                </button>
-                <button class="default-button-slim">Modifică genul</button>
-                <button class="default-button-slim">
-                  Modifică localizare
-                </button>
-                <button class="default-button-slim">Modifică limbă</button>
-                <button class="default-button-slim">
-                  Modifică starea civilă
-                </button>
-                <button class="default-button-slim">
-                  Modifică tipul contului
-                </button>
+                <button class="default-button-slim red-bg edit_user_button" data-field="DeleteAccount">Șterge</button>
+                <button class="default-button-slim orange-bg edit_user_button" data-field="DeactivateAccount">Dezactivează/Activează</button>
+                <button class="default-button-slim edit_user_button" data-field="FirstName">Modifică nume</button>
+                <button class="default-button-slim edit_user_button" data-field="LastName">Modifică prenume</button>
+                <button class="default-button-slim edit_user_button" data-field="PhoneNo">Modifică telefon</button>
+                <button class="default-button-slim edit_user_button" data-field="Email">Modifică email</button>
+                <button class="default-button-slim edit_user_button" data-field="Location">Modifică localizare</button>
+                <button class="default-button-slim edit_user_button" data-field="Language">Modifică limbă</button>
+                <button class="default-button-slim edit_user_button" data-field="CivilState">Modifică starea civilă</button>
+                <button class="default-button-slim edit_user_button" data-field="AccountType">Modifică tipul contului</button>
+
               </div>
               <div class="profile-settings-container-admin">
                 <div class="admin-panel-settings-container">
                   <h3>Opțiuni editare copil selectat:</h3>
                   <br />
-                  <button class="default-button-slim red-bg">Șterge</button>
-                  <button class="default-button-slim">
-                    Modifică nume & prenume
-                  </button>
-                  <button class="default-button-slim">
-                    Modifică data nașterii
-                  </button>
-                  <button class="default-button-slim">Modifică genul</button>
+                  <button class="default-button-slim red-bg edit_children_button" data-field="DeleteChild">Șterge</button>
+                  <button class="default-button-slim edit_children_button" data-field="FirstName">Modifică nume</button>
+                  <button class="default-button-slim edit_children_button" data-field="LastName">Modifică prenume</button>
+                  <button class="default-button-slim edit_children_button" data-field="Gender">Modifică gen</button>
+                  <button class="default-button-slim edit_children_button" data-field="DateOfBirth">Modifică data nașterii</button>
                 </div>
               </div>
             </div>
@@ -674,6 +578,7 @@
   <script type="module" src="./feedingOperations.js"></script>
   <script type="module" src="./sleepingOperations.js"></script>
   <script type="module" src="./mediaOperations.js"></script>
+  <script type="module" src="./adminOperations.js"></script>
   <!-- <script type = "module" src="./dashboard_logic.js"></script> -->
   <!-- <script type = "module" src="./dashboard_post_operations.js"></script> -->
 </body>
