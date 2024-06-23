@@ -11,6 +11,7 @@ import { deleteMedia, resetMediaForm } from './mediaOperations.js';
 import { fetchAccountData } from './accountOperations.js';
 
 export let selectedEntryId = null;
+let currentSelectedAttribute = null;
 
 export function setSelectedEntryId(entryId) {
     selectedEntryId = entryId;
@@ -108,10 +109,18 @@ function addEventListeners() {
         showModal('edit-account-modal');
         fetchAccountData();
     });
+
+    document.getElementById('add-child-bttn').addEventListener('click', () => {
+        showModal('add-child-modal');
+    });
+
+    document.getElementById('add-group-bttn').addEventListener('click', () => {
+        showModal('add-group-modal');
+    });
 }
 
 function setupAttributeButtons() {
-    let currentSelectedAttribute = document.getElementById('feeding-bttn');
+    currentSelectedAttribute = document.getElementById('feeding-bttn');
 
     if (currentSelectedAttribute) {
         currentSelectedAttribute.style.border = "2px solid black";
