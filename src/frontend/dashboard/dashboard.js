@@ -7,7 +7,7 @@ import {
     addSleeping, editSleeping, fetchSleepingEntryData, deleteSleepingEntry,
     resetSleepingForm, openSleepingModal
 } from './sleepingOperations.js';
-import { deleteMedia, resetMediaForm } from './mediaOperations.js';
+import { deleteMedia, resetMediaForm, addMedia } from './mediaOperations.js';
 import { fetchAccountData } from './accountOperations.js';
 
 export let selectedEntryId = null;
@@ -59,6 +59,8 @@ function addEventListeners() {
     document.getElementById('delete').addEventListener('click', deleteMedia);
 
     document.getElementById('add-child-form').addEventListener('submit', addChild);
+
+    document.getElementById('add-media-form').addEventListener('submit', addMedia);
 
     document.getElementById('add-photo-bttn').addEventListener('click', () => {
         resetMediaForm();
@@ -114,6 +116,10 @@ function addEventListeners() {
         showModal('add-child-modal');
     });
 
+    document.getElementById('addButton').addEventListener('click', () => {
+        showModal('addModal');
+    });
+
     document.getElementById('add-group-bttn').addEventListener('click', () => {
         showModal('add-group-modal');
     });
@@ -145,10 +151,6 @@ function fetchMedical() {
         category = categorySelect.value;
         document.getElementById('TypeOf').value = category;
         await fetchMedicalRecords(category);
-    }
-
-    addButton.onclick = function () {
-        addModal.style.display = "block";
     }
 
     closeModal.onclick = function () {

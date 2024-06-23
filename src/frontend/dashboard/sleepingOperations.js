@@ -88,7 +88,11 @@ export async function addSleeping(e) {
     let date, sleepTime, awakeTime;
 
     if (useCurrentDateTime) {
-        date = getLocalISOString().split(' ')[0];
+        const selectedDateObj = new Date(selectedDate);
+        const year = selectedDateObj.getFullYear();
+        const month = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(selectedDateObj.getDate()).padStart(2, '0');
+        date = `${year}-${month}-${day}`;
     } else {
         date = document.getElementById('data_sleep').value;
     }
