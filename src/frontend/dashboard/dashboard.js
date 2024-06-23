@@ -97,6 +97,11 @@ document.querySelectorAll('.attribute-button').forEach(function (button) {
         }
 
         currentSelectedAttribute = this;
+
+        if(this.id === "medical-bttn")
+        {
+            fetchMedical();
+        }
         console.log(currentSelectedAttribute.id);
         this.style.border = "2px solid black";
     });
@@ -1340,6 +1345,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+async function fetchMedia() {
+    try {
+        const response = await fetch('http://localhost:5000/api/get_children_media?childID=55');
+        const data = await response.json();
+
+        for (const media of data.media) {
+            const figureElement = document.createElement('figure');
+
+            if (media.MediaType === '.jpg' || media.MediaType === '.png') {
+                const img = document.createElement('img');
+                img.src = `http://localhost:5000/api/${media.PictureRef}`;
+                img.classList.add('modal-image');
+                figureElement.appendChild(img);
+
+                img.onclick = () => {
+                    modal.style.display = "block";
+                    modalImg.style.display = "block";
+                    modalVideo.style.display = "none";
+                    modalImg.src = img.src;
+                    captionText.innerHTML = new Date(media.Date).toLocaleDateString();
+                };
+
+            } else if (media.MediaType === '.mp4') {
+                const video = document.createElement('video');
+                video.src = `http://localhost:5000/api/${media.PictureRef}`;
+                video.classList.add('modal-image');
+                video.controls = true;
+                figureElement.appendChild(video);
+
+                video.onclick = () => {
+                    modal.style.display = "block";
+                    modalImg.style.display = "none";
+                    modalVideo.style.display = "block";
+                    modalVideo.src = video.src;
+                    captionText.innerHTML = new Date(media.Date).toLocaleDateString();
+                };
+
+            } else if (media.MediaType === '.mp3') {
+                const audio = document.createElement('audio');
+                audio.src = `http://localhost:5000/api/${media.PictureRef}`;
+                audio.classList.add('modal-image');
+                audio.controls = true;
+                figureElement.appendChild(audio);
+
+                audio.onclick = () => {
+                    modal.style.display = "block";
+                    modalImg.style.display = "none";
+                    modalVideo.style.display = "none";
+                    captionText.innerHTML = new Date(media.Date).toLocaleDateString();
+                };
+            }
+
+            const figcaption = document.createElement('figcaption');
+            figcaption.textContent = new Date(media.Date).toLocaleDateString();
+            figureElement.appendChild(figcaption);
+
+            gallery.appendChild(figureElement);
+        }
+    } catch (error) {
+        console.error('Error fetching media:', error);
+    }
+}
 
 const figures = [
     { src: '../placeholders/child1.jpg', caption: '17 Mai 2024' },
@@ -1356,6 +1423,141 @@ const figures = [
     { src: '../placeholders/child4.jpg', caption: '2 octombrie 2023' },
 ];
 
+function fetchMedical() {
+    const categorySelect = document.getElementById('category');
+    const medicalRecordsDiv = document.getElementById('medicalRecords');
+    const addButton = document.getElementById('addButton');
+    const addModal = document.getElementById('addModal');
+    const addForm = document.getElementById('addForm');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const selectedChildId = currentSelectedChild.dataset.childId;
+
+    let category = categorySelect.value;
+    console.log(selectedChildId);
+
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        console.error('JWT token not found');
+        alert('JWT token not found');
+        return;
+    }
+
+    categorySelect.onchange = async function () {
+        category = categorySelect.value;
+        document.getElementById('TypeOf').value = category;
+        await fetchMedicalRecords(category);
+    }
+
+    addButton.onclick = function () {
+        addModal.style.display = "block";
+    }
+
+    closeModal.onclick = function () {
+        addModal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == addModal) {
+            addModal.style.display = "none";
+        }
+    }
+
+    addForm.onsubmit = async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(addForm);
+        formData.append('TypeOf', category);
+        formData.append('ChildID', selectedChildId);
+        console.log(formData);
+        try {
+            const response = await fetch('http://localhost:5000/api/insert_health', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            addModal.style.display = "none";
+            const category = categorySelect.value;
+            await fetchMedicalRecords(category);
+        } catch (error) {
+            console.error('Error inserting medical record:', error);
+        }
+    }
+
+    async function fetchMedicalRecords(category) {
+        try {
+            const response = await fetch(`http://localhost:5000/api/get_health?childID=${selectedChildId}&typeOf=${category}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            renderTable(data.health);
+        } catch (error) {
+            console.error('Error fetching medical records:', error);
+        }
+    }
+
+    async function deleteMedicalRecord(recordId) {
+        try {
+            console.log(recordId);
+            const response = await fetch(`http://localhost:5000/api/delete_health?id=${recordId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const category = categorySelect.value;
+            await fetchMedicalRecords(category);
+        } catch (error) {
+            console.error('Error deleting medical record:', error);
+        }
+    }
+
+    function renderTable(records) {
+        let tableHtml = '<table><tr><th>Title</th><th>Description</th><th>Action</th><th>Delete</th></tr>';
+        for (const record of records) {
+            tableHtml += `<tr>
+                            <td>${record.Title}</td>
+                            <td>${record.Description}</td>
+                            <td>${record.FileRef ? `<a href="http://localhost:5000/api/src/${record.FileRef}" target="_blank">Download document</a>` : ''}</td>
+                            <td><button class="deleteButton" data-id="${record.ID}">Delete</button></td>
+                          </tr>`;
+        }
+        tableHtml += '</table>';
+        medicalRecordsDiv.innerHTML = tableHtml;
+
+        const deleteButtons = document.querySelectorAll('.deleteButton');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const recordId = this.getAttribute('data-id');
+                deleteMedicalRecord(recordId);
+            });
+        });
+    }
+}
+
 const gallery = document.querySelector('.gallery');
 
 for (const figure of figures) {
@@ -1371,6 +1573,7 @@ for (const figure of figures) {
     figureElement.appendChild(figcaption);
 
     gallery.appendChild(figureElement);
+    fetchMedia();
 }
 
 var img = document.getElementsByClassName('modal-image');
