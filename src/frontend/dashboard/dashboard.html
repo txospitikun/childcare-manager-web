@@ -295,7 +295,7 @@
                   <img class="modal-content" id="img01" />
                   <video class="modal-content" id="vid01" controls style="display:none;"></video>
                   <audio class="modal-content" id="aud01" controls style="display:none;"></audio>
-                  <div id="caption"></div>
+                  <div class="caption" id="caption"></div>
                   <button id="delete">Șterge media</button>
                 </div>
               </div>
@@ -638,7 +638,7 @@
                   <div class="main-modal" id="add-group-modal">
                     <div class="popup-form-wrapper">
                       <button class="close-button">&times;</button>
-                      <h2 class="popup-title">Add a new group</h2>
+                      <h2 class="popup-title" id="group-title">Add a new group</h2>
                       <form class="popup-form" id="add-group-form">
                         <div class="form-group">
                           <label for="groupName">Group Name:</label>
@@ -649,7 +649,7 @@
                           <input type="file" id="groupPhoto" name="PictureRef" required />
                         </div>
                         <div class="form-group">
-                          <button type="submit" class="confirm-button">
+                          <button type="submit" class="confirm-button" id="group-button">
                             Add Group
                           </button>
                         </div>
@@ -659,6 +659,33 @@
                 
               </div>
               <div class="gallery" id="groups-gallery"></div>
+              <div id="groupChildModal" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" id="img02" />
+                <div class="caption" id="caption2"> 
+                </div>
+                <button class="caption-button default-button" id="add-relation">Add Relation</button>
+                
+            </div>
+            
+            <div class="main-modal" id="addRelationModal">
+              <div class="popup-form-wrapper">
+                <button class="close-button">&times;</button>
+                <form class="modal-content" id="add-relation-form">
+                  <h2 class="popup-title">Add Relation</h2>
+                  <div class="form-group">
+                    <label for="relatedChildId">Related Child ID:</label>
+                    <input type="text" id="relatedChildId" name="ChildrenRelationTwo" required />
+                  </div>
+                  <div class="form-group">
+                  <label for="relationType">Relation Type:</label>
+                    <input type="text" id="relationType" name="TypeOfRelation" required />
+                  </div>
+                  <button type="submit" class="confirm-button">Add Relation</button>
+                </form>
+              </div>
+            </div>
+            
               <div class="main-modal" id="add-group-child-modal">
                 <div class="popup-form-wrapper">
                     <button class="close-button">&times;</button>
@@ -673,7 +700,7 @@
                         </div>
                     </form>
                 </div>
-            </div>    
+              </div>   
             </div>
         </div>
       </div>

@@ -106,7 +106,7 @@ figure figcaption {
   object-fit: contain;
 }
 
-#caption {
+.caption {
   margin: auto;
   display: block;
   width: 80%;
@@ -115,6 +115,23 @@ figure figcaption {
   color: #ccc;
   padding: 10px 0;
   height: 150px;
+}
+
+.caption-button{
+  margin: auto;
+  display: block;
+}
+
+li{
+  list-style-type:none;
+}
+
+.delete-relation-button{
+  background-color:red;
+  color:white;
+  border:none;
+  margin-left:1rem;
+  padding:0 8px;
 }
 
 .modal-content,

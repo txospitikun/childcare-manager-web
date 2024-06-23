@@ -9,7 +9,7 @@ import {
 } from './sleepingOperations.js';
 import {addMedia, deleteMedia, resetMediaForm} from './mediaOperations.js';
 import { fetchAccountData } from './accountOperations.js';
-import { addGroup, fetchGroups, addChildToGroup } from './groupOperations.js';
+import { addGroup, fetchGroups } from './groupOperations.js';
 
 
 export let selectedEntryId = null;
@@ -60,7 +60,7 @@ function addEventListeners() {
 
     document.getElementById('add-media-form').addEventListener('submit', addMedia);
     document.getElementById('add-child-form').addEventListener('submit', addChild);
-    document.getElementById('add-group-form').addEventListener('submit', addGroup);
+    
     
     document.getElementById('delete').addEventListener('click', deleteMedia); 
     document.getElementById('delete-bttn').addEventListener('click', deleteChild);
@@ -116,10 +116,6 @@ function addEventListeners() {
 
     document.getElementById('addButton').addEventListener('click', () => {
         showModal('addModal');
-    });
-
-    document.getElementById('add-group-bttn').addEventListener('click', () => {
-        showModal('add-group-modal');
     });
 
     document.getElementById('add-photo-bttn').addEventListener('click', () => {

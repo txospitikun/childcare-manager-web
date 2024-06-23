@@ -1,5 +1,10 @@
 import { getLocalISOString, showModal } from "./dashboard.js";
 
+let currentGroupId = null;
+let currentChildId = null;
+let groupChildrenInfo = {};
+
+
 export async function fetchGroups() {
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
@@ -46,11 +51,10 @@ export function displayGroups(groups) {
 
         figureElement.appendChild(img);
         figureElement.appendChild(figcaption);
-        figureElement.addEventListener('click', () => fetchGroupContent(group.ID)); // Make the group clickable
+        figureElement.addEventListener('click', () => fetchGroupContent(group.ID));
         gallery.appendChild(figureElement);
     });
 
-    // Clear existing buttons (except the "Adaugă grup" button)
     const buttonsContainer = document.getElementById('group-buttons');
     while (buttonsContainer.children.length > 1) {
         buttonsContainer.removeChild(buttonsContainer.lastChild);
@@ -69,7 +73,7 @@ async function fetchGroupContent(groupId) {
             return;
         }
 
-        const response = await fetch(`http://localhost:5000/api/get_group_content?groupId=${groupId}`, {
+        const response = await fetch(`http://localhost:5000/api/get_group_children_info?groupId=${groupId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -81,7 +85,11 @@ async function fetchGroupContent(groupId) {
         } else {
             const result = await response.json();
             if (response.ok) {
-                displayGroupContent(result.content, groupId);
+                groupChildrenInfo = result.foundChildrens.reduce((acc, child) => {
+                    acc[child.ID] = `${child.FirstName} ${child.LastName}`;
+                    return acc;
+                }, {});
+                displayGroupContent(result.foundChildrens, groupId);
             } else {
                 console.error('Error fetching group content:', result.message);
             }
@@ -95,28 +103,41 @@ function displayGroupContent(content, groupId) {
     const gallery = document.getElementById('groups-gallery');
     gallery.innerHTML = '';
 
-    // Add group content here (e.g., images, text, etc.)
+    currentGroupId = groupId;
+
     content.forEach(item => {
-        const itemElement = document.createElement('div');
-        itemElement.textContent = item; // Customize this based on your content
-        gallery.appendChild(itemElement);
+        const figureElement = document.createElement('figure');
+
+        const img = document.createElement('img');
+        img.src = `http://localhost:5000/api/src/${item.PictureRef}`;
+        img.alt = `${item.FirstName} ${item.LastName}`;
+
+        const figcaption = document.createElement('figcaption');
+        figcaption.textContent = `${item.FirstName} ${item.LastName}`;
+
+        figureElement.appendChild(img);
+        figureElement.appendChild(figcaption);
+        figureElement.addEventListener('click', () => {
+            openChildModal(item);
+        });
+        gallery.appendChild(figureElement);
     });
 
-    // Add group buttons
     const buttonsContainer = document.getElementById('group-buttons');
 
-    // Clear existing buttons (except the "Adaugă grup" button)
     while (buttonsContainer.children.length > 1) {
         buttonsContainer.removeChild(buttonsContainer.lastChild);
     }
 
-    // Hide "Adaugă grup" button when inside a group
     document.getElementById('add-group-bttn').style.display = 'none';
 
     const backButton = document.createElement('button');
     backButton.className = 'default-button';
     backButton.textContent = 'Back';
-    backButton.addEventListener('click', fetchGroups);
+    backButton.addEventListener('click', () => {
+        document.getElementById('add-group-bttn').style.display = '';
+        fetchGroups();
+    });
 
     const addChildButton = document.createElement('button');
     addChildButton.className = 'default-button';
@@ -130,20 +151,15 @@ function displayGroupContent(content, groupId) {
     editButton.className = 'default-button';
     editButton.textContent = 'Edit Group';
     editButton.addEventListener('click', () => {
-        const selectedGroup = prompt('Enter the ID of the group you want to edit:');
-        if (selectedGroup) {
-            editGroup(selectedGroup);
-        }
+        const group = { Title: document.getElementById('groupName').value }; 
+        openEditGroupModal(group);
     });
 
     const deleteButton = document.createElement('button');
     deleteButton.className = 'default-button';
     deleteButton.textContent = 'Delete Group';
     deleteButton.addEventListener('click', () => {
-        const selectedGroup = prompt('Enter the ID of the group you want to delete:');
-        if (selectedGroup) {
-            deleteGroup(selectedGroup);
-        }
+        deleteGroup(groupId);
     });
 
     buttonsContainer.appendChild(backButton);
@@ -180,7 +196,6 @@ export async function addGroup(e) {
 
         const result = await response.json();
         if (response.ok) {
-            alert('Group added successfully');
             fetchGroups();
         } else {
             alert(`Error: ${result.message}`);
@@ -191,8 +206,9 @@ export async function addGroup(e) {
     }
 }
 
-export async function addChildToGroup(groupId) {
-    const form = document.getElementById('add-child-form');
+async function addChildToGroup() {
+    const form = document.getElementById('add-group-child-form');
+    const groupId = form.dataset.groupId;
     const formData = new FormData(form);
     formData.append('GroupID', groupId);
 
@@ -217,7 +233,6 @@ export async function addChildToGroup(groupId) {
         if (response.ok) {
             alert('Child added to the group successfully');
             fetchGroupContent(groupId);
-            closeModal('add-child-modal');
         } else {
             alert(`Error: ${result.message}`);
         }
@@ -227,16 +242,48 @@ export async function addChildToGroup(groupId) {
     }
 }
 
-async function editGroup(groupId) {
-    // Implement edit group functionality
-    alert('Edit group functionality to be implemented.');
-}
+async function editGroup(e) {
+    e.preventDefault();
 
-async function deleteGroup(groupId) {
-    if (!confirm('Are you sure you want to delete this group?')) {
+    const form = document.getElementById('add-group-form');
+    const formData = new FormData(form);
+    formData.append('ID', currentGroupId); 
+
+    const now=getLocalISOString().split('T')[0];
+    formData.append('Creation_Date', now);
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        alert('JWT token not found');
         return;
     }
 
+    try {
+        const response = await fetch('http://localhost:5000/api/edit_group', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('Group updated successfully');
+            fetchGroups();
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while updating the group');
+    }
+}
+
+async function deleteGroup(groupId) {
+    
     try {
         const cookieString = document.cookie;
         const token = cookieString.substring(4);
@@ -255,7 +302,6 @@ async function deleteGroup(groupId) {
 
         const result = await response.json();
         if (response.ok) {
-            alert('Group deleted successfully');
             fetchGroups();
         } else {
             alert(`Error: ${result.message}`);
@@ -266,8 +312,255 @@ async function deleteGroup(groupId) {
     }
 }
 
-document.getElementById('add-group-child-form').addEventListener('submit', (e) => {
+function openGroupModal(title, buttonText, submitHandler) {
+    showModal('add-group-modal');
+
+    const form = document.getElementById('add-group-form');
+    
+    form.removeEventListener('submit', addGroup);
+    form.removeEventListener('submit', editGroup);
+
+    form.addEventListener('submit', submitHandler);
+
+    document.getElementById('group-title').textContent = title;
+    document.getElementById('group-button').textContent = buttonText;
+}
+
+
+function openEditGroupModal(group) {
+    openGroupModal('Edit current group', 'Save Changes', editGroup);
+
+    document.getElementById('groupName').value = group.Title;
+    document.getElementById('groupPhoto').required = false;
+}
+
+
+document.getElementById('add-group-child-form').addEventListener('submit', addChildToGroup);
+
+document.getElementById('add-group-bttn').addEventListener('click', () => {
+    openGroupModal('Add a new group', 'Add Group', addGroup);
+});
+
+document.getElementById('add-group-form').addEventListener('submit', addGroup);
+
+function openChildModal(child) {
+    const modal = document.getElementById('groupChildModal');
+    const img = document.getElementById('img02');
+    const caption = document.getElementById('caption2');
+    
+    img.src = `http://localhost:5000/api/src/${child.PictureRef}`;
+    caption.textContent = `${child.FirstName} ${child.LastName}`;
+
+    // Clear previous relations
+    let relationsList = document.getElementById('relations-list');
+    currentChildId = child.ID; // Set the current child ID
+    if (!relationsList) {
+        relationsList = document.createElement('ul');
+        relationsList.id = 'relations-list';
+        caption.appendChild(relationsList);
+    }
+    relationsList.innerHTML = '';
+
+    // Fetch and display relations
+    fetchRelations(child.ID, currentGroupId);
+
+    modal.style.display = 'block';
+
+    // Event listener to close the modal
+    modal.querySelector('.close').addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    document.getElementById('add-relation').addEventListener('click', () => {
+        showModal('addRelationModal');
+        document.getElementById('add-relation-form').dataset.childId = child.ID;
+    });
+}
+
+
+
+async function fetchChildRelations(childId, groupId) {
+    try {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+
+        if (!token) {
+            alert('JWT token not found');
+            return;
+        }
+
+        const response = await fetch(`http://localhost:5000/api/get_group_children_info?childrenId=${childId}&groupId=${groupId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            displayChildRelations(result.foundChildrens);
+        } else {
+            console.error('Error fetching child relations:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function displayChildRelations(relations) {
+    const relationsContainer = document.getElementById('relations');
+    relationsContainer.innerHTML = '';
+
+    if (relations.length === 0) {
+        relationsContainer.innerHTML = '<p>No relations found.</p>';
+    } else {
+        relations.forEach(relation => {
+            const relationElement = document.createElement('div');
+            relationElement.textContent = `${relation.TypeOfRelation}: ${relation.FirstName} ${relation.LastName}`;
+            relationsContainer.appendChild(relationElement);
+        });
+    }
+}
+
+async function addChildRelation(childId) {
+    const form = document.getElementById('add-relation-form');
+    const formData = new FormData(form);
+    formData.append('ChildrenRelationOne', childId);
+    console.log(childId);
+    formData.append('GroupID', currentGroupId);
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        alert('JWT token not found');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/insert_group_relation', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('Relation added successfully');
+            fetchRelations(childId, currentGroupId);
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while adding the relation');
+    }
+}
+
+async function fetchRelations(childId, groupId) {
+    try {
+        const cookieString = document.cookie;
+        const token = cookieString.substring(4);
+
+        if (!token) {
+            alert('JWT token not found');
+            return;
+        }
+
+        const response = await fetch(`http://localhost:5000/api/get_group_relations?childrenId=${childId}&groupId=${groupId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+        console.log(result);
+        if (response.ok) {
+            displayRelations(result.groupRelations);
+        } else {
+            console.error('Error fetching relations:', result.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+function displayRelations(relations) {
+    const relationsList = document.getElementById('relations-list');
+    relationsList.innerHTML = '';
+
+    if (!relations || relations.length === 0) {
+        const noRelationsMessage = document.createElement('p');
+        noRelationsMessage.textContent = 'This child does not have any relations yet.';
+        relationsList.appendChild(noRelationsMessage);
+    } else {
+        relations.forEach(relation => {
+            const relatedChildName = groupChildrenInfo[relation.ChildrenRelationTwo] || 'Unknown Child';
+            console.log(groupChildrenInfo[relation.ChildrenRelationTwo]);
+            console.log('gogosi');
+            const relationItem = document.createElement('li');
+            relationItem.textContent = `Relation: ${relation.TypeOfRelation}, Related Child: ${relatedChildName}`;
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-relation-button';
+            deleteButton.textContent = 'Delete Relation';
+            deleteButton.addEventListener('click', () => {
+                deleteRelation(relation.ID);
+            });
+            
+            relationItem.appendChild(deleteButton);
+            relationsList.appendChild(relationItem);
+        });
+    }
+}
+
+async function deleteRelation(relationId) {
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        alert('JWT token not found');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/delete_group_relation?relationId=${relationId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert('Relation deleted successfully');
+            fetchRelations(currentChildId, currentGroupId); // Refresh relations list
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the relation');
+    }
+}
+
+ // Close modal event
+ document.querySelector('.close').addEventListener('click', () => {
+    document.getElementById('groupChildModal').style.display = "none";
+});
+
+// Event listener for the add-relation-form
+document.getElementById('add-relation-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const groupId = document.getElementById('add-child-form').dataset.groupId;
-    addChildToGroup(groupId);
+    addChildRelation(currentChildId);
 });
