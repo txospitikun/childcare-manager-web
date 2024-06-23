@@ -9,19 +9,17 @@ const {serveStaticFiles} = require("./workers/fetch_worker");
 
 http.createServer((req, res) =>
 {
-     // Add CORS headers
      res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Include Authorization
  
-     // Handle preflight requests
      if (req.method === 'OPTIONS') {
          res.writeHead(204);
          res.end();
          return;
      }
 
-    if (req.url.startsWith('/api')) 
+    if (req.url.startsWith('/api'))
     {
         req.url = req.url.slice(4);
     } 
@@ -109,6 +107,12 @@ http.createServer((req, res) =>
                 case '/get_user_groups':
                     group_worker.getUserGroups(req, res);
                     break;
+                case '/get_group_children_info':
+                    group_worker.getGroupChildrenInfo(req, res);
+                    break;
+                case '/get_group_relations':
+                    group_worker.getGroupChildrenRelations(req, res);
+                    break;
                 case '/get_health':
                     user_worker.getHealth(req, res);
                     break;
@@ -173,6 +177,9 @@ http.createServer((req, res) =>
                     break;
                 case '/delete_group_chat':
                     group_worker.deleteGroupChat(req, res);
+                    break;
+                case '/delete_relation':
+                    group_worker.deleteGroupRelation(req, res);
                     break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
