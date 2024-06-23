@@ -345,7 +345,39 @@
                 </div>
               </div>
 
-              <div id="medicalElement" style="display: none">Sanatate</div>
+              <div id="medicalElement" class="medical-records" style="display: none">
+                <h2>Istoric medical</h2>
+                <label for="category">Alege o categorie:</label>
+                <select id="category">
+                  <option value="0">Informații generale</option>
+                  <option value="1">Vaccinuri</option>
+                  <option value="2">Vizite la medic, diagnostice si recomandări</option>
+                  <option value="3">Boli și tratamente</option>
+                  <option value="4">Alergii și intoleranțe</option>
+                  <option value="5">Altele</option>
+                </select>
+                <div id="medicalRecords">
+                </div>
+                <button id="addButton">Adauga raport medical</button>
+
+                <div id="addModal" class="modal">
+                  <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Adauga raport medical</h2>
+                    <form id="addForm">
+                      <label for="Date">Date:</label>
+                      <input type="date" id="Date" name="Date" required><br>
+                      <label for="Title">Title:</label>
+                      <input type="text" id="Title" name="Title" required><br>
+                      <label for="Description">Description:</label>
+                      <input type="text" id="Description" name="Description" required><br>
+                      <label for="FileRef">File:</label>
+                      <input type="file" id="FileRef" name="FileRef"><br>
+                      <button type="submit" id="submitButton">Submit</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
