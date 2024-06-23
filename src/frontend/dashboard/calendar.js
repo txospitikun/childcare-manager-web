@@ -1,6 +1,6 @@
-// calendar.js
-import { getCurrentSelectedChild } from './shared.js';
-import { fetchFeedingEntries, fetchSleepingEntries } from './dashboard.js';
+import { getCurrentSelectedChild } from './childrenOperations.js';
+import { fetchSleepingEntries } from './sleepingOperations.js';
+import { fetchFeedingEntries } from './feedingOperations.js';
 
 const calendarContainer = document.getElementById("calendarElement");
 const monthYearDisplay = document.getElementById("month-year");
