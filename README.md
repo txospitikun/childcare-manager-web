@@ -213,6 +213,41 @@ EditFeedingEntryResponse: 300 if edited sucesfully
 
 # SQL Tabels:
 ```
+CREATE TABLE Sleeping (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Date DATE,
+    SleepTime TIME,
+    AwakeTime TIME,
+    UserID INT,
+    ChildrenID INT,
+    FOREIGN KEY (UserID) REFERENCES Users(ID),
+    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID)
+);
+
+CREATE TABLE medias (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    ChildrenID INT NOT NULL,
+    UserID INT NOT NULL,
+    Date DATE NOT NULL,
+    Time TIME NOT NULL,
+    InTimeline TINYINT(1) NOT NULL,
+    MediaType VARCHAR(255) NOT NULL,
+    PictureRef VARCHAR(255) NOT NULL
+    FOREIGN KEY (ChildrenID) REFERENCES Childrens(ID),
+    FOREIGN KEY (UserID) REFERENCES Users(ID)
+);
+
+CREATE TABLE Healthcare (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT NOT NULL,
+    ChildID INT NOT NULL,
+    Date DATE NOT NULL,
+    TypeOf INT NOT NULL,
+    Title TEXT NOT NULL,
+    Description TEXT,
+    FileRef VARCHAR(255)
+);
+
 CREATE TABLE Users (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Email VARCHAR(255) NOT NULL,

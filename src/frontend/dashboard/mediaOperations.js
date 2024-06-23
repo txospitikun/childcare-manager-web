@@ -1,0 +1,244 @@
+import { getCurrentSelectedChild } from './childrenOperations.js';
+
+export async function addMedia(e) {
+    e.preventDefault();
+
+    if (getCurrentSelectedChild() === null) {
+        alert("Please select a child first.");
+        return;
+    }
+
+    const selectedChildId = getCurrentSelectedChild().dataset.childId;
+    const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox-media').checked;
+    const addToTimeline = document.getElementById('add-to-timeline-checkbox').checked;
+    let date, time;
+
+    if (useCurrentDateTime) {
+        const now = new Date();
+        date = now.toISOString().split('T')[0];
+        time = now.toTimeString().split(' ')[0];
+    } else {
+        date = document.getElementById('data_media').value;
+        time = document.getElementById('time_media').value + ":00";
+    }
+
+    const fileInput = document.getElementById('mediaInput');
+    if (fileInput.files.length === 0) {
+        alert('Please select a file.');
+        return;
+    }
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('ChildrenID', selectedChildId);
+    formData.append('Date', date);
+    formData.append('Time', time);
+    formData.append('InTimeline', addToTimeline ? '1' : '0');
+    formData.append('MediaType', file.type);
+    formData.append('PictureRef', file);
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        console.error('JWT token not found');
+        alert('JWT token not found');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/insert_media', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        console.log('Response status:', response.status);
+        const result = await response.json();
+        console.log('Result:', result);
+
+        if (response.ok) {
+            fetchChildrenMedia(selectedChildId);
+            document.getElementById('add-photo-modal').style.display = 'none';
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while adding the media entry.');
+    }
+}
+
+export async function deleteMedia() {
+    const entryId = this.dataset.entryId;
+
+    if (!entryId) {
+        alert("No media entry selected.");
+        return;
+    }
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        console.error('JWT token not found');
+        alert('JWT token not found');
+        return;
+    }
+
+    try {
+        console.log('Deleting media entry with ID:', entryId);
+        const response = await fetch(`http://localhost:5000/api/delete_media?id=${entryId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+        console.log('Result:', result);
+
+        if (response.ok) {
+            const selectedChildId = getCurrentSelectedChild().dataset.childId;
+            fetchChildrenMedia(selectedChildId);
+            document.getElementById('myModal').style.display = 'none';
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        alert('An error occurred while deleting the media entry.');
+    }
+}
+
+export function fetchChildrenMedia(childID) {
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        console.error('JWT token not found');
+        alert('JWT token not found');
+        return;
+    }
+
+    fetch(`http://localhost:5000/api/get_children_media?childID=${childID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            console.log('Fetch response status:', response.status);
+            return response.json();
+        })
+        .then(result => {
+            console.log('Fetch result:', result);
+            if (result.media) {
+                console.log('Media entries found:', result.media);
+                displayMediaEntries(result.media);
+            } else {
+                console.log('No media entries found.');
+                displayMediaEntries([]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayMediaEntries([]);
+        });
+}
+
+function displayMediaEntries(entries) {
+    const gallery = document.querySelector('.gallery');
+    gallery.innerHTML = "";
+
+    console.log('Displaying media entries:', entries);
+
+    if (entries.length === 0) {
+        gallery.innerHTML = "<p>No entries for the selected child.</p>";
+        return;
+    }
+
+    entries.forEach(entry => {
+        const figureElement = document.createElement('figure');
+
+        const mediaType = entry.MediaType.toLowerCase();
+        let mediaElement;
+
+        if (mediaType.includes('.jpg') || mediaType.includes('.jpeg') || mediaType.includes('.png') || mediaType.includes('.gif')) {
+            mediaElement = document.createElement('img');
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
+            mediaElement.classList.add('modal-image');
+        } else if (mediaType.includes('.mp4') || mediaType.includes('.webm') || mediaType.includes('.ogg')) {
+            mediaElement = document.createElement('video');
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
+            mediaElement.controls = true;
+            mediaElement.classList.add('modal-video');
+        } else if (mediaType.includes('.mp3') || mediaType.includes('.wav') || mediaType.includes('.ogg')) {
+            mediaElement = document.createElement('audio');
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
+            mediaElement.controls = true;
+            mediaElement.classList.add('modal-audio');
+        }
+
+        figureElement.appendChild(mediaElement);
+
+        const figcaption = document.createElement('figcaption');
+        figcaption.textContent = `${entry.Date.split('T')[0]} ${entry.Time.slice(0, 5)}`;
+        figureElement.appendChild(figcaption);
+
+        gallery.appendChild(figureElement);
+
+        mediaElement.addEventListener('click', function () {
+            openMediaModal(mediaElement, figcaption.textContent, entry.ID);
+        });
+    });
+}
+
+function openMediaModal(mediaElement, caption, entryId) {
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("img01");
+    const modalVideo = document.getElementById("vid01");
+    const modalAudio = document.getElementById("aud01");
+    const captionText = document.getElementById("caption");
+    const deleteButton = document.getElementById("delete");
+    const closeButton = modal.querySelector('.close');
+
+    modal.style.display = "block";
+    captionText.innerHTML = caption;
+    deleteButton.dataset.entryId = entryId;
+
+    if (mediaElement.tagName === 'IMG') {
+        modalImg.src = mediaElement.src;
+        modalImg.style.display = 'block';
+        modalVideo.style.display = 'none';
+        modalAudio.style.display = 'none';
+    } else if (mediaElement.tagName === 'VIDEO') {
+        modalVideo.src = mediaElement.src;
+        modalVideo.style.display = 'block';
+        modalImg.style.display = 'none';
+        modalAudio.style.display = 'none';
+    } else if (mediaElement.tagName === 'AUDIO') {
+        modalAudio.src = mediaElement.src;
+        modalAudio.style.display = 'block';
+        modalImg.style.display = 'none';
+        modalVideo.style.display = 'none';
+    }
+
+    closeButton.addEventListener('click', function () {
+        modal.style.display = "none";
+    });
+
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById("myModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+}
+
+export function resetMediaForm() {
+    document.getElementById('add-photo-modal').querySelector('form').reset();
+    document.getElementById('use-current-date-time-checkbox-media').checked = true;
+    document.getElementById('date-and-time-inputs-media').style.display = 'none';
+}

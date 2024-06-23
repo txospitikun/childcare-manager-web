@@ -223,5 +223,5 @@ async function deleteHealth(ID, healthID)
 
 }
 
-module.exports = {deleteHealth, getHealth, insertHealth, getChildrenMedia, insertMedia, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry};
+module.exports = {deleteHealth, getHealth, insertHealth, getChildrenMedia, insertMedia, insertFeedingEntry, getFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, deleteFeedingEntry, insertSleepingEntry, getSleepingEntry, getSleepingEntriesByDate, editSleepingEntry, deleteSleepingEntry,deleteMedia};
 

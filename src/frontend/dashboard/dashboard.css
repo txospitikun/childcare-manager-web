@@ -282,14 +282,14 @@ select {
   justify-content: space-between;
 }
 
-.info-container > p {
+.info-container>p {
   color: #1a1a1a;
   font-family: Montserrat;
   font-weight: 500;
   font-size: 1.2rem;
 }
 
-.info-container > p:nth-child(2) {
+.info-container>p:nth-child(2) {
   font-weight: 300;
   font-size: 1rem;
 }
@@ -598,6 +598,13 @@ select {
   font-weight: 500;
 }
 
+.media-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+}
+
 .default-button-slim {
   font-family: Montreal;
   display: flex;
@@ -709,11 +716,11 @@ select {
   width: 100vw;
 }
 
-.profile-settings-container > p {
+.profile-settings-container>p {
   font-size: 1.2em;
 }
 
-.profile-settings-container > p:first-child {
+.profile-settings-container>p:first-child {
   font-size: 2em;
   font-weight: 500;
 }
@@ -799,7 +806,7 @@ select {
   flex-direction: row;
 }
 
-.flex-column > button {
+.flex-column>button {
   width: 100%;
   margin-top: 4%;
   height: 40%;
@@ -830,10 +837,10 @@ select {
   }
 }
 
-@media only screen and (min-width:769px) and (max-width:1572px){
-	.info-container{
-		display:none;
-	}
+@media only screen and (min-width:769px) and (max-width:1572px) {
+  .info-container {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 1200px) {
@@ -881,7 +888,7 @@ select {
     margin: 0;
   }
 
-  .profile-settings-container > p {
+  .profile-settings-container>p {
     font-size: 1em;
     margin: 0;
   }
@@ -893,7 +900,7 @@ select {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .profile-settings-container > p:first-child {
+  .profile-settings-container>p:first-child {
     font-size: 1.3em;
     font-weight: 500;
   }
@@ -941,11 +948,11 @@ select {
     gap: 0.5rem;
   }
 
-  .attribute-button > span {
+  .attribute-button>span {
     display: none;
   }
 
-  .attribute-button > img {
+  .attribute-button>img {
     height: 4vw;
   }
 
@@ -1010,7 +1017,7 @@ select {
     box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
   }
 
-  .dashboard-children > p {
+  .dashboard-children>p {
     align-self: center;
     font-size: 1em;
   }
@@ -1183,11 +1190,15 @@ textarea:focus {
 .checkbox-group {
   display: flex;
   align-items: center;
-  width: 100%;
+  gap: 1rem;
 }
 
-.checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
+.checkbox-group input {
+  width: auto;
+}
+
+.checkbox-group label {
+  margin-left: 5px;
 }
 
 label {
@@ -1203,4 +1214,38 @@ label {
 .confirm-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.modal-content-container {
+  width: 80%;
+  height: auto;
+}
+
+.modal-content {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.modal-content-container img {
+  display: block;
+}
+
+.modal-content-container video {
+  display: block;
+}
+
+.modal-content-container audio {
+  display: block;
+}
+
+.modal-content.modal-image {
+  width: 80%;
+  height: auto;
+}
+
+.modal-content.modal-video,
+.modal-content.modal-audio {
+  width: 80%;
+  height: auto;
 }
