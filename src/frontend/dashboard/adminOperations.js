@@ -210,10 +210,5 @@ export function mapAccountTypeToString(accountType) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() =>
-    {
-        console.log(document.getElementById('dashboard_admin_bttn').style.display)
-        if(document.getElementById('dashboard_admin_bttn').style.display === 'block')
-            fetchAllUsers();
-    }, 500);
+
 });
