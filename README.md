@@ -366,5 +366,12 @@ CREATE TABLE `Relations` (
   UNIQUE KEY `ID` (`ID`)
 );
 
+CREATE TABLE `blacklistedtokens` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `token` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
 ```
 
