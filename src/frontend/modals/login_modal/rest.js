@@ -29,7 +29,6 @@ confirm_login_bttn.addEventListener('click', () => {
   };
 
   fetch(`${config.apiUrl}/api/login`, {
-    // mode: 'no-cors',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -43,6 +42,7 @@ confirm_login_bttn.addEventListener('click', () => {
     return response.json();
   })
   .then(loginData => {
+    console.log(loginData['LoginResponse']);
     switch(loginData['LoginResponse'])
     {
         case 200:
@@ -56,7 +56,7 @@ confirm_login_bttn.addEventListener('click', () => {
             
             window.location.href = '../../dashboard/dashboard.html';
             break;
-        case 111:
+        case 201:
             login_response.style.color = 'red';
             login_response.innerHTML = "Parola sau email-ul este incorectă!";
             break;
@@ -71,7 +71,7 @@ confirm_login_bttn.addEventListener('click', () => {
     }
   })
   .catch(error => {
-    console.error('Request failed', error);
+    console.error('Cerere eșuată', error);
     login_response.style.color = 'red';
     login_response.innerHTML = "A apărut o eroare.";
   });

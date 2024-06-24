@@ -7,8 +7,8 @@ export function fetchSleepingEntries(date, childID) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -38,7 +38,7 @@ export function fetchSleepingEntries(date, childID) {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Eroare:', error);
             displaySleepingEntries([]);
         });
 }
@@ -84,11 +84,6 @@ export function displaySleepingEntries(entries) {
 export async function addSleeping(e) {
     e.preventDefault();
 
-    if (getCurrentSelectedChild() === null) {
-        alert("Please select a child first.");
-        return;
-    }
-
     const selectedChildId = getCurrentSelectedChild().dataset.childId;
 
     const useCurrentDateTime = document.getElementById('use-current-date-checkbox-sleep').checked;
@@ -113,13 +108,12 @@ export async function addSleeping(e) {
         AwakeTime: awakeTime
     };
 
-
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -139,21 +133,16 @@ export async function addSleeping(e) {
             fetchSleepingEntries(selectedDate, selectedChildId);
             document.getElementById('sleeping-modal').style.display = 'none';
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error (addSleeping):', error);
-        alert('An error occurred while adding the sleeping entry.');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la adăugarea somnului');
     }
 }
 
 export async function editSleeping(e) {
     e.preventDefault();
-
-    if (getCurrentSelectedChild() === null) {
-        alert("Please select a child first.");
-        return;
-    }
 
     const selectedChildId = getCurrentSelectedChild().dataset.childId;
 
@@ -161,7 +150,11 @@ export async function editSleeping(e) {
     let date, sleepTime, awakeTime;
 
     if (useCurrentDateTime) {
-        date = getLocalISOString().split(' ')[0];
+        const selectedDateObj = new Date(selectedDate);
+        const year = selectedDateObj.getFullYear();
+        const month = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(selectedDateObj.getDate()).padStart(2, '0');
+        date = `${year}-${month}-${day}`;
     } else {
         date = document.getElementById('data_sleep').value;
     }
@@ -181,8 +174,8 @@ export async function editSleeping(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -202,11 +195,11 @@ export async function editSleeping(e) {
             fetchSleepingEntries(selectedDate, selectedChildId);
             document.getElementById('sleeping-modal').style.display = 'none';
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error (editSleeping):', error);
-        alert('An error occurred while updating the sleeping entry.');
+        console.error('Eroare: ', error);
+        alert('A apărut o eroare la actualizarea somnului');
     }
 }
 
@@ -215,8 +208,8 @@ export function fetchSleepingEntryData() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -236,12 +229,12 @@ export function fetchSleepingEntryData() {
             if (result.sleepingEntry) {
                 autoCompleteSleepingForm(result.sleepingEntry);
             } else {
-                alert('Sleeping entry not found');
+                alert('Intrarea de dormit nu a fost găsită');
             }
         })
         .catch(error => {
-            console.error('Error fetching entry details:', error);
-            alert('An error occurred while fetching the entry details.');
+            console.error('Eroare la preluarea detaliilor intrării:', error);
+            alert('A apărut o eroare la preluarea detaliilor intrării');
         });
 }
 
@@ -250,8 +243,8 @@ export async function deleteSleepingEntry() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -269,10 +262,10 @@ export async function deleteSleepingEntry() {
             const selectedChildId = getCurrentSelectedChild().dataset.childId;
             fetchSleepingEntries(selectedDate, selectedChildId);
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        alert('An error occurred while deleting the sleeping entry.');
+        alert('A apărut o eroare la ștergerea somnului.');
     }
 }
 

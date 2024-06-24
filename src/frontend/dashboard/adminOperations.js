@@ -9,8 +9,8 @@ export async function fetchAPI(endpoint, method, body = null, params = {}) {
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
     }
 
     const url = new URL(`${baseURL}/${endpoint}`);
@@ -155,7 +155,7 @@ export async function deleteChild() {
     if (!selectedChild) return alert('Selectează un copil mai întâi!');
     await fetchAPI(`delete_child?childID=${selectedChild.ID}`, 'DELETE');
     alert('Copil șters!');
-    fetchUserChildren(selectedUser.ID); // Refresh child list for the selected user
+    fetchUserChildren(selectedUser.ID);
 }
 
 export async function editChild(field) {

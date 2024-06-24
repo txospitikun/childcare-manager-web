@@ -18,10 +18,16 @@ async function handle_register(req, res)
     {
         const parsedData = await fetch_worker.handle_request(req);
         const register = new Register(parsedData);
+
+        if (!register.email || !register.password || !register.confirm_password || !register.firstname || !register.lastname) {
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({ RegisterResponse: Register.response_empty_fields }));
+            return;
+        }
     
         if(register.password != register.confirm_password)
         {
-            res.writeHead(401, {'Content-Type': 'application/json',});
+            res.writeHead(200, {'Content-Type': 'application/json',});
             res.end(JSON.stringify({ RegisterResponse: Register.response_password_mismatch }));
             return;
         }
@@ -29,7 +35,7 @@ async function handle_register(req, res)
         const searchedUser = await userdb_logic.findUserByEmail(register.email);
         if(searchedUser != null)
         {
-            res.writeHead(401, {'Content-Type': 'application/json',});
+            res.writeHead(200, {'Content-Type': 'application/json',});
             res.end(JSON.stringify({ RegisterResponse: Register.response_user_already_exists }));
             return;
         }
@@ -64,14 +70,14 @@ async function handle_login(req, res)
 
         if(foundUser === null)
         {
-            res.writeHead(401, {'Content-Type': 'application/json',});
+            res.writeHead(200, {'Content-Type': 'application/json',});
             res.end(JSON.stringify({ LoginResponse: Login.response_user_or_password_not_valid }));
             return;
         }
 
         if(foundUser.Password != encryption_worker.hash(login.password))
         {
-            res.writeHead(401, {'Content-Type': 'application/json',});
+            res.writeHead(200, {'Content-Type': 'application/json',});
             res.end(JSON.stringify({ LoginResponse: Login.response_user_or_password_not_valid }));
             return;
         }

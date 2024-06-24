@@ -3,11 +3,6 @@ import { getCurrentSelectedChild } from './childrenOperations.js';
 export async function addMedia(e) {
     e.preventDefault();
 
-    if (getCurrentSelectedChild() === null) {
-        alert("Please select a child first.");
-        return;
-    }
-
     const selectedChildId = getCurrentSelectedChild().dataset.childId;
     const useCurrentDateTime = document.getElementById('use-current-date-time-checkbox-media').checked;
     const addToTimeline = document.getElementById('add-to-timeline-checkbox').checked;
@@ -24,7 +19,7 @@ export async function addMedia(e) {
 
     const fileInput = document.getElementById('mediaInput');
     if (fileInput.files.length === 0) {
-        alert('Please select a file.');
+        alert('Vă rugăm să selectați un fișier.');
         return;
     }
     const file = fileInput.files[0];
@@ -40,8 +35,8 @@ export async function addMedia(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -60,11 +55,11 @@ export async function addMedia(e) {
             fetchChildrenMedia(selectedChildId);
             document.getElementById('add-photo-modal').style.display = 'none';
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while adding the media entry.');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la adăugarea intrării media.');
     }
 }
 
@@ -72,7 +67,7 @@ export async function deleteMedia() {
     const entryId = this.dataset.entryId;
 
     if (!entryId) {
-        alert("No media entry selected.");
+        alert("Nicio intrare media selectată.");
         return;
     }
 
@@ -80,8 +75,8 @@ export async function deleteMedia() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -100,10 +95,10 @@ export async function deleteMedia() {
             fetchChildrenMedia(selectedChildId);
             document.getElementById('myModal').style.display = 'none';
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        alert('An error occurred while deleting the media entry.');
+        alert('A apărut o eroare la ștergerea intrării media.');
     }
 }
 
@@ -112,8 +107,8 @@ export function fetchChildrenMedia(childID) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -140,7 +135,7 @@ export function fetchChildrenMedia(childID) {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Eroare:', error);
             displayMediaEntries([]);
             displayTimelineEntries([]);
         });
@@ -171,6 +166,15 @@ function displayMediaEntries(entries) {
             mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
             mediaElement.controls = true;
             mediaElement.classList.add('modal-video');
+            mediaElement.addEventListener('click', function (event) {
+                event.preventDefault();
+                openMediaModal(mediaElement, figcaption.textContent, entry.ID);
+            });
+
+            mediaElement.addEventListener('play', function (event) {
+                event.stopPropagation();
+            });
+            
         } else if (mediaType.includes('.mp3') || mediaType.includes('.wav') || mediaType.includes('.ogg')) {
             mediaElement = document.createElement('audio');
             mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
@@ -239,6 +243,7 @@ function displayTimelineEntries(entries) {
 }
 
 function openMediaModal(mediaElement, caption, entryId) {
+    let currentMediaElement=mediaElement;
     const modal = document.getElementById("myModal");
     const modalImg = document.getElementById("img01");
     const modalVideo = document.getElementById("vid01");
@@ -276,6 +281,8 @@ function openMediaModal(mediaElement, caption, entryId) {
         const modal = document.getElementById("myModal");
         if (event.target === modal) {
             modal.style.display = "none";
+            document.getElementById('vid01').pause();
+            document.getElementById('aud01').pause();
         }
     });
 }

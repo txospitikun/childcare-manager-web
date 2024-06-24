@@ -3,6 +3,7 @@ class Register
     static response_register_succesful  = 100;
     static response_user_already_exists = 101;
     static response_password_mismatch   = 102;
+    static response_empty_fields        = 103;
 
 
     static response_backend_error = 1;
