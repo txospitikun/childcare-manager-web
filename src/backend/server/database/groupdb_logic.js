@@ -89,10 +89,10 @@ async function deleteChildrenGroup(userId, groupId, childrenId) {
             '        SELECT ge.GroupID\n' +
             '        FROM GroupEntries ge\n' +
             '        JOIN ChildrenGroups cg ON ge.GroupID = cg.ID\n' +
-            '        WHERE ge.GroupID = ? AND cg.UserID = ?\n' +
+            '        WHERE ge.GroupID = ? AND cg.UserID = ? AND ge.ChildrenID = ?\n' +
             '    ) AS subquery\n' +
             ');';
-        const [result] = await connection.query(query, [childrenId, groupId, userId]);
+        const [result] = await connection.query(query, [childrenId, groupId, userId, childrenId]);
         connection.release();
         return result;
     } catch (error) {

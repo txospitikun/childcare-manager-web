@@ -99,14 +99,14 @@ async function getUserGroups(req, res)
         if(!user) return;
 
         const result = await groupdb_logic.getUserGroups(user.ID);
-        if(result.length === 0)
+        if(result.rows === 0)
         {
             res.writeHead(204, {'Content-Type': 'application/json'});
             res.end(JSON.stringify({ message: "No groups found or no permissions!" }));
             return;
         }
         res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(JSON.stringify({ groups: result }));
+        res.end(JSON.stringify(result));
     }
     catch (err) {
         console.log("Server error: Couldn't get groups from the database! ", err);

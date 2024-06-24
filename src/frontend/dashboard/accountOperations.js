@@ -141,6 +141,41 @@ export function toggleCivilState() {
     }
 }
 
+document.getElementById('logout_bttn').addEventListener('click', async function ()
+{
+    await logout();
+});
+
+export async function logout() {
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        alert('JWT token not found');
+        return null;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            formData: null
+        });
+
+        if (response.ok) {
+
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while logging out.');
+        return null;
+    }
+}
+
 export function mapAccountTypeToString(accountType) {
     switch (accountType) {
         case 1: return 'familie';

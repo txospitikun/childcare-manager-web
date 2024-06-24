@@ -4,6 +4,7 @@ class Register
     static response_user_already_exists = 101;
     static response_password_mismatch   = 102;
 
+
     static response_backend_error = 1;
 
     constructor(json)

@@ -126,4 +126,34 @@ async function editUser(updateaccount, userId) {
     }
 }
 
-module.exports = {findUserByID, findUserByEmail, insertUser, editUser}
+async function blacklistToken(token)
+{
+    try
+    {
+        const connection = await pool.getConnection();
+        const query = 'INSERT INTO BlacklistedTokens (Token) VALUES (?)';
+        const [result] = await connection.query(query, [token]);
+        connection.release();
+        return result;
+    } catch (error) {
+        console.error('Error blacklisting token:', error);
+        throw error;
+    }
+}
+
+async function isTokenBlacklisted(token)
+{
+    try
+    {
+        const connection = await pool.getConnection();
+        const query = 'SELECT * FROM BlacklistedTokens WHERE Token = ?';
+        const [result] = await connection.query(query, [token]);
+        connection.release();
+        return result.length > 0;
+    } catch (error) {
+        console.error('Error checking blacklisted token:', error);
+        throw error;
+    }
+}
+
+module.exports = {blacklistToken, isTokenBlacklisted, findUserByID, findUserByEmail, insertUser, editUser}
