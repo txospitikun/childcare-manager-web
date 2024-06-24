@@ -145,6 +145,9 @@ http.createServer((req, res) =>
                 case '/edit_sleeping_entry':
                     user_worker.editSleepingEntry(req, res);
                     break;
+                case '/edit_children':
+                    user_worker.editChildren(req, res);
+                    break;
                 case '/edit_group':
                     group_worker.editGroup(req, res);
                     break;

@@ -17,6 +17,22 @@ async function insertChildren(ID, childrenform)
     }
 }
 
+async function editChildren(entryID, childrenform, userID)
+{
+    try
+    {
+        const connection = await pool.getConnection();
+        const query = 'UPDATE Childrens SET FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, PictureRef = ? WHERE ID = ? AND UserID = ?';
+        const values= [childrenform.FirstName, childrenform.LastName, childrenform.Gender, childrenform.DateOfBirth, childrenform.PictureRef.path, entryID, userID];
+        const [result] = await connection.query(query, values);
+        connection.release();
+        return result;
+    } catch(error) {
+        console.error('Error editing user:', error);
+        throw error;
+    }
+}
+
 async function deleteChildren(userID, childrenID)
 {
     try
@@ -34,6 +50,8 @@ async function deleteChildren(userID, childrenID)
         throw error;
     }
 }
+
+
 
 async function getChildrensByID(ID) 
 {
@@ -65,4 +83,4 @@ async function getAllChildren(ID)
     }
 }
 
-module.exports = {insertChildren, getChildrensByID, deleteChildren, getAllChildren};
+module.exports = {insertChildren, editChildren, getChildrensByID, deleteChildren, getAllChildren};

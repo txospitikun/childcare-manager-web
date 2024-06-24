@@ -216,6 +216,12 @@ textarea {
   gap: 2rem;
 }
 
+.child-buttons{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
 .dashboard-children {
   display: flex;
   flex-direction: column;
@@ -964,6 +970,9 @@ label {
 }
 
 @media only screen and (min-width:769px) and (max-width:1572px) {
+  .child-buttons{
+    flex-direction: column;
+  }
   .info-container {
     display: none;
   }
@@ -986,6 +995,10 @@ label {
 @media only screen and (min-width: 0px) and (max-width: 768px) {
   body {
     overflow: hidden;
+  }
+
+  .child-buttons{
+    flex-direction: column;
   }
 
   .dashboard-navbar {

@@ -14,7 +14,7 @@
 <body>
   <div id="white-panel"></div>
   <main>
-    <div class="main-wrapper">
+  <div class="main-wrapper">
       <div class="dashboard-left-panel">
         <div class="dashboard-buttons">
           <button class="dashboard-button" id="dashboard_bttn">
@@ -39,10 +39,10 @@
           </button>
         </div>
       </div>
-      <div class="dashboard-right-panel">
+    <div class="dashboard-right-panel">
         <div class="dashboard-navbar">
           <div class="dashboard-profile-container">
-            <img src="../placeholders/user1.jpg" class="profile-photo" id="profile-photo" alt="Profile Photo" >
+            <img src="./assets/placeholders/placeholder_profile.jpg" class="profile-photo" id="profile-photo" alt="Profile Photo" >
             <div class="profile-info-container">
               <p class="profile-name" id="user-profile-name"></p>
               <p class="profile-name-grad" id="user-profile-type"></p>
@@ -55,18 +55,18 @@
             <button class="children-add-button default-button" id="add-child-bttn">
               +
             </button>
-            <div class="main-modal" id="add-child-modal">
+            <div class="main-modal" id="child-modal">
               <div class="popup-form-wrapper">
                 <button class="close-button">&times;</button>
-                <h2 class="popup-title">Adaugă un copil nou</h2>
-                <form class="popup-form" id="add-child-form">
+                <h2 class="popup-title" id="modal-title">Adaugă un copil nou</h2>
+                <form class="popup-form" id="child-form">
                   <div class="form-group">
                     <label for="FirstName">Nume:</label>
-                    <input type="text" id="FirstName" name="FirstName" placeholder="Ex: Popescu" required >
+                    <input type="text" id="FirstName" name="FirstName" placeholder="Ex: Popescu" required>
                   </div>
                   <div class="form-group">
                     <label for="LastName">Prenume:</label>
-                    <input type="text" id="LastName" name="LastName" placeholder="Ex: Ion" required >
+                    <input type="text" id="LastName" name="LastName" placeholder="Ex: Ion" required>
                   </div>
                   <div class="form-group">
                     <label for="Gender">Sex:</label>
@@ -78,18 +78,17 @@
                   </div>
                   <div class="form-group">
                     <label for="DateOfBirth">Data nasterii:</label>
-                    <input type="date" id="DateOfBirth" name="DateOfBirth" required >
+                    <input type="date" id="DateOfBirth" name="DateOfBirth" required>
                   </div>
                   <div class="form-group">
                     <label for="PictureRef">Foto:</label>
-                    <input type="file" id="PictureRef" name="PictureRef" required >
+                    <input type="file" id="PictureRef" name="PictureRef" required>
                   </div>
-                  <button type="submit" class="confirm-button">
-                    Confirm
-                  </button>
+                  <button type="submit" class="confirm-button" id="modal-button">Confirm</button>
                 </form>
               </div>
             </div>
+            
           </div>
 
           <div class="dashboard-info">
@@ -116,9 +115,14 @@
                   <span>Sănătate</span>
                 </button>
               </div>
-              <button class="delete-child-bttn default-button" id="delete-bttn">
-                <span>Elimină copil</span>
-              </button>
+              <div class="child-buttons">
+                <button class="default-button" id="edit-child-bttn">
+                  <span>Modifică copil</span>
+                </button>
+                <button class="red-bg default-button" id="delete-bttn">
+                  <span>Elimină copil</span>
+                </button>
+            </div>
             </div>
 
             <div class="dashboard-content">
@@ -288,7 +292,7 @@
                 <div class="gallery" id="media-gallery"></div>
                 <div id="myModal" class="modal">
                   <span class="close">&times;</span>
-                  <img class="modal-content" id="img01" >
+                  <img src="./assets/placeholders/placeholder_profile.jpg" class="modal-content" id="img01" alt="modal_image" >
                   <video class="modal-content" id="vid01" controls style="display:none;"></video>
                   <audio class="modal-content" id="aud01" controls style="display:none;"></audio>
                   <div class="caption" id="caption"></div>
@@ -366,8 +370,10 @@
               <div class="profile-settings-container">
                 <button type="button" class="orange-bg" id="edit-account-bttn">
                   Modifică cont
+                </button>
                 <button type="button" class="orange-bg" id="export-profile">
                   Export informații cont
+                </button>
               </div>
 
               <div class="main-modal" id="edit-account-modal">
@@ -468,12 +474,12 @@
 
               <div class="profile-settings-container-admin">
                 Selectează utilizatorul pe care vrei să îl modifici.
-                <div id = 'all-users' class="all-avalabile-users-container" id="users-list">
+                <div id = "all-users" class="all-avalabile-users-container">
                 </div>
               </div>
               <div class="profile-settings-container-admin">
                 Selectează copilul pe care vrei să îl modifici.
-                <div id = 'children-list' class="all-avalabile-users-container" id="children-list">
+                <div class="all-avalabile-users-container" id="children-list">
                 </div>
               </div>
               <div class="admin-panel-settings-container">
@@ -540,7 +546,7 @@
               <div class="gallery" id="groups-gallery"></div>
               <div id="groupChildModal" class="modal">
                 <span class="close">&times;</span>
-                <img class="modal-content" id="img02" >
+                <img src="./assets/placeholders/placeholder_profile.jpg" class="modal-content" id="img02" alt="modal_image" >
                 <div class="caption" id="caption2"> 
                 </div>
 
@@ -552,25 +558,25 @@
                   <button class="caption-button default-button" id="delete-group-child">Șterge copil</button>
                 </div>
 
-            </div>
-            
-            <div class="main-modal" id="addRelationModal">
-              <div class="popup-form-wrapper">
-                <button class="close-button">&times;</button>
-                <form class="modal-content" id="add-relation-form">
-                  <h2 class="popup-title">Add Relation</h2>
-                  <div class="form-group">
-                    <label for="relatedChildId">ID-ul copilului relaționat:</label>
-                    <input type="text" id="relatedChildId" name="ChildrenRelationTwo" required >
-                  </div>
-                  <div class="form-group">
-                  <label for="relationType">Tipul relației:</label>
-                    <input type="text" id="relationType" name="TypeOfRelation" required >
-                  </div>
-                  <button type="submit" class="confirm-button">Add Relation</button>
-                </form>
               </div>
-            </div>
+              
+              <div class="main-modal" id="addRelationModal">
+                <div class="popup-form-wrapper">
+                  <button class="close-button">&times;</button>
+                  <form class="modal-content" id="add-relation-form">
+                    <h2 class="popup-title">Add Relation</h2>
+                    <div class="form-group">
+                      <label for="relatedChildId">ID-ul copilului relaționat:</label>
+                      <input type="text" id="relatedChildId" name="ChildrenRelationTwo" required >
+                    </div>
+                    <div class="form-group">
+                    <label for="relationType">Tipul relației:</label>
+                      <input type="text" id="relationType" name="TypeOfRelation" required >
+                    </div>
+                    <button type="submit" class="confirm-button">Add Relation</button>
+                  </form>
+                </div>
+              </div>
             
               <div class="main-modal" id="add-group-child-modal">
                 <div class="popup-form-wrapper">
@@ -591,7 +597,8 @@
         </div>
       </div>
     </div>
-  </main>
+  </div>
+</main>
 
   <script>
     function shareOnFacebook() {
@@ -601,16 +608,16 @@
       return false;
     }
   </script>
-  <script type="module" src="./dashboard.js" defer></script>
-  <script type="module" src="./calendar.js" defer></script>
-  <script type="module" src="./childrenOperations.js" defer></script>
-  <script type="module" src="./feedingOperations.js" defer></script>
-  <script type="module" src="./sleepingOperations.js" defer></script>
-  <script type="module" src="./mediaOperations.js" defer></script>
-  <script type="module" src="./groupOperations.js" defer></script>
-  <script type="module" src="./adminOperations.js" defer></script>
-  <script type="module" src="./exportOperations.js" defer></script>
-  <script type="module" src="./accountOperations.js" defer></script>
+  <script type="module" src="./dashboard.js"></script>
+  <script type="module" src="./calendar.js"></script>
+  <script type="module" src="./childrenOperations.js"></script>
+  <script type="module" src="./feedingOperations.js"></script>
+  <script type="module" src="./sleepingOperations.js"></script>
+  <script type="module" src="./mediaOperations.js"></script>
+  <script type="module" src="./groupOperations.js"></script>
+  <script type="module" src="./adminOperations.js"></script>
+  <script type="module" src="./exportOperations.js"></script>
+  <script type="module" src="./accountOperations.js"></script>
 
   <!-- <script type = "module" src="./dashboard_logic.js"></script> -->
   <!-- <script type = "module" src="./dashboard_post_operations.js"></script> -->

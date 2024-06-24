@@ -1,4 +1,4 @@
-import { deleteChild, loadChildren, addChild, getCurrentSelectedChild } from './childrenOperations.js';
+import { deleteChild, loadChildren, addChild, getCurrentSelectedChild, openChildModal, editChild } from './childrenOperations.js';
 import {
     addMeal, editMeal, fetchFeedingEntryData, deleteFeedingEntry,
     openMealModal, resetMealForm
@@ -9,7 +9,7 @@ import {
 } from './sleepingOperations.js';
 import {addMedia, deleteMedia, resetMediaForm} from './mediaOperations.js';
 import { fetchAccountData, updateAccount } from './accountOperations.js';
-import { addGroup, fetchGroups } from './groupOperations.js';
+import { fetchGroups } from './groupOperations.js';
 
 
 import {deleteCookie, getCookie} from './../workers/cookie_worker.js';
@@ -71,12 +71,9 @@ function addEventListeners() {
     });
 
     document.getElementById('add-media-form').addEventListener('submit', addMedia);
-    document.getElementById('add-child-form').addEventListener('submit', addChild);
-    
     
     document.getElementById('delete').addEventListener('click', deleteMedia); 
     document.getElementById('delete-bttn').addEventListener('click', deleteChild);
-    
     
 
     document.getElementById('add-entry-bttn').addEventListener('click', () => {
@@ -127,7 +124,17 @@ function addEventListeners() {
     });
 
     document.getElementById('add-child-bttn').addEventListener('click', () => {
-        showModal('add-child-modal');
+        console.log('add child');
+        openChildModal('Adaugă un copil nou', 'Confirm', addChild);
+    });
+
+    document.getElementById('edit-child-bttn').addEventListener('click', () => {
+        console.log('edit child');
+        if (getCurrentSelectedChild() === null) {
+            alert("Vă rugăm să selectați mai întâi un copil.");
+            return;
+        }
+        openChildModal('Modifică datele copilului', 'Modifică', editChild);
     });
 
     document.getElementById('addButton').addEventListener('click', () => {

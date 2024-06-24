@@ -102,10 +102,45 @@ async function insertChildren(req, res) {
             return;
         }
 
-        await childrendb_logic.insertChildren(user.ID, childrenform);
+        const result = await childrendb_logic.insertChildren(user.ID, childrenform);
+
+        if (result.affectedRows === 0) {
+            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({ message: "Child not found or you don't have permission to edit this child" }));
+            return;
+        }
 
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Children added successfully" }));
+    } catch (err) {
+        res.writeHead(500, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Backend error" }));
+    }
+}
+
+async function editChildren(req, res) {
+    try {
+        const user = await getUser(req, res);
+        if (!user) return;
+
+        const parsedData = await parseFormData(req);
+
+        const childrenform = new ChildrenForm(parsedData);
+
+        if (json_worker.isNullOrEmpty(childrenform.FirstName) || 
+            json_worker.isNullOrEmpty(childrenform.LastName) || 
+            json_worker.isNullOrEmpty(childrenform.Gender) || 
+            json_worker.isNullOrEmpty(childrenform.DateOfBirth) ||
+            json_worker.isNullOrEmpty(childrenform.PictureRef)) {
+            res.writeHead(400, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify({ message: "Invalid form data" }));
+            return;
+        }
+
+        await childrendb_logic.editChildren(parsedData.ID,childrenform, user.ID);
+
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.end(JSON.stringify({ message: "Children updated successfully" }));
     } catch (err) {
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({ message: "Backend error" }));
@@ -586,5 +621,5 @@ async function deleteHealth(req, res)
 
 }
 
-module.exports = {getUser, deleteHealth, getHealth, insertHealth, deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+module.exports = {getUser, deleteHealth, getHealth, insertHealth, deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren,editChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
 

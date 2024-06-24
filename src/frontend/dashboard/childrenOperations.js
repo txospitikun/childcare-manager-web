@@ -2,6 +2,7 @@ import { fetchChildrenMedia } from "./mediaOperations.js";
 import { fetchSleepingEntries } from "./sleepingOperations.js";
 import { fetchFeedingEntries } from "./feedingOperations.js";
 import { selectedDate } from "./calendar.js";
+import { showModal } from "./dashboard.js";
 
 export let currentSelectedChild = null;
 
@@ -92,7 +93,7 @@ export function loadChildren() {
 export async function addChild(e) {
     e.preventDefault();
 
-    const form = document.getElementById('add-child-form');
+    const form = document.getElementById('child-form');
     const formData = new FormData(form);
 
     const cookieString = document.cookie;
@@ -138,6 +139,48 @@ export async function addChild(e) {
         loadChildren();
     }
 }
+
+export async function editChild(e) {
+    e.preventDefault();
+
+    const selectedChildId = getCurrentSelectedChild().dataset.childId;
+
+    const form = document.getElementById('child-form');
+    const formData = new FormData(form);
+    formData.append('ID', selectedChildId);
+
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        alert('Tokenul JWT nu a fost găsit');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/edit_children`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            loadChildren();
+
+        } else {
+            alert(`Eroare: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la actualizarea copilului.');
+    }
+}
+
+
 
 export function displayChildren(children) {
     const dashboardChildren = document.getElementById('user-children-id');
@@ -377,4 +420,12 @@ export function addChildSelectionHandler() {
             fetchMedical(selectedChildId);
         });
     });
+}
+
+export function openChildModal(title, buttonText, submitHandler) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-button').textContent = buttonText;
+    const form = document.getElementById('child-form');
+    form.onsubmit = submitHandler;
+    showModal('child-modal');
 }

@@ -124,7 +124,7 @@ function displayGroupContent(content, groupId) {
         figureElement.appendChild(img);
         figureElement.appendChild(figcaption);
         figureElement.addEventListener('click', () => {
-            openChildModal(item);
+            openGroupChildModal(item);
         });
         gallery.appendChild(figureElement);
     });
@@ -351,7 +351,7 @@ document.getElementById('add-group-bttn').addEventListener('click', () => {
 
 document.getElementById('add-group-form').addEventListener('submit', addGroup);
 
-function openChildModal(child) {
+function openGroupChildModal(child) {
     const modal = document.getElementById('groupChildModal');
     const img = document.getElementById('img02');
     const caption = document.getElementById('caption2');
