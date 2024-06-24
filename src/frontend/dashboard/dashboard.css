@@ -583,7 +583,9 @@ select {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
+  height: 100%;
+  width: 100%;
+  padding: 16px;
 }
 
 .default-button-slim {
@@ -822,268 +824,11 @@ select {
   background-color: rgb(199, 151, 63);
 }
 
-@media only screen and (max-width: 1000px) {
-  .current-day-title {
-    font-size: 1em;
-    font-weight: 500;
-    margin: 0;
-  }
-}
-
-@media only screen and (min-width:769px) and (max-width:1572px) {
-  .info-container {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1200px) {
-  .dashboard-button span {
-    display: none;
-    width: max-content;
-  }
-}
-
-@media only screen and (min-width: 0px) and (max-width: 768px) {
-  body {
-    overflow: hidden;
-  }
-
-  .dashboard-navbar {
-    flex-direction: row;
-    gap: 0.5rem;
-    height: 15%;
-    width:100%;
-  }
-
-  .profile-settings-container-first-line {
-    align-self: center;
-    justify-self: center;
-    grid-column: span 2;
-  }
-
-  .dashboard-search-bar {
-    width: 100%;
-  }
-
-  
-
-  .dashboard-profile-container {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1/1;
-  }
-
-  .profile-settings-container-admin {
-    border-radius: 20px;
-    display: grid;
-    flex-direction: column;
-    margin: 0;
-  }
-
-  .profile-settings-container>p {
-    font-size: 1em;
-    margin: 0;
-  }
-
-  .grid-layout-content {
-    width: 100%;
-    height: 70%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .profile-settings-container>p:first-child {
-    font-size: 1.3em;
-    font-weight: 500;
-  }
-
-  .ad-info {
-    font-size: 0.3em;
-  }
-
-  .default-button {
-    font-family: Montreal;
-    display: flex;
-    flex-direction: row;
-    color: white;
-    cursor: pointer;
-    background-color: var(--button-color);
-    border-radius: 20px;
-    font-size: 1em;
-    border: none;
-    padding: 10px 20px;
-    flex-shrink: 0;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-  }
-
-  .left-upper-content {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    width: 100%;
-  }
-
-  .calendar-bttn {
-    border: 1px solid rgba(109, 109, 109, 0.534);
-    flex: 1;
-    height: max-content;
-  }
-
-  .upper-content {
-    width: 100%;
-  }
-
-  .left-upper-content {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .attribute-button>span {
-    display: none;
-  }
-
-  .attribute-button>img {
-    height: 4vw;
-  }
-
-  .current-day-title {
-    font-size: 2rem;
-    font-weight: 500;
-    margin: 0;
-    display: none;
-  }
-
-  .calendar-container {
-    flex-direction: column;
-  }
-
-  .calendar-date-day {
-    font-size: 1.5em;
-    font-weight: 500;
-  }
-
-  .calendar-date-feed-count {
-    font-size: 0.6em;
-    font-weight: 200;
-    margin: 3%;
-  }
-
-  .dashboard-control-panel {
-    height: max-content;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-  }
-
-  .children-container {
-    background-color: #fff2e1;
-    border: 1px solid #a3966a;
-    border-radius: 0.5vw;
-
-    display: flex;
-    flex-direction: row;
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 2%;
-    height: 50%;
-    flex-shrink: 0;
-
-    box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
-  }
-
-  .dashboard-children {
-    background-color: var(--spanish-white);
-    border: 1px solid #a3966a;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    height: max-content;
-    max-height: 26rem;
-    width: 100%;
-    overflow: auto;
-    box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
-  }
-
-  .dashboard-children>p {
-    align-self: center;
-    font-size: 1em;
-  }
-
-  .dashboard-info {
-    flex-direction: column;
-  }
-
-  .main-wrapper {
-    display: flex;
-    flex-direction: column-reverse;
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .dashboard-right-panel {
-    display: flex;
-    flex-direction: column;
-    height: 90%;
-    width: 100%;
-    margin: 0 1%;
-    justify-self: center;
-    align-self: center;
-  }
-
-  .dashboard-left-panel {
-    display: flex;
-    border: 1px solid #a3966a;
-    width: 100%;
-    height: max-content;
-    background-color: var(--spanish-white);
-    font-size: 1em;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px 10px 0px 0px;
-    padding: 1rem;
-  }
-
-  .dashboard-buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .dashboard-button-text {
-    display: none;
-  }
-
-  .profile-name {
-    font-size: 1.1em;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  .dashboard-button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    border-radius: 10px;
-    background: none;
-    color: inherit;
-    border: none;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-    width: max-content;
-    height: max-content;
-    padding: 12px;
-  }
+.account-header{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
 .main-modal {
@@ -1206,4 +951,304 @@ label {
 .confirm-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+@media only screen and (max-width: 1000px) {
+  .current-day-title {
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+@media only screen and (min-width:769px) and (max-width:1572px) {
+  .info-container {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .dashboard-button span {
+    display: none;
+    width: max-content;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1024px) and (min-height: 600px) and (max-height: 600px) and (orientation: landscape) {
+  .dashboard-navbar{
+    padding:0;
+  }
+}
+
+
+@media only screen and (min-width: 0px) and (max-width: 768px) {
+  body {
+    overflow: hidden;
+  }
+
+  .dashboard-navbar {
+    flex-direction: row;
+    gap: 0.5rem;
+    height: 15%;
+    width:100%;
+  }
+
+  .profile-settings-container-first-line {
+    align-self: center;
+    justify-self: center;
+    grid-column: span 2;
+  }
+
+  .profile-settings-container{
+    padding-left:1rem;
+  }
+
+  .dashboard-search-bar {
+    width: 100%;
+  }
+
+  
+
+  .dashboard-profile-container {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+  }
+
+  .profile-settings-container-admin {
+    border-radius: 20px;
+    display: grid;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .profile-settings-container>p {
+    font-size: 1em;
+    margin: 0;
+  }
+
+  .grid-layout-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    overflow: auto;
+    
+  }
+  #edit-account-bttn{
+    width:85%;
+  }
+
+  .profile-settings-container>p:first-child {
+    font-size: 1.3em;
+    font-weight: 500;
+    grid-column:span 1;
+  }
+
+  .ad-info {
+    font-size: 0.3em;
+  }
+
+  .default-button {
+    font-family: Montreal;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 1em;
+    border: none;
+    padding: 10px 20px;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .left-upper-content {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+  }
+
+  .calendar-bttn {
+    border: 1px solid rgba(109, 109, 109, 0.534);
+    flex: 1;
+    height: max-content;
+  }
+
+  .upper-content {
+    width: 100%;
+  }
+
+  .left-upper-content {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .attribute-button>span {
+    display: none;
+  }
+
+  .attribute-button>img {
+    height: 4vw;
+  }
+
+  .current-day-title {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0;
+    display: none;
+  }
+
+  .calendar-container {
+    flex-direction: column;
+    gap:1rem;
+  }
+
+  .calendar-date-day {
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+
+  .calendar-date-feed-count {
+    font-size: 0.6em;
+    font-weight: 200;
+    margin: 3%;
+  }
+
+  .dashboard-control-panel {
+    height: max-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+  }
+
+  .children-container {
+    background-color: #fff2e1;
+    border: 1px solid #a3966a;
+    border-radius: 0.5vw;
+
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    height: 50%;
+    flex-shrink: 0;
+
+    box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
+  }
+
+  .dashboard-children {
+    background-color: var(--spanish-white);
+    border: 1px solid #a3966a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: max-content;
+    max-height: 10rem;
+    width: 100%;
+    overflow: auto;
+    box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
+  }
+
+  .dashboard-children>p {
+    align-self: center;
+    font-size: 1em;
+  }
+
+  .dashboard-info {
+    flex-direction: column;
+    gap:0.5rem;
+    border-radius:0;
+  }
+
+  .main-wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .dashboard-right-panel {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    width: 100%;
+    padding:0;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .dashboard-left-panel {
+    display: flex;
+    border: 1px solid #a3966a;
+    width: 100%;
+    height: max-content;
+    background-color: var(--spanish-white);
+    font-size: 1em;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px 10px 0px 0px;
+    padding: 1rem;
+  }
+
+  .dashboard-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dashboard-button-text {
+    display: none;
+  }
+
+  .profile-name {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .dashboard-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    border-radius: 10px;
+    background: none;
+    color: inherit;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    width: max-content;
+    height: max-content;
+    padding: 12px;
+  }
+
+  .popup-form-wrapper {
+    width: 90%;
+    height:auto;
+    max-height: 90%;
+    overflow-y:auto;
+  }
+
+  .dashboard-info-first-row{
+    padding:0.5rem;
+  }
+
+  .account-header{
+    padding:1rem;
+  }
+
+  .media-container{
+    padding:8px;
+    gap:8px;
+  }
+  
 }

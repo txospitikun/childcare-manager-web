@@ -1,8 +1,4 @@
-.media-container {
-  height: 100%;
-  width: 100%;
-  padding: 16px;
-}
+
 
 .gallery {
   display: grid;
@@ -71,9 +67,13 @@ figure figcaption {
   }
 
   figure img,
-  figure video,
-  figure audio {
+  figure video {
     height: auto;
+
+  }
+
+  figure audio{
+    height:50px;
   }
 }
 

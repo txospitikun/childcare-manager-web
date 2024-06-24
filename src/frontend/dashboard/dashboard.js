@@ -253,6 +253,14 @@ document.getElementById('edit-account-form').addEventListener('submit', updateAc
 toggleDateTimeInputs('use-current-date-checkbox-sleep', 'date-input-sleep');
 toggleDateTimeInputs('use-current-date-time-checkbox-meal', 'date-and-time-inputs-meal');
 toggleDateTimeInputs('use-current-date-time-checkbox-media', 'date-and-time-inputs-media');
+document.getElementById('casatorit').addEventListener('change', function () {
+    const numePartenerGroup = document.getElementById('nume-partener-group');
+    if (this.checked) {
+        numePartenerGroup.style.display = 'block';
+    } else {
+        numePartenerGroup.style.display = 'none';
+    }
+});
 
 document.getElementById('logout_bttn').addEventListener('click', function () {
     deleteCookie('JWT');

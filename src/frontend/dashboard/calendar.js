@@ -70,12 +70,7 @@ function createCalendarDate(day, additionalClass, date) {
     dayDiv.className = "calendar-date-day";
     dayDiv.textContent = day;
 
-    const feedCountDiv = document.createElement("div");
-    feedCountDiv.className = "calendar-date-feed-count";
-    feedCountDiv.textContent = "5*";
-
     dateDiv.appendChild(dayDiv);
-    dateDiv.appendChild(feedCountDiv);
 
     dateDiv.addEventListener("click", function () {
         document.querySelectorAll('.calendar-date.current').forEach(el => {
