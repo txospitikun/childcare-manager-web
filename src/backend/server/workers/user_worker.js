@@ -55,7 +55,7 @@ async function getUser(req, res) {
 
     let decoded_jwt_token;
     try {
-        decoded_jwt_token = encryption_worker.decode(jwtToken);
+        decoded_jwt_token = await encryption_worker.decode(jwtToken);
     } catch (error) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: "Invalid authentication token" }));

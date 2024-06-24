@@ -21,10 +21,14 @@ export async function fetchGroups() {
                 'Authorization': `Bearer ${token}`
             }
         });
-
+        console.log(response);
+        if(response.status === 204)
+        {
+            return;
+        }
         const result = await response.json();
         if (response.ok) {
-            displayGroups(result.groups);
+            displayGroups(result);
         } else {
             console.error('Error fetching groups:', result.message);
             displayGroups([]);
@@ -91,13 +95,15 @@ async function fetchGroupContent(groupId) {
                 }, {});
                 displayGroupContent(result.foundChildrens, groupId);
             } else {
-                console.error('Error fetching group content:', result.message);
+                const errorText = await response.text(); // Read response as text
+                console.error('Error response:', errorText);
             }
         }
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
 
 function displayGroupContent(content, groupId) {
     const gallery = document.getElementById('groups-gallery');
@@ -133,7 +139,7 @@ function displayGroupContent(content, groupId) {
 
     const backButton = document.createElement('button');
     backButton.className = 'default-button';
-    backButton.textContent = 'Back';
+    backButton.textContent = 'Înapoi';
     backButton.addEventListener('click', () => {
         document.getElementById('add-group-bttn').style.display = '';
         fetchGroups();
@@ -141,7 +147,7 @@ function displayGroupContent(content, groupId) {
 
     const addChildButton = document.createElement('button');
     addChildButton.className = 'default-button';
-    addChildButton.textContent = 'Add Child';
+    addChildButton.textContent = 'Adaugă copil';
     addChildButton.addEventListener('click', () => {
         showModal('add-group-child-modal');
         document.getElementById('add-group-child-form').dataset.groupId = groupId;
@@ -149,7 +155,7 @@ function displayGroupContent(content, groupId) {
 
     const editButton = document.createElement('button');
     editButton.className = 'default-button';
-    editButton.textContent = 'Edit Group';
+    editButton.textContent = 'Editează grup';
     editButton.addEventListener('click', () => {
         const group = { Title: document.getElementById('groupName').value }; 
         openEditGroupModal(group);
@@ -157,7 +163,7 @@ function displayGroupContent(content, groupId) {
 
     const deleteButton = document.createElement('button');
     deleteButton.className = 'default-button';
-    deleteButton.textContent = 'Delete Group';
+    deleteButton.textContent = 'Șterge grup';
     deleteButton.addEventListener('click', () => {
         deleteGroup(groupId);
     });
@@ -230,11 +236,11 @@ async function addChildToGroup(e) {
             },
             body: formData
         });
-
         if (!response.ok) {
             const result = await response.json();
             console.error('Error response:', result);
             throw new Error(result.message || 'Failed to add child to the group');
+
         }
 
         const result = await response.json();
@@ -341,7 +347,7 @@ function openEditGroupModal(group) {
 document.getElementById('add-group-child-form').addEventListener('submit', addChildToGroup);
 
 document.getElementById('add-group-bttn').addEventListener('click', () => {
-    openGroupModal('Add a new group', 'Add Group', addGroup);
+    openGroupModal('Adaugă un grup nou', 'Adaugă grup', addGroup);
 });
 
 document.getElementById('add-group-form').addEventListener('submit', addGroup);
@@ -453,7 +459,6 @@ async function addChildRelation(childId) {
 
         const result = await response.json();
         if (response.ok) {
-            alert('Relation added successfully');
             fetchRelations(childId, currentGroupId);
         } else {
             alert(`Error: ${result.message}`);
@@ -528,7 +533,7 @@ function displayRelations(relations) {
 
     if (!relations || relations.length === 0) {
         const noRelationsMessage = document.createElement('p');
-        noRelationsMessage.textContent = 'This child does not have any relations yet.';
+        noRelationsMessage.textContent = 'Acest copil nu are nicio relație.';
         relationsList.appendChild(noRelationsMessage);
     } else {
         relations.forEach(relation => {
@@ -568,7 +573,6 @@ async function deleteRelation(relationId) {
 
         const result = await response.json();
         if (response.ok) {
-            alert('Relation deleted successfully');
             fetchRelations(currentChildId, currentGroupId);
         } else {
             alert(`Error: ${result.message}`);

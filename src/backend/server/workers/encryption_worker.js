@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-
+const userdb_logic = require('./../database/userdb_logic');
 const key = 'd4e5f6a1b3c4d7e8f9a2b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6';
 
 function encodeBase64(str) {
@@ -43,7 +43,7 @@ function encode(obj) {
     return result;
 }
 
-function decode(str) {
+async function decode(str) {
     if (!str) {
         throw new Error('Invalid token: token is undefined');
     }
@@ -59,16 +59,19 @@ function decode(str) {
 
     const checkSum = checkSumGen(head, body).replace(/=+$/, '');
     hash = hash.replace(/=+$/, '');
+    let tokenStatus = await userdb_logic.isTokenBlacklisted(str);
+    if(tokenStatus === true)
+        throw new Error('Invalid token: token is blacklisted');
     if (hash === checkSum) {
         const payload = JSON.parse(decodeBase64(body));
 
         const date = new Date(payload.iat);
         const time_difference = date - new Date();
 
-        if(time_difference / (24 * 60 * 60 * 1000) > 5) {
+        if (time_difference / (24 * 60 * 60 * 1000) > 5) {
             return false;
         }
-        
+
         return {
             payload: payload,
         };

@@ -10,6 +10,7 @@ const encryption_worker = require('./../workers/encryption_worker.js');
 // modals
 const Register = require('../request_modals/registerform_modal.js');
 const Login = require('../request_modals/loginform_modal.js');
+const {blacklistToken} = require("../database/childrendb_logic");
 
 async function handle_register(req, res) 
 {
@@ -89,4 +90,45 @@ async function handle_login(req, res)
     }
 };
 
-module.exports = {handle_register, handle_login}
+async function handle_logout(req, res)
+{
+    const authHeader = req.headers['authorization'];
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "No authentication token" }));
+        return null;
+    }
+
+    const jwtToken = authHeader.split(' ')[1];
+
+    let decoded_jwt_token;
+    try {
+        decoded_jwt_token = await encryption_worker.decode(jwtToken);
+    } catch (error) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ message: "Invalid authentication token" }));
+        return null;
+    }
+
+    try
+    {
+        if(decoded_jwt_token === null)
+        {
+            res.writeHead(401, {'Content-Type': 'application/json',});
+            res.end(JSON.stringify({ LogoutResponse: 101 }));
+            return;
+        }
+        await userdb_logic.blacklistToken(jwtToken);
+        res.writeHead(200, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({ LogoutResponse: 100 }));
+    }
+    catch(err)
+    {
+        console.log("Server error: Couldn't logout user! ", err);
+        res.writeHead(500, {'Content-Type': 'application/json',});
+        res.end(JSON.stringify({ RegisterResponse: "Backend error" }));
+    }
+
+}
+
+module.exports = {handle_logout, handle_register, handle_login}

@@ -48,6 +48,9 @@ http.createServer((req, res) =>
                 case '/login':
                     authentification_worker.handle_login(req, res);
                     break;
+                case '/logout':
+                    authentification_worker.handle_logout(req, res)
+                    break;
                 case '/insert_children':
                     user_worker.insertChildren(req, res);
                     break;
