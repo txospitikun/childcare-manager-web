@@ -75,6 +75,12 @@ p{
   width: 70px;
 }
 
+.auth-buttons{
+  display:flex;
+  gap:1rem;
+
+}
+
 .register {
   border: 1px solid rgba(83, 82, 82, 0.5);
   padding: 0.6rem 1.9rem;
@@ -605,7 +611,10 @@ footer {
     position: relative;
     justify-content: space-evenly;
     align-items: center;
-    padding-right:7rem;
+  }
+
+  .auth-buttons{
+    flex-direction: column;
   }
 
   .navbar li{

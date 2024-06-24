@@ -95,7 +95,7 @@ async function fetchGroupContent(groupId) {
                 }, {});
                 displayGroupContent(result.foundChildrens, groupId);
             } else {
-                const errorText = await response.text();
+                const errorText = await response.text(); // Read response as text
                 console.error('Răspuns de eroare:', errorText);
             }
         }
@@ -505,7 +505,7 @@ function displayRelations(relations, currentChildId) {
                 'Unknown Child';
 
             const relationItem = document.createElement('li');
-            relationItem.textContent = `Relație: ${relation.TypeOfRelation}, Copil Related: ${relatedChildName}`;
+            relationItem.textContent = `Relație: ${relation.TypeOfRelation}, Copil: ${relatedChildName}`;
             
             const deleteButton = document.createElement('button');
             deleteButton.className = 'delete-relation-button';
