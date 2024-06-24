@@ -27,7 +27,10 @@ export function fetchSleepingEntries(date, childID) {
             return response.json();
         })
         .then(result => {
-            if(result === null) return;
+            if(result === null){
+                displaySleepingEntries([]);
+                return;
+            }
             if (result.sleepingEntries) {
                 displaySleepingEntries(result.sleepingEntries);
             } else {
@@ -193,7 +196,6 @@ export async function editSleeping(e) {
             body: JSON.stringify(payload)
         });
 
-        console.log('Response status (editSleeping):', response.status);
         const result = await response.json();
 
         if (response.ok) {

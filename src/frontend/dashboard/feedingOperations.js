@@ -27,7 +27,10 @@ export function fetchFeedingEntries(date, childID) {
             return response.json();
         })
         .then(result => {
-            if(result === null) return;
+            if(result === null) {
+                displayFeedingEntries([]);
+                return;
+            }
             if (result.feedingEntries) {
                 displayFeedingEntries(result.feedingEntries);
             } else {
@@ -43,6 +46,7 @@ export function fetchFeedingEntries(date, childID) {
 export function displayFeedingEntries(entries) {
     const feedingItemsContainer = document.getElementById("feeding_items");
     feedingItemsContainer.innerHTML = "";
+    
 
     if (entries.length === 0) {
         feedingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
