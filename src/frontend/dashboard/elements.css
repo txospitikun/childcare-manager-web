@@ -293,13 +293,19 @@ li{
   border-radius: 6px;
 }
 
-.content img {
+.content img, .content video{
   width: 100%;
   height: auto;
   margin-bottom: 16px;
   border-radius: 8px;
   object-fit: contain;
 }
+
+.content audio{
+  width:100%;
+  object-fit:contain;
+}
+
 
 @media screen and (max-width: 600px) {
 

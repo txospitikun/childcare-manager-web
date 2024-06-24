@@ -231,8 +231,6 @@ async function addChildToGroup(e) {
             body: formData
         });
 
-        console.log('Response status:', response.status);
-
         if (!response.ok) {
             const result = await response.json();
             console.error('Error response:', result);
@@ -240,7 +238,6 @@ async function addChildToGroup(e) {
         }
 
         const result = await response.json();
-        console.log('Success response:', result); 
         fetchGroupContent(groupId);
     } catch (error) {
         console.error('Error:', error);
@@ -435,7 +432,6 @@ async function addChildRelation(childId) {
     const form = document.getElementById('add-relation-form');
     const formData = new FormData(form);
     formData.append('ChildrenRelationOne', childId);
-    console.log(childId);
     formData.append('GroupID', currentGroupId);
 
     const cookieString = document.cookie;
@@ -515,7 +511,6 @@ async function fetchRelations(childId, groupId) {
         });
 
         const result = await response.json();
-        console.log(result);
         if (response.ok) {
             displayRelations(result.groupRelations);
         } else {
@@ -538,8 +533,6 @@ function displayRelations(relations) {
     } else {
         relations.forEach(relation => {
             const relatedChildName = groupChildrenInfo[relation.ChildrenRelationTwo] || 'Unknown Child';
-            console.log(groupChildrenInfo[relation.ChildrenRelationTwo]);
-            console.log('gogosi');
             const relationItem = document.createElement('li');
             relationItem.textContent = `Relation: ${relation.TypeOfRelation}, Related Child: ${relatedChildName}`;
             

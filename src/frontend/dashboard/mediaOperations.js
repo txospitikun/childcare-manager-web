@@ -133,13 +133,16 @@ export function fetchChildrenMedia(childID) {
             if(result === null) return;
             if (result.media) {
                 displayMediaEntries(result.media);
+                displayTimelineEntries(result.media);
             } else {
                 displayMediaEntries([]);
+                displayTimelineEntries([]);
             }
         })
         .catch(error => {
             console.error('Error:', error);
             displayMediaEntries([]);
+            displayTimelineEntries([]);
         });
 }
 
@@ -186,6 +189,52 @@ function displayMediaEntries(entries) {
         mediaElement.addEventListener('click', function () {
             openMediaModal(mediaElement, figcaption.textContent, entry.ID);
         });
+    });
+}
+
+function displayTimelineEntries(entries) {
+    const timelineContent = document.getElementById('timeline-content');
+    timelineContent.innerHTML = '';
+
+    const timelineEntries = entries.reverse().filter(entry => entry.InTimeline === 1);
+
+
+    timelineEntries.forEach((entry, index) => {
+        const containerDiv = document.createElement('div');
+        containerDiv.className = `container ${index % 2 === 0 ? 'left' : 'right'}`;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'content';
+
+        const date = new Date(entry.Date);
+        const year = date.getFullYear();
+
+        const h2 = document.createElement('h2');
+        h2.textContent = year;
+
+        let mediaElement;
+        if (entry.MediaType.includes('.jpg') || entry.MediaType.includes('.jpeg') || entry.MediaType.includes('.png')) {
+            mediaElement = document.createElement('img');
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
+            mediaElement.alt = "Image description";
+        } else if (entry.MediaType.includes('.mp4') || entry.MediaType.includes('.webm')) {
+            mediaElement = document.createElement('video');
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
+            mediaElement.controls = true;
+        } else if (entry.MediaType.includes('.mp3') || entry.MediaType.includes('.wav')) {
+            mediaElement = document.createElement('audio');
+            mediaElement.src = `http://localhost:5000/api/src/${entry.PictureRef}`;
+            mediaElement.controls = true;
+        }
+
+        const p = document.createElement('p');
+        p.textContent = `${entry.Date.split('T')[0]} ${entry.Time.slice(0, 5)}`;
+
+        contentDiv.appendChild(h2);
+        contentDiv.appendChild(mediaElement);
+        contentDiv.appendChild(p);
+        containerDiv.appendChild(contentDiv);
+        timelineContent.appendChild(containerDiv);
     });
 }
 

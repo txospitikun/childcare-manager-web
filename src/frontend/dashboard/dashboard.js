@@ -8,7 +8,7 @@ import {
     resetSleepingForm, openSleepingModal
 } from './sleepingOperations.js';
 import {addMedia, deleteMedia, resetMediaForm} from './mediaOperations.js';
-import { fetchAccountData } from './accountOperations.js';
+import { fetchAccountData, updateAccount } from './accountOperations.js';
 import { addGroup, fetchGroups } from './groupOperations.js';
 
 
@@ -215,7 +215,6 @@ function setupDashboardButtons() {
             hideAllSections();
             showSection(currentDashboardButton.id);
             currentDashboardButton.style.backgroundColor = 'var(--button-color)';
-            console.log('a')
         }
 
         if (!currentDashboardButton && button.id === 'dashboard_bttn') {
@@ -223,7 +222,6 @@ function setupDashboardButtons() {
             showSection(button.id);
             currentDashboardButton = button;
             currentDashboardButton.style.backgroundColor = 'var(--button-color)';
-            console.log('b')
         }
 
         button.addEventListener('click', function () {
@@ -249,7 +247,7 @@ function toggleDateTimeInputs(checkboxId, inputContainerId) {
         }
     });
 }
-const editform = document.querySelector('edit-account-form');
+document.getElementById('edit-account-form').addEventListener('submit', updateAccount);
 
 
 toggleDateTimeInputs('use-current-date-checkbox-sleep', 'date-input-sleep');
