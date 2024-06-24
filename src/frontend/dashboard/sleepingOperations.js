@@ -27,7 +27,10 @@ export function fetchSleepingEntries(date, childID) {
             return response.json();
         })
         .then(result => {
-            if(result === null) return;
+            if(result === null){
+                displaySleepingEntries([]);
+                return;
+            }
             if (result.sleepingEntries) {
                 displaySleepingEntries(result.sleepingEntries);
             } else {

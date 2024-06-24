@@ -164,16 +164,6 @@ document.getElementById('category').addEventListener('click', () =>
     fetchMedical(getCurrentSelectedChild().dataset.childId);
 });
 
-// find me id category of a select and add event listener on the change of the value
-// fetch medical records based on the selected category
-// render the table with the fetched records
-// please complete with code
-// fetchMedicalRecords(categorySelect.value);
-// renderTable(data.health);
-// add event listener on the change of the value of the select
-// fetch medical records based on the selected category
-// render the table with the fetched records
-
 export function fetchMedical(selectedChild) {
     const categorySelect = document.getElementById('category');
     const medicalRecordsDiv = document.getElementById('medicalRecords');

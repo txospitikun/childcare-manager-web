@@ -206,7 +206,9 @@ export async function addGroup(e) {
     }
 }
 
-async function addChildToGroup() {
+async function addChildToGroup(e) {
+    e.preventDefault();
+
     const form = document.getElementById('add-group-child-form');
     const groupId = form.dataset.groupId;
     const formData = new FormData(form);
@@ -229,16 +231,20 @@ async function addChildToGroup() {
             body: formData
         });
 
-        const result = await response.json();
-        if (response.ok) {
-            alert('Child added to the group successfully');
-            fetchGroupContent(groupId);
-        } else {
-            alert(`Error: ${result.message}`);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+            const result = await response.json();
+            console.error('Error response:', result);
+            throw new Error(result.message || 'Failed to add child to the group');
         }
+
+        const result = await response.json();
+        console.log('Success response:', result); 
+        fetchGroupContent(groupId);
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while adding the child to the group');
+        alert('An error occurred while adding the child to the group: ' + error.message);
     }
 }
 
@@ -351,9 +357,8 @@ function openChildModal(child) {
     img.src = `http://localhost:5000/api/src/${child.PictureRef}`;
     caption.textContent = `${child.FirstName} ${child.LastName}`;
 
-    // Clear previous relations
     let relationsList = document.getElementById('relations-list');
-    currentChildId = child.ID; // Set the current child ID
+    currentChildId = child.ID;
     if (!relationsList) {
         relationsList = document.createElement('ul');
         relationsList.id = 'relations-list';
@@ -361,12 +366,10 @@ function openChildModal(child) {
     }
     relationsList.innerHTML = '';
 
-    // Fetch and display relations
     fetchRelations(child.ID, currentGroupId);
 
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
 
-    // Event listener to close the modal
     modal.querySelector('.close').addEventListener('click', () => {
         modal.style.display = 'none';
     });
@@ -465,6 +468,35 @@ async function addChildRelation(childId) {
     }
 }
 
+async function deleteChildFromGroup(groupId, childId) {
+    const cookieString = document.cookie;
+    const token = cookieString.substring(4);
+
+    if (!token) {
+        alert('JWT token not found');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/delete_children_group?groupId=${groupId}&childrenId=${childId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            fetchGroupContent(groupId);
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while removing the child from the group');
+    }
+}
+
 async function fetchRelations(childId, groupId) {
     try {
         const cookieString = document.cookie;
@@ -544,7 +576,7 @@ async function deleteRelation(relationId) {
         const result = await response.json();
         if (response.ok) {
             alert('Relation deleted successfully');
-            fetchRelations(currentChildId, currentGroupId); // Refresh relations list
+            fetchRelations(currentChildId, currentGroupId);
         } else {
             alert(`Error: ${result.message}`);
         }
@@ -554,13 +586,16 @@ async function deleteRelation(relationId) {
     }
 }
 
- // Close modal event
  document.querySelector('.close').addEventListener('click', () => {
     document.getElementById('groupChildModal').style.display = "none";
 });
 
-// Event listener for the add-relation-form
 document.getElementById('add-relation-form').addEventListener('submit', (e) => {
     e.preventDefault();
     addChildRelation(currentChildId);
+});
+
+document.getElementById('delete-group-child').addEventListener('click', () => {
+    deleteChildFromGroup(currentGroupId, currentChildId);
+    document.getElementById('groupChildModal').style.display = "none";
 });
