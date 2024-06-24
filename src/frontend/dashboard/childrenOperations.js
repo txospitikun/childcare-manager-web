@@ -296,7 +296,7 @@ export function createChildElement(child) {
     childContainer.dataset.childId = child.ID;
 
     const img = document.createElement('img');
-    img.src = child.PictureRef ? `http://localhost:5000/api/src/${child.PictureRef}` : '../placeholders/child2.jpg';
+    img.src = child.PictureRef ? `http://localhost:5000/api/src/${child.PictureRef}` : './assets/placeholders/placeholder_child.jpg';
     img.className = 'photo-container';
     img.alt = 'child';
 

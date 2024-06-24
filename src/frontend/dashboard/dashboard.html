@@ -2,13 +2,13 @@
 <html lang="ro">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta charset="UTF-8" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" >
   <title>Dashboard</title>
-  <link rel="stylesheet" href="./dashboard.css" async/>
-  <link rel="stylesheet" href="./elements.css" async/>
-  <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="./dashboard.css">
+  <link rel="stylesheet" href="./elements.css">
+  <link rel="icon" href="./favicon.ico" type="image/x-icon" >
 </head>
 
 <body>
@@ -18,23 +18,23 @@
       <div class="dashboard-left-panel">
         <div class="dashboard-buttons">
           <button class="dashboard-button" id="dashboard_bttn">
-            <img src="./assets/icons/dashboard_main_icon.svg" alt="Dashboard Icon" />
+            <img src="./assets/icons/dashboard_main_icon.svg" alt="Dashboard Icon" >
             <span class="dashboard-button-text">Panou de control</span>
           </button>
           <button class="dashboard-button" id="profile_bttn">
-            <img src="./assets/icons/dashboard_user_icon.svg" alt="Profile Icon" />
+            <img src="./assets/icons/dashboard_user_icon.svg" alt="Profile Icon" >
             <span class="dashboard-button-text">Profilul tău</span>
           </button>
           <button class="dashboard-button" id="groups_bttn">
-            <img src="./assets/icons/dashboard_group_icon.svg" alt="Groups Icon" />
+            <img src="./assets/icons/dashboard_group_icon.svg" alt="Groups Icon" >
             <span class="dashboard-button-text">Grupuri</span>
           </button>
           <button class="dashboard-button" id="dashboard_admin_bttn" style="display: none">
-            <img src="./assets/icons/dashboard_admin_icon.svg" alt="Admin Icon" />
+            <img src="./assets/icons/dashboard_admin_icon.svg" alt="Admin Icon" >
             <span class="dashboard-button-text">Admin Panel</span>
           </button>
           <button class="dashboard-button" id="logout_bttn">
-            <img src="./assets/icons/dashboard_logout_icon.svg" alt="Logout Icon" />
+            <img src="./assets/icons/dashboard_logout_icon.svg" alt="Logout Icon" >
             <span class="dashboard-button-text">Deloghează-te</span>
           </button>
         </div>
@@ -42,12 +42,11 @@
       <div class="dashboard-right-panel">
         <div class="dashboard-navbar">
           <div class="dashboard-profile-container">
-            <img src="../placeholders/user1.jpg" class="profile-photo" id="profile-photo" alt="Profile Photo" />
+            <img src="../placeholders/user1.jpg" class="profile-photo" id="profile-photo" alt="Profile Photo" >
             <div class="profile-info-container">
               <p class="profile-name" id="user-profile-name"></p>
               <p class="profile-name-grad" id="user-profile-type"></p>
             </div>
-            <!-- <img class="profile-bell" src="./assets/icons/dashboard_bell_icon.svg" alt = "Bell Icon"> -->
           </div>
         </div>
         <div class="dashboard-control-panel" id="dashboard-main">
@@ -63,26 +62,27 @@
                 <form class="popup-form" id="add-child-form">
                   <div class="form-group">
                     <label for="FirstName">Nume:</label>
-                    <input type="text" id="FirstName" name="FirstName" placeholder="Ex: Popescu" required />
+                    <input type="text" id="FirstName" name="FirstName" placeholder="Ex: Popescu" required >
                   </div>
                   <div class="form-group">
                     <label for="LastName">Prenume:</label>
-                    <input type="text" id="LastName" name="LastName" placeholder="Ex: Ion" required />
+                    <input type="text" id="LastName" name="LastName" placeholder="Ex: Ion" required >
                   </div>
                   <div class="form-group">
                     <label for="Gender">Sex:</label>
                     <select id="Gender" name="Gender" required>
+                      <option value="" disabled selected>Select Gender</option>
                       <option value="male">Bărbat</option>
                       <option value="female">Femeie</option>
                     </select>
                   </div>
                   <div class="form-group">
                     <label for="DateOfBirth">Data nasterii:</label>
-                    <input type="date" id="DateOfBirth" name="DateOfBirth" required />
+                    <input type="date" id="DateOfBirth" name="DateOfBirth" required >
                   </div>
                   <div class="form-group">
                     <label for="PictureRef">Foto:</label>
-                    <input type="file" id="PictureRef" name="PictureRef" required />
+                    <input type="file" id="PictureRef" name="PictureRef" required >
                   </div>
                   <button type="submit" class="confirm-button">
                     Confirm
@@ -96,23 +96,23 @@
             <div class="dashboard-info-first-row">
               <div class="dashboard-info-first-row-buttons">
                 <button class="attribute-button default-button" id="feeding-bttn">
-                  <img class="invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon" />
+                  <img class="invert" src="./assets/icons/ds_i_fork.svg" alt="Feeding Icon" >
                   <span>Hrănire</span>
                 </button>
                 <button class="attribute-button default-button" id="sleeping-bttn">
-                  <img class="invert" src="./assets/icons/ds_i_bed.svg" alt="Sleeping Icon" />
+                  <img class="invert" src="./assets/icons/ds_i_bed.svg" alt="Sleeping Icon" >
                   <span>Somn</span>
                 </button>
                 <button class="attribute-button default-button" id="media-bttn">
-                  <img class="invert" src="./assets/icons/ds_i_media.svg" alt="Media Icon" />
+                  <img class="invert" src="./assets/icons/ds_i_media.svg" alt="Media Icon" >
                   <span>Media</span>
                 </button>
                 <button class="attribute-button default-button" id="evolution-bttn">
-                  <img class="invert" src="./assets/icons/ds_i_evolution.svg" alt="Evolution Icon" />
+                  <img class="invert" src="./assets/icons/ds_i_evolution.svg" alt="Evolution Icon" >
                   <span>Evoluție</span>
                 </button>
                 <button class="attribute-button default-button" id="medical-bttn">
-                  <img class="invert" src="./assets/icons/ds_i_medical.svg" alt="Medical Icon" />
+                  <img class="invert" src="./assets/icons/ds_i_medical.svg" alt="Medical Icon" >
                   <span>Sănătate</span>
                 </button>
               </div>
@@ -139,14 +139,14 @@
                             <div class="checkbox-group">
                               <label for="use-current-date-time-checkbox-meal">Folosește timpul și data actuală:</label>
                               <input type="checkbox" id="use-current-date-time-checkbox-meal"
-                                name="use-current-date-time-checkbox-meal" checked />
+                                name="use-current-date-time-checkbox-meal" checked >
                             </div>
                           </div>
                           <div class="form-group" id="date-and-time-inputs-meal" style="display: none">
-                            <label for="data">Data:</label>
-                            <input type="date" id="data_meal" name="data" />
-                            <label for="timp">Timp:</label>
-                            <input type="time" id="time_meal" name="timp" />
+                            <label for="data_meal">Data:</label>
+                            <input type="date" id="data_meal" name="data" >
+                            <label for="time_meal">Timp:</label>
+                            <input type="time" id="time_meal" name="timp" >
                           </div>
                           <div class="form-group">
                             <label for="mass-selector">Unitate de cântărire:</label>
@@ -157,11 +157,11 @@
                           </div>
                           <div class="form-group">
                             <label for="mass-input">Cantitate:</label>
-                            <input type="number" id="mass-input" name="mass-input" min="0" required />
+                            <input type="number" id="mass-input" name="mass-input" min="0" required >
                           </div>
                           <div class="form-group">
                             <label for="food">Aliment:</label>
-                            <input type="text" id="food" name="food" required />
+                            <input type="text" id="food" name="food" required >
                           </div>
                           <button type="submit" class="confirm-button" id="confirm-meal-bttn">
                             Adaugă
@@ -183,18 +183,18 @@
                             <div class="checkbox-group">
                               <label for="use-current-date-checkbox-sleep">Folosește data actuală:</label>
                               <input type="checkbox" id="use-current-date-checkbox-sleep"
-                                name="use-current-date-checkbox-sleep" checked />
+                                name="use-current-date-checkbox-sleep" checked >
                             </div>
                           </div>
                           <div class="form-group" id="date-input-sleep" style="display: none">
-                            <label for="data">Data:</label>
-                            <input type="date" id="data_sleep" name="data" />
+                            <label for="data_sleep">Data:</label>
+                            <input type="date" id="data_sleep" name="data" >
                           </div>
                           <div class="form-group">
-                            <label for="time-sleep">Ora de somn:</label>
-                            <input type="time" id="time_sleep" name="time-sleep" />
-                            <label for="time-awake">Ora de trezire:</label>
-                            <input type="time" id="time_awake" name="time-awake" />
+                            <label for="time_sleep">Ora de somn:</label>
+                            <input type="time" id="time_sleep" name="time-sleep" >
+                            <label for="time_awake">Ora de trezire:</label>
+                            <input type="time" id="time_awake" name="time-awake" >
                           </div>
                           <button type="submit" class="confirm-button" id="confirm-sleeping-bttn">
                             Adaugă
@@ -254,25 +254,25 @@
                               <label for="use-current-date-time-checkbox-media">Folosește timpul și data
                                 actuală:</label>
                               <input type="checkbox" id="use-current-date-time-checkbox-media"
-                                name="use-current-date-time-checkbox-media" checked />
+                                name="use-current-date-time-checkbox-media" checked >
                             </div>
                           </div>
                           <div class="form-group" id="date-and-time-inputs-media" style="display: none">
-                            <label for="data">Data:</label>
-                            <input type="date" id="data_media" name="data" />
-                            <label for="timp">Timp:</label>
-                            <input type="time" id="time_media" name="timp" />
+                            <label for="data_media">Data:</label>
+                            <input type="date" id="data_media" name="data" >
+                            <label for="time_media">Timp:</label>
+                            <input type="time" id="time_media" name="timp" >
                           </div>
                           <div class="form-group">
                             <div class="checkbox-group">
                               <label for="add-to-timeline-checkbox">Adaugă la timeline?</label>
                               <input type="checkbox" id="add-to-timeline-checkbox" name="add-to-timeline-checkbox"
-                                checked />
+                                checked >
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="mediaInput">Selectează fișier:</label>
-                            <input type="file" id="mediaInput" name="PictureRef" required />
+                            <input type="file" id="mediaInput" name="PictureRef" required >
                           </div>
                           <div class="form-group">
                             <button type="submit" class="confirm-button">
@@ -288,7 +288,7 @@
                 <div class="gallery" id="media-gallery"></div>
                 <div id="myModal" class="modal">
                   <span class="close">&times;</span>
-                  <img class="modal-content" id="img01" />
+                  <img class="modal-content" id="img01" >
                   <video class="modal-content" id="vid01" controls style="display:none;"></video>
                   <audio class="modal-content" id="aud01" controls style="display:none;"></audio>
                   <div class="caption" id="caption"></div>
@@ -377,39 +377,39 @@
                   <form class="popup-form" id="edit-account-form">
                     <div class="form-group">
                       <label for="email">Email:</label>
-                      <input type="email" id="email" name="email" />
+                      <input type="email" id="email" name="email" >
                     </div>
                     <div class="form-group">
                       <label for="password">Parola:</label>
-                      <input type="password" id="password" name="password" />
+                      <input type="password" id="password" name="password" >
                     </div>
                     <div class="form-group">
                       <label for="lastname">Nume:</label>
-                      <input type="text" id="lastname" name="lastname" />
+                      <input type="text" id="lastname" name="lastname" >
                     </div>
                     <div class="form-group">
                       <label for="firstname">Prenume:</label>
-                      <input type="text" id="firstname" name="firstname" />
+                      <input type="text" id="firstname" name="firstname" >
                     </div>
                     <div class="form-group">
                       <label for="phoneNo">Telefon:</label>
-                      <input type="tel" id="phoneNo" name="phoneNo" />
+                      <input type="tel" id="phoneNo" name="phoneNo" >
                     </div>
                     <div class="form-group">
                       <label for="location">Localizare:</label>
-                      <input type="text" id="location" name="location" />
+                      <input type="text" id="location" name="location" >
                     </div>
                     <div class="form-group">
                       <label for="language">Limbă:</label>
-                      <input type="text" id="language" name="language" />
+                      <input type="text" id="language" name="language" >
                     </div>
                     <div class="form-group checkbox-group">
                       <label for="casatorit">Căsătorit</label>
-                      <input type="checkbox" id="casatorit" name="civilState" />
+                      <input type="checkbox" id="casatorit" name="civilState" >
                     </div>
                     <div class="form-group" id="nume-partener-group" style="display: none">
                       <label for="civilPartner">Nume partener:</label>
-                      <input type="text" id="civilPartner" name="civilPartner" />
+                      <input type="text" id="civilPartner" name="civilPartner" >
                     </div>
                     <div class="form-group">
                       <label for="accountType">Tipul contului:</label>
@@ -421,7 +421,7 @@
                     </div>
                     <div class="form-group">
                       <label for="ProfilePhoto">Foto:</label>
-                      <input type="file" id="ProfilePhoto" name="pictureRef" />
+                      <input type="file" id="ProfilePhoto" name="pictureRef" >
                     </div>
                     <button type="submit" class="confirm-button">
                       Confirm
@@ -478,7 +478,7 @@
               </div>
               <div class="admin-panel-settings-container">
                 <h3>Opțiuni editare cont selectat:</h3>
-                <br />
+                <br >
                 <button class="default-button-slim red-bg edit_user_button" data-field="DeleteAccount">Șterge</button>
                 <button class="default-button-slim orange-bg edit_user_button" data-field="DeactivateAccount">Dezactivează/Activează</button>
                 <button class="default-button-slim edit_user_button" data-field="FirstName">Modifică nume</button>
@@ -494,7 +494,7 @@
               <div class="profile-settings-container-admin">
                 <div class="admin-panel-settings-container">
                   <h3>Opțiuni editare copil selectat:</h3>
-                  <br />
+                  <br >
                   <button class="default-button-slim red-bg edit_children_button" data-field="DeleteChild">Șterge</button>
                   <button class="default-button-slim edit_children_button" data-field="FirstName">Modifică nume</button>
                   <button class="default-button-slim edit_children_button" data-field="LastName">Modifică prenume</button>
@@ -521,11 +521,11 @@
                       <form class="popup-form" id="add-group-form">
                         <div class="form-group">
                           <label for="groupName">Numele grupului:</label>
-                          <input type="text" id="groupName" name="Title" required />
+                          <input type="text" id="groupName" name="Title" required >
                         </div>
                         <div class="form-group">
                           <label for="groupPhoto">Poza grupului:</label>
-                          <input type="file" id="groupPhoto" name="PictureRef" required />
+                          <input type="file" id="groupPhoto" name="PictureRef" required >
                         </div>
                         <div class="form-group">
                           <button type="submit" class="confirm-button" id="group-button">
@@ -540,7 +540,7 @@
               <div class="gallery" id="groups-gallery"></div>
               <div id="groupChildModal" class="modal">
                 <span class="close">&times;</span>
-                <img class="modal-content" id="img02" />
+                <img class="modal-content" id="img02" >
                 <div class="caption" id="caption2"> 
                 </div>
 
@@ -561,11 +561,11 @@
                   <h2 class="popup-title">Add Relation</h2>
                   <div class="form-group">
                     <label for="relatedChildId">ID-ul copilului relaționat:</label>
-                    <input type="text" id="relatedChildId" name="ChildrenRelationTwo" required />
+                    <input type="text" id="relatedChildId" name="ChildrenRelationTwo" required >
                   </div>
                   <div class="form-group">
                   <label for="relationType">Tipul relației:</label>
-                    <input type="text" id="relationType" name="TypeOfRelation" required />
+                    <input type="text" id="relationType" name="TypeOfRelation" required >
                   </div>
                   <button type="submit" class="confirm-button">Add Relation</button>
                 </form>
@@ -579,7 +579,7 @@
                     <form class="popup-form" id="add-group-child-form">
                         <div class="form-group">
                             <label for="childId">Child ID:</label>
-                            <input type="text" id="childId" name="ChildrenID" required />
+                            <input type="text" id="childId" name="ChildrenID" required >
                         </div>
                         <div class="form-group">
                             <button type="submit" class="confirm-button">Adaugă copil</button>

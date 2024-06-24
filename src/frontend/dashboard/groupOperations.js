@@ -47,7 +47,7 @@ export function displayGroups(groups) {
         const figureElement = document.createElement('figure');
 
         const img = document.createElement('img');
-        img.src = `http://localhost:5000/api/src/${group.PictureRef}`;
+        img.src = group.PictureRef ? `http://localhost:5000/api/src/${group.PictureRef}` : './assets/placeholders/group_placeholder.jpg';
         img.alt = group.Title;
 
         const figcaption = document.createElement('figcaption');

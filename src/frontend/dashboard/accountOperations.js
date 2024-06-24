@@ -40,7 +40,7 @@ export function populateProfileData(userData) {
     const location = `Localizare: ${userData.Location || 'N/A'}`;
     const language = `Limbă: ${userData.Language || 'N/A'}`;
     const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType) || 'N/A'}`;
-    const profilePhoto = userData.PictureRef ? `http://localhost:5000/api/src/${userData.PictureRef}` : 'default-profile-photo-url.jpg';
+    const profilePhoto = userData.PictureRef ? `http://localhost:5000/api/src/${userData.PictureRef}` : './assets/placeholders/placeholder_profile.jpg';
 
     document.querySelector('.profile-settings-container h1').textContent = fullName;
     document.querySelector('.profile-settings-container:nth-of-type(2) p:nth-of-type(2)').textContent = email;
