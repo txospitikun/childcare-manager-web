@@ -227,7 +227,7 @@ CREATE TABLE `Users` (
   `Location` varchar(255) DEFAULT NULL,
   `Language` varchar(255) DEFAULT NULL,
   `CivilState` tinyint(1) DEFAULT NULL,
-  `CivilPartner` int DEFAULT NULL,
+  `CivilPartner` varchar(255) DEFAULT NULL,
   `AccountType` int DEFAULT NULL,
   `PictureRef` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
