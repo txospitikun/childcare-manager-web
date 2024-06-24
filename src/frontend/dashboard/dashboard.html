@@ -292,7 +292,10 @@
                   <video class="modal-content" id="vid01" controls style="display:none;"></video>
                   <audio class="modal-content" id="aud01" controls style="display:none;"></audio>
                   <div class="caption" id="caption"></div>
-                  <button id="delete">Șterge media</button>
+                  <div class = "buttons-media">
+                    <button class = "default-button" id="delete">Șterge media</button>
+                    <button class = "default-button" onclick="return shareOnFacebook();" id="share">Partajează pe Facebook</button>
+                  </div>
                 </div>
               </div>
 
@@ -404,8 +407,10 @@
               <div class="profile-settings-container">
                 <button type="button" class="orange-bg" id="edit-account-bttn">
                   Modifică cont
-                </button>
+                <button type="button" class="orange-bg" id="export-profile">
+                  Export informații cont
               </div>
+
               <div class="main-modal" id="edit-account-modal">
                 <div class="popup-form-wrapper">
                   <button class="close-button">&times;</button>
@@ -470,6 +475,9 @@
                 <p>Căsătorit: Nu</p>
               </div>
               <div class="profile-settings-container">
+                <button type="button" class="orange-bg" id="export-groups">
+                  Exportă grupuri
+                </button>
               </div>
               <div class="profile-settings-container">
                 <p>Localizare & Limbă</p>
@@ -478,11 +486,19 @@
               </div>
 
               <div class="profile-settings-container">
+                <button type="button" class="orange-bg" id="export-childrens">
+                  Exportă copiii
+                </button>
               </div>
 
               <div class="profile-settings-container">
                 <p>Tipul contului</p>
                 <p>Tipul contului: Familie</p>
+              </div>
+              <div class="profile-settings-container">
+                <button type="button" class="orange-bg" id="export-media">
+                  Exportă media
+                </button>
               </div>
             </div>
           </div>
@@ -542,19 +558,19 @@
                   <div class="main-modal" id="add-group-modal">
                     <div class="popup-form-wrapper">
                       <button class="close-button">&times;</button>
-                      <h2 class="popup-title" id="group-title">Add a new group</h2>
+                      <h2 class="popup-title" id="group-title">Adaugă un grup nou</h2>
                       <form class="popup-form" id="add-group-form">
                         <div class="form-group">
-                          <label for="groupName">Group Name:</label>
+                          <label for="groupName">Numele grupului:</label>
                           <input type="text" id="groupName" name="Title" required />
                         </div>
                         <div class="form-group">
-                          <label for="groupPhoto">Group Photo:</label>
+                          <label for="groupPhoto">Poza grupului:</label>
                           <input type="file" id="groupPhoto" name="PictureRef" required />
                         </div>
                         <div class="form-group">
                           <button type="submit" class="confirm-button" id="group-button">
-                            Add Group
+                            Adaugă grup
                           </button>
                         </div>
                       </form>
@@ -568,7 +584,7 @@
                 <img class="modal-content" id="img02" />
                 <div class="caption" id="caption2"> 
                 </div>
-                <button class="caption-button default-button" id="add-relation">Add Relation</button>
+                <button class="caption-button default-button" id="add-relation">Adaugă relație</button>
                 
             </div>
             
@@ -578,11 +594,11 @@
                 <form class="modal-content" id="add-relation-form">
                   <h2 class="popup-title">Add Relation</h2>
                   <div class="form-group">
-                    <label for="relatedChildId">Related Child ID:</label>
+                    <label for="relatedChildId">ID-ul copilului relaționat:</label>
                     <input type="text" id="relatedChildId" name="ChildrenRelationTwo" required />
                   </div>
                   <div class="form-group">
-                  <label for="relationType">Relation Type:</label>
+                  <label for="relationType">Tipul relației:</label>
                     <input type="text" id="relationType" name="TypeOfRelation" required />
                   </div>
                   <button type="submit" class="confirm-button">Add Relation</button>
@@ -593,14 +609,14 @@
               <div class="main-modal" id="add-group-child-modal">
                 <div class="popup-form-wrapper">
                     <button class="close-button">&times;</button>
-                    <h2 class="popup-title">Add a Child to Group</h2>
+                    <h2 class="popup-title">Adaugă un copil în grup după ID</h2>
                     <form class="popup-form" id="add-group-child-form">
                         <div class="form-group">
                             <label for="childId">Child ID:</label>
                             <input type="text" id="childId" name="ChildrenID" required />
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="confirm-button">Add Child</button>
+                            <button type="submit" class="confirm-button">Adaugă copil</button>
                         </div>
                     </form>
                 </div>
@@ -610,6 +626,15 @@
       </div>
     </div>
   </main>
+
+  <script>
+    function shareOnFacebook() {
+      const photoUrl = 'https://localhost:5000/api/src/uploads/1719235262445-868e0667e287-0605d08d-ff40-430e-bd1d-c99c8c1ed373.jpg';
+      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(photoUrl)}`;
+      window.open(shareUrl, 'facebook-share-dialog', 'width=800,height=600');
+      return false;
+    }
+  </script>
   <script type="module" src="./dashboard.js"></script>
   <script type="module" src="./calendar.js"></script>
   <script type="module" src="./childrenOperations.js"></script>
@@ -618,6 +643,9 @@
   <script type="module" src="./mediaOperations.js"></script>
   <script type="module" src="./groupOperations.js"></script>
   <script type="module" src="./adminOperations.js"></script>
+  <script type="module" src="./exportOperations.js"></script>
+  <script type="module" src="./accountOperations.js"></script>
+
   <!-- <script type = "module" src="./dashboard_logic.js"></script> -->
   <!-- <script type = "module" src="./dashboard_post_operations.js"></script> -->
 </body>

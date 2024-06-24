@@ -167,13 +167,30 @@ li{
   cursor: pointer;
 }
 
-
 #delete {
   display: block;
   width: 100px;
   margin: 20px auto;
   padding: 10px;
   background-color: red;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.buttons-media
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#share
+{
+  display: block;
+  width: 100px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: dodgerblue;
   color: white;
   text-align: center;
   cursor: pointer;
