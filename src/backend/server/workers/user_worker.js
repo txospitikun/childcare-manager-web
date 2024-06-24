@@ -621,5 +621,51 @@ async function deleteHealth(req, res)
 
 }
 
-module.exports = {getUser, deleteHealth, getHealth, insertHealth, deleteMedia, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren,editChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
+async function importChildren(req, res) {
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+    req.on('end', async () => {
+        const data = JSON.parse(body);
+        try {
+            for (const child of data.childrenInfo) {
+                const { ID, FirstName, LastName, Gender, DateOfBirth, PictureRef, UserID } = child;
+                await childrendb_logic.insertOrUpdateChild(ID, FirstName, LastName, Gender, DateOfBirth, PictureRef, UserID);
+            }
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Children imported successfully' }));
+        } catch (error) {
+            console.error(error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Database error' }));
+        }
+    });
+}
+
+async function importMedia(req, res) {
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+    req.on('end', async () => {
+        const data = JSON.parse(body);
+        try {
+            for (const mediaGroup of data) {
+                for (const media of mediaGroup.media) {
+                    const { ID, ChildrenID, UserID, Date, Time, InTimeline, MediaType, PictureRef } = media;
+                    await childrendb_logic.insertOrUpdateMedia(ID, ChildrenID, UserID, Date, Time, InTimeline, MediaType, PictureRef);
+                }
+            }
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Media imported successfully' }));
+        } catch (error) {
+            console.error(error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Database error' }));
+        }
+    });
+}
+
+module.exports = {importMedia, importChildren, getUser, deleteHealth, getHealth, insertHealth, deleteMedia,editChildren, getChildrenMedia, insertMedia, loadSelfChildren, insertChildren, insertFeedingEntry, editFeedingEntry, getFeedingEntriesByDate, getFeedingEntry, deleteFeedingEntry, insertSleepingEntry, editSleepingEntry, getSleepingEntriesByDate, getSleepingEntry, deleteSleepingEntry, editAccountSettings, getSelfInfo, deleteChildren};
 

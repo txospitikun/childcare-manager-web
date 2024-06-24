@@ -78,6 +78,15 @@ http.createServer((req, res) =>
                 case '/insert_group_chat':
                     group_worker.insertGroupChat(req, res);
                     break;
+                case '/import_children':
+                    user_worker.importChildren(req, res);
+                    break;
+                case '/import_media':
+                    user_worker.importMedia(req, res);
+                    break;
+                case '/import_groups':
+                    group_worker.importGroups(req, res);
+                    break;
                 default:
                     res.writeHead(404, { 'Content-Type': 'text/plain' });
                     res.end('Not Found');
