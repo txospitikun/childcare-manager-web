@@ -9,6 +9,8 @@ import {
 } from './sleepingOperations.js';
 import {addMedia, deleteMedia, resetMediaForm} from './mediaOperations.js';
 import { fetchAccountData } from './accountOperations.js';
+import { addGroup, fetchGroups } from './groupOperations.js';
+
 
 import {deleteCookie, getCookie} from './../workers/cookie_worker.js';
 
@@ -68,14 +70,14 @@ function addEventListeners() {
         });
     });
 
-    document.getElementById('delete').addEventListener('click', deleteMedia);
     document.getElementById('add-media-form').addEventListener('submit', addMedia);
     document.getElementById('add-child-form').addEventListener('submit', addChild);
-
-    document.getElementById('add-photo-bttn').addEventListener('click', () => {
-        resetMediaForm();
-        showModal('add-photo-modal');
-    });
+    
+    
+    document.getElementById('delete').addEventListener('click', deleteMedia); 
+    document.getElementById('delete-bttn').addEventListener('click', deleteChild);
+    
+    
 
     document.getElementById('add-entry-bttn').addEventListener('click', () => {
         if (currentSelectedAttribute.id === 'feeding-bttn') {
@@ -115,8 +117,6 @@ function addEventListeners() {
         }
     });
 
-    document.getElementById('delete-bttn').addEventListener('click', deleteChild);
-
     document.getElementById('edit-account-bttn').addEventListener('click', () => {
         showModal('edit-account-modal');
         fetchAccountData();
@@ -126,9 +126,16 @@ function addEventListeners() {
         showModal('add-child-modal');
     });
 
-    document.getElementById('add-group-bttn').addEventListener('click', () => {
-        showModal('add-group-modal');
+    document.getElementById('addButton').addEventListener('click', () => {
+        showModal('addModal');
     });
+
+    document.getElementById('add-photo-bttn').addEventListener('click', () => {
+        resetMediaForm();
+        showModal('add-photo-modal');
+    });
+
+    
 }
 
 
@@ -260,4 +267,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     setupAttributeButtons();
     setupDashboardButtons();
     loadChildren();
+    fetchGroups();
 });
