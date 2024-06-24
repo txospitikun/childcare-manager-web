@@ -116,8 +116,9 @@ function parseFormData(req) {
                             extension: path.extname(filename)
                         };
                     } else {
-                        const value = part.slice(part.indexOf('\r\n\r\n') + 4, part.lastIndexOf('\r\n')).toString();
-                        fields[key] = value;
+                        const value = part.slice(part.indexOf('\r\n\r\n') + 4, part.lastIndexOf('\r\n'));
+                        const utf8Value = Buffer.from(value, 'binary').toString('utf8');
+                        fields[key] = utf8Value;
                     }
                 }
             });
@@ -130,5 +131,8 @@ function parseFormData(req) {
         });
     });
 }
+
+module.exports = parseFormData;
+
 
 module.exports = { handle_request, parseFormData, serveStaticFiles};

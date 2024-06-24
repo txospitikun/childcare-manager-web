@@ -49,7 +49,7 @@ export function displayFeedingEntries(entries) {
     
 
     if (entries.length === 0) {
-        feedingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
+        feedingItemsContainer.innerHTML = "<p>Nu există înregistrări pentru această dată.</p>";
     }
 
     entries.forEach(entry => {

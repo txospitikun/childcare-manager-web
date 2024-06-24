@@ -1,13 +1,19 @@
 const pool = require('./../database/connection.js');
 const User = require('./../modals/user_modal.js')
+const crypto = require("crypto");
+const key = 'd4e5f6a1b3c4d7e8f9a2b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6';
+function hash(text) {
+    const hmac = crypto.createHmac('sha256', key);
+    hmac.update(text);
+    return hmac.digest('hex');
+}
 
-const encryption_worker = require('./../workers/encryption_worker.js');
 
 
 async function insertUser(registerform) {
     try {
 
-        const encrypted_password = encryption_worker.hash(registerform.password);
+        const encrypted_password = hash(registerform.password);
 
         const connection = await pool.getConnection();
         const query = 'INSERT INTO Users (Email, Password, FirstName, LastName, Privilege, Suspended) VALUES (?, ?, ?, ?, ?, ?)';
@@ -63,11 +69,13 @@ async function findUserByEmail(email) {
 
 async function editUser(updateaccount, userId) {
     try {
+        console.log(updateaccount);
         const connection = await pool.getConnection();
 
         let query = 'UPDATE Users SET ';
         let fields = [];
         let values = [];
+
 
         if (updateaccount.email !== 'N/A' && updateaccount.email !== -1) {
             fields.push('Email = ?');
@@ -114,8 +122,11 @@ async function editUser(updateaccount, userId) {
             return;
         }
 
+
         query += fields.join(', ') + ' WHERE ID = ?';
         values.push(userId);
+
+
 
         const [result] = await connection.query(query, values);
         connection.release();

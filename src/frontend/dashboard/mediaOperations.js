@@ -196,7 +196,7 @@ function displayTimelineEntries(entries) {
     const timelineContent = document.getElementById('timeline-content');
     timelineContent.innerHTML = '';
 
-    const timelineEntries = entries.reverse().filter(entry => entry.InTimeline === 1);
+    const timelineEntries = entries.filter(entry => entry.InTimeline === 1);
 
 
     timelineEntries.forEach((entry, index) => {

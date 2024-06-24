@@ -124,8 +124,8 @@ async function getGroupChildrenRelations(userId, childrenId, groupId)
         const connection = await pool.getConnection();
         const query = 'SELECT *\n' +
             'FROM GroupRelations\n' +
-            'WHERE ChildrenRelationOne = ? AND GroupID = ?';
-        const [result] = await connection.query(query, [childrenId, groupId]);
+            'WHERE ChildrenRelationOne = ? OR ChildrenRelationTwo = ? AND GroupID = ?';
+        const [result] = await connection.query(query, [childrenId, childrenId, groupId]);
         connection.release();
         return result;
     } catch (error) {

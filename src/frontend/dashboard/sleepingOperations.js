@@ -48,7 +48,7 @@ export function displaySleepingEntries(entries) {
     sleepingItemsContainer.innerHTML = "";
 
     if (entries.length === 0) {
-        sleepingItemsContainer.innerHTML = "<p>No entries for the selected date.</p>";
+        sleepingItemsContainer.innerHTML = "<p>Nu există înregistrări pentru această dată.</p>";
         return;
     }
 

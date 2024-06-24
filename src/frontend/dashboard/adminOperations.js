@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:5000/api/authorized';
+const baseURL = 'http://192.168.1.242:5000/api/authorized';
 
 let selectedUser = null;
 let selectedChild = null;
