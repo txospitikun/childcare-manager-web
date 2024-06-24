@@ -1,3 +1,5 @@
+import {deleteCookie} from "../workers/cookie_worker.js";
+
 export async function fetchAccountData() {
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
@@ -145,37 +147,49 @@ export function toggleCivilState() {
 document.getElementById('logout_bttn').addEventListener('click', async function ()
 {
     await logout();
+    deleteCookie('JWT');
+    window.location.href = "/src/frontend/modals/login_modal/login.html";
 });
 
 export async function logout() {
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
-
     if (!token) {
         alert('Tokenul JWT nu a fost găsit');
         return null;
     }
 
-    try {
-        const response = await fetch('http://localhost:5000/api/logout', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            formData: null
-        });
-
-        if (response.ok) {
-
-        } else {
+        if (!navigator.onLine) {
+            alert('Nu există conexiune la internet. Verificați conexiunea și încercați din nou.');
             return null;
         }
-    } catch (error) {
-        console.error('Eroare:', error);
-        alert('A apărut o eroare la deconectare.');
-        return null;
+
+        try {
+            const response = await fetch('http://localhost:5000/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                console.log("Logged out successfully.");
+            } else {
+                console.error('Failed to log out:', response.status, response.statusText);
+                alert('Logout failed: ' + response.statusText);
+                return null;
+            }
+        } catch (error) {
+            if (error.name === 'TypeError') {
+                console.error('Eroare de rețea:', error);
+                alert('Nu s-a putut efectua cererea de logout din cauza unei erori de rețea.');
+            } else {
+                console.error('Eroare necunoscută:', error);
+                alert('A apărut o eroare necunoscută.');
+            }
+            return null;
+        }
     }
-}
 
 export function mapAccountTypeToString(accountType) {
     switch (accountType) {

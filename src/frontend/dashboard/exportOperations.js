@@ -181,3 +181,65 @@ function saveToFile(data, filename) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+    document.getElementById('import-children-btn').addEventListener('click', () => {
+    document.getElementById('children-file').click();
+});
+
+    document.getElementById('import-media-btn').addEventListener('click', () => {
+    document.getElementById('media-file').click();
+});
+
+document.getElementById('children-file').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const data = JSON.parse(e.target.result);
+            fetch('http://localhost:5000/api/import_children', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        };
+        reader.readAsText(file);
+    }
+});
+
+document.getElementById('groups-file').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const data = JSON.parse(e.target.result);
+            fetch('http://localhost:5000/api/import_groups', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        };
+        reader.readAsText(file);
+    }
+});
+
+document.getElementById('media-file').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const data = JSON.parse(e.target.result);
+            fetch('http://localhost:5000/api/import_media', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        };
+        reader.readAsText(file);
+    }
+});

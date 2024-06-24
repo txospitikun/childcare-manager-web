@@ -217,11 +217,15 @@ function setupDashboardButtons() {
 
     function showSection(buttonId) {
         hideAllSections();
+        if(sections[buttonId] === undefined || sections[buttonId] === null)
+            return;
         document.querySelector(sections[buttonId]).style.display = '';
     }
 
     document.querySelectorAll('.dashboard-button').forEach(button => {
 
+        if(localStorage.getItem('currentDashboardButton') === 'logout_bttn')
+            localStorage.setItem('currentDashboardButton', 'dashboard_bttn');
         if(!currentDashboardButton && localStorage.getItem('currentDashboardButton') !== null) {
             currentDashboardButton = document.getElementById(localStorage.getItem('currentDashboardButton'));
             hideAllSections();
@@ -241,6 +245,8 @@ function setupDashboardButtons() {
                 currentDashboardButton.style.backgroundColor = '';
             }
 
+            if(this.id === null || this.id === undefined)
+                return;
             showSection(this.id);
             localStorage.setItem('currentDashboardButton', this.id);
             currentDashboardButton = this;
@@ -272,11 +278,6 @@ document.getElementById('casatorit').addEventListener('change', function () {
     } else {
         numePartenerGroup.style.display = 'none';
     }
-});
-
-document.getElementById('logout_bttn').addEventListener('click', function () {
-    deleteCookie('JWT');
-    window.location.href = "/src/frontend/modals/login_modal/login.html";
 });
 
 document.addEventListener('DOMContentLoaded', async function () {
