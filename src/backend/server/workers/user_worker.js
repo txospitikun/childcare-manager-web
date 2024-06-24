@@ -71,9 +71,14 @@ async function getUser(req, res) {
     const User = await userdb_logic.findUserByID(decoded_jwt_token.payload.UserID);
 
     if (User == null) {
-        throw new Error("Backend error.");
+        throw new Error("Token exists but user doesn't!");
     }
 
+    if(User.Suspended === 1)
+    {
+        throw new Error("Suspended user!");
+        return null;
+    }
     return User;
 }
 

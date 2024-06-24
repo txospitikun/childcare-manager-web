@@ -82,17 +82,25 @@ async function insertChildrenGroup(data)
 async function deleteChildrenGroup(userId, groupId, childrenId) {
     try {
         const connection = await pool.getConnection();
-        const query = 'DELETE FROM GroupEntries\n' +
-            'WHERE ChildrenID = ?\n' +
-            'AND GroupID = (\n' +
-            '    SELECT GroupID FROM (\n' +
-            '        SELECT ge.GroupID\n' +
-            '        FROM GroupEntries ge\n' +
-            '        JOIN ChildrenGroups cg ON ge.GroupID = cg.ID\n' +
-            '        WHERE ge.GroupID = ? AND cg.UserID = ? AND ge.ChildrenID = ?\n' +
-            '    ) AS subquery\n' +
-            ');';
-        const [result] = await connection.query(query, [childrenId, groupId, userId, childrenId]);
+        const query = `
+            DELETE FROM GroupEntries
+            WHERE ChildrenID = ?
+            AND (
+                GroupID = (
+                    SELECT GroupID FROM (
+                        SELECT ge.GroupID
+                        FROM GroupEntries ge
+                        JOIN ChildrenGroups cg ON ge.GroupID = cg.ID
+                        WHERE ge.GroupID = ? AND cg.UserID = ? AND ge.ChildrenID = ?
+                    ) AS subquery
+                )
+                OR EXISTS (
+                    SELECT 1
+                    FROM Childrens c
+                    WHERE c.ID = ? AND c.UserID = ?
+                )
+            );`;
+        const [result] = await connection.query(query, [childrenId, groupId, userId, childrenId, childrenId, userId]);
         connection.release();
         return result;
     } catch (error) {

@@ -206,6 +206,8 @@ textarea {
 
 .dashboard-control-panel {
   display: flex;
+  min-height: 100px;
+
   height: 90%;
   width: 100%;
   padding: 1rem;
@@ -1007,7 +1009,7 @@ label {
     width: 100%;
   }
 
-  
+
 
   .dashboard-profile-container {
     width: 100%;
@@ -1031,7 +1033,7 @@ label {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(5, 1fr);
     overflow: auto;
-    
+
   }
   #edit-account-bttn{
     width:85%;
@@ -1250,5 +1252,5 @@ label {
     padding:8px;
     gap:8px;
   }
-  
+
 }
