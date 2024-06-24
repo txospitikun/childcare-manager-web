@@ -16,7 +16,7 @@ export function getCurrentSelectedChild() {
 
 export async function deleteChild() {
     if (getCurrentSelectedChild() === null) {
-        alert("Please select a child first.");
+        alert("Vă rugăm să selectați mai întâi un copil.");
         return;
     }
 
@@ -27,8 +27,8 @@ export async function deleteChild() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -46,11 +46,11 @@ export async function deleteChild() {
         if (response.ok) {
             loadChildren();
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while deleting the child.');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la ștergerea copilului.');
     }
 }
 
@@ -59,7 +59,7 @@ export function loadChildren() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -81,11 +81,11 @@ export function loadChildren() {
                 displayChildren(result.childrenInfo);
                 addChildSelectionHandler();
             } else {
-                console.error('Error: ' + result.message);
+                console.error('Eroare ' + result.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Eroare', error);
         });
 }
 
@@ -99,7 +99,7 @@ export async function addChild(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -126,14 +126,14 @@ export async function addChild(e) {
             addChildSelectionHandler();
         } else {
             if (result.status === 10) {
-                alert('Invalid or expired JWT token. Redirecting to login page.');
+                alert('Token JWT invalid sau expirat. Redirecționare către pagina de conectare.');
                 window.location.href = '/login';
             } else {
-                alert('Error: ' + result.message);
+                alert('Eroare: ' + result.message);
             }
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Eroare', error);
     } finally {
         loadChildren();
     }
@@ -159,15 +159,13 @@ export function displayChildren(children) {
 
 document.getElementById('category').addEventListener('click', () =>
 {
-    const selectElement = document.getElementById('category');
-    const selectedValue = selectElement.value;
     fetchMedical(getCurrentSelectedChild().dataset.childId);
 });
 
 export function fetchMedical(selectedChild) {
+    
     const categorySelect = document.getElementById('category');
     const medicalRecordsDiv = document.getElementById('medicalRecords');
-    const addButton = document.getElementById('addButton');
     const addModal = document.getElementById('addModal');
     const addForm = document.getElementById('addForm');
     const closeModal = document.getElementsByClassName('close')[0];
@@ -175,13 +173,12 @@ export function fetchMedical(selectedChild) {
 
     let category = categorySelect.value;
 
-
     const cookieString = document.cookie;
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -225,7 +222,7 @@ export function fetchMedical(selectedChild) {
             const category = categorySelect.value;
             await fetchMedicalRecords(category);
         } catch (error) {
-            console.error('Error inserting medical record:', error);
+            console.error('Eroare la introducerea intrării medicale:', error);
         }
     }
 
@@ -246,7 +243,7 @@ export function fetchMedical(selectedChild) {
             const data = await response.json();
             renderTable(data.health);
         } catch (error) {
-            console.error('Error fetching medical records:', error);
+            console.error('Eroare la preluarea intrărilor medicale:', error);
         }
     }
 
@@ -266,7 +263,7 @@ export function fetchMedical(selectedChild) {
             const category = categorySelect.value;
             await fetchMedicalRecords(category);
         } catch (error) {
-            console.error('Error deleting medical record:', error);
+            console.error('Eroare la ștergerea intrării medicale:', error);
         }
     }
 
@@ -309,8 +306,10 @@ export function createChildElement(child) {
     const nameP = document.createElement('p');
     nameP.textContent = `${child.FirstName} ${child.LastName}`;
 
+    const ageDetails = calculateAge(child.DateOfBirth);
+    const ageCategory = getAgeCategory(child.DateOfBirth);
     const ageP = document.createElement('p');
-    ageP.textContent = calculateAge(child.DateOfBirth) + ' ani - ' + getAgeCategory(calculateAge(child.DateOfBirth));
+    ageP.textContent = `${ageDetails.value} ${ageDetails.unit} - ${ageCategory} #${child.ID}`;
 
     infoContainer.appendChild(nameP);
     infoContainer.appendChild(ageP);
@@ -321,17 +320,34 @@ export function createChildElement(child) {
     return childContainer;
 }
 
-export function calculateAge(dateOfBirth) {
-    const dob = new Date(dateOfBirth);
-    const diff_ms = Date.now() - dob.getTime();
-    const age_dt = new Date(diff_ms);
-    return Math.abs(age_dt.getUTCFullYear() - 1970);
+function calculateAge(dateOfBirth) {
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    const ageInMilliseconds = today - birthDate;
+    const ageInDays = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24));
+
+    if (ageInDays < 30) {
+        return { value: ageInDays, unit: 'zile' };
+    } else if (ageInDays < 365) {
+        const ageInMonths = Math.floor(ageInDays / 30);
+        return { value: ageInMonths, unit: 'luni' };
+    } else {
+        const ageInYears = Math.floor(ageInDays / 365);
+        return { value: ageInYears, unit: ageInYears === 1 ? 'an' : 'ani' };
+    }
 }
 
-export function getAgeCategory(age) {
-    if (age < 3) return 'infant';
-    if (age < 13) return 'copil';
-    if (age < 18) return 'adolescent';
+function getAgeCategory(dateOfBirth) {
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    const ageInMilliseconds = today - birthDate;
+    const ageInDays = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24));
+    const ageInYears = Math.floor(ageInDays / 365);
+
+    if (ageInYears < 1) return 'infant';
+    if (ageInYears < 3) return 'copil mic';
+    if (ageInYears < 13) return 'copil';
+    if (ageInYears < 18) return 'adol.';
     return 'adult';
 }
 

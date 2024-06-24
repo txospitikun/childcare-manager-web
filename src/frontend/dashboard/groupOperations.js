@@ -10,7 +10,7 @@ export async function fetchGroups() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -30,11 +30,11 @@ export async function fetchGroups() {
         if (response.ok) {
             displayGroups(result);
         } else {
-            console.error('Error fetching groups:', result.message);
+            console.error('Eroare la preluarea grupurilor:', result.message);
             displayGroups([]);
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Eroare:', error);
         displayGroups([]);
     }
 }
@@ -73,7 +73,7 @@ async function fetchGroupContent(groupId) {
         const token = cookieString.substring(4);
 
         if (!token) {
-            alert('JWT token not found');
+            alert('Tokenul JWT nu a fost găsit');
             return;
         }
 
@@ -95,12 +95,12 @@ async function fetchGroupContent(groupId) {
                 }, {});
                 displayGroupContent(result.foundChildrens, groupId);
             } else {
-                const errorText = await response.text(); // Read response as text
-                console.error('Error response:', errorText);
+                const errorText = await response.text();
+                console.error('Răspuns de eroare:', errorText);
             }
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Eroare:', error);
     }
 }
 
@@ -119,7 +119,7 @@ function displayGroupContent(content, groupId) {
         img.alt = `${item.FirstName} ${item.LastName}`;
 
         const figcaption = document.createElement('figcaption');
-        figcaption.textContent = `${item.FirstName} ${item.LastName}`;
+        figcaption.textContent = `${item.FirstName} ${item.LastName} ID:${item.ID}`;
 
         figureElement.appendChild(img);
         figureElement.appendChild(figcaption);
@@ -187,7 +187,7 @@ export async function addGroup(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -204,11 +204,11 @@ export async function addGroup(e) {
         if (response.ok) {
             fetchGroups();
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while adding the group');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la adăugarea grupului');
     }
 }
 
@@ -224,7 +224,7 @@ async function addChildToGroup(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -238,7 +238,7 @@ async function addChildToGroup(e) {
         });
         if (!response.ok) {
             const result = await response.json();
-            console.error('Error response:', result);
+            console.error('Răspuns de eroare:', result);
             throw new Error(result.message || 'Failed to add child to the group');
 
         }
@@ -246,8 +246,8 @@ async function addChildToGroup(e) {
         const result = await response.json();
         fetchGroupContent(groupId);
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while adding the child to the group: ' + error.message);
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la adăugarea copilului la grup: ' + error.message);
     }
 }
 
@@ -265,7 +265,7 @@ async function editGroup(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -280,14 +280,13 @@ async function editGroup(e) {
 
         const result = await response.json();
         if (response.ok) {
-            alert('Group updated successfully');
             fetchGroups();
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while updating the group');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la actualizarea grupului');
     }
 }
 
@@ -298,7 +297,7 @@ async function deleteGroup(groupId) {
         const token = cookieString.substring(4);
 
         if (!token) {
-            alert('JWT token not found');
+            alert('Tokenul JWT nu a fost găsit');
             return;
         }
 
@@ -313,11 +312,11 @@ async function deleteGroup(groupId) {
         if (response.ok) {
             fetchGroups();
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while deleting the group');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la ștergerea grupului');
     }
 }
 
@@ -358,7 +357,7 @@ function openChildModal(child) {
     const caption = document.getElementById('caption2');
     
     img.src = `http://localhost:5000/api/src/${child.PictureRef}`;
-    caption.textContent = `${child.FirstName} ${child.LastName}`;
+    caption.textContent = `${child.FirstName} ${child.LastName} ID:${child.ID}`;
 
     let relationsList = document.getElementById('relations-list');
     currentChildId = child.ID;
@@ -389,51 +388,6 @@ function openChildModal(child) {
     });
 }
 
-
-
-async function fetchChildRelations(childId, groupId) {
-    try {
-        const cookieString = document.cookie;
-        const token = cookieString.substring(4);
-
-        if (!token) {
-            alert('JWT token not found');
-            return;
-        }
-
-        const response = await fetch(`http://localhost:5000/api/get_group_children_info?childrenId=${childId}&groupId=${groupId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            displayChildRelations(result.foundChildrens);
-        } else {
-            console.error('Error fetching child relations:', response.statusText);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-function displayChildRelations(relations) {
-    const relationsContainer = document.getElementById('relations');
-    relationsContainer.innerHTML = '';
-
-    if (relations.length === 0) {
-        relationsContainer.innerHTML = '<p>No relations found.</p>';
-    } else {
-        relations.forEach(relation => {
-            const relationElement = document.createElement('div');
-            relationElement.textContent = `${relation.TypeOfRelation}: ${relation.FirstName} ${relation.LastName}`;
-            relationsContainer.appendChild(relationElement);
-        });
-    }
-}
-
 async function addChildRelation(childId) {
     const form = document.getElementById('add-relation-form');
     const formData = new FormData(form);
@@ -444,7 +398,7 @@ async function addChildRelation(childId) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -461,11 +415,11 @@ async function addChildRelation(childId) {
         if (response.ok) {
             fetchRelations(childId, currentGroupId);
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while adding the relation');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la adăugarea relației');
     }
 }
 
@@ -474,7 +428,7 @@ async function deleteChildFromGroup(groupId, childId) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -490,11 +444,11 @@ async function deleteChildFromGroup(groupId, childId) {
         if (response.ok) {
             fetchGroupContent(groupId);
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while removing the child from the group');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la eliminarea copilului din grup');
     }
 }
 
@@ -504,7 +458,7 @@ async function fetchRelations(childId, groupId) {
         const token = cookieString.substring(4);
 
         if (!token) {
-            alert('JWT token not found');
+            alert('Tokenul JWT nu a fost găsit');
             return;
         }
 
@@ -517,17 +471,17 @@ async function fetchRelations(childId, groupId) {
 
         const result = await response.json();
         if (response.ok) {
-            displayRelations(result.groupRelations);
+            displayRelations(result.groupRelations, childId);
         } else {
-            console.error('Error fetching relations:', result.message);
+            console.error('Eroare la preluarea relațiilor:', result.message);
         }
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Eroare:', error);
     }
 }
 
 
-function displayRelations(relations) {
+function displayRelations(relations, currentChildId) {
     const relationsList = document.getElementById('relations-list');
     relationsList.innerHTML = '';
 
@@ -537,13 +491,25 @@ function displayRelations(relations) {
         relationsList.appendChild(noRelationsMessage);
     } else {
         relations.forEach(relation => {
-            const relatedChildName = groupChildrenInfo[relation.ChildrenRelationTwo] || 'Unknown Child';
+            let relatedChildId;
+            if (relation.ChildrenRelationOne == currentChildId) {
+                relatedChildId = relation.ChildrenRelationTwo;
+            } else if (relation.ChildrenRelationTwo == currentChildId) {
+                relatedChildId = relation.ChildrenRelationOne;
+            } else {
+                relatedChildId = null;
+            }
+
+            const relatedChildName = relatedChildId && groupChildrenInfo[relatedChildId] ? 
+                groupChildrenInfo[relatedChildId] : 
+                'Unknown Child';
+
             const relationItem = document.createElement('li');
-            relationItem.textContent = `Relation: ${relation.TypeOfRelation}, Related Child: ${relatedChildName}`;
+            relationItem.textContent = `Relație: ${relation.TypeOfRelation}, Copil Related: ${relatedChildName}`;
             
             const deleteButton = document.createElement('button');
             deleteButton.className = 'delete-relation-button';
-            deleteButton.textContent = 'Delete Relation';
+            deleteButton.textContent = 'Șterge relația';
             deleteButton.addEventListener('click', () => {
                 deleteRelation(relation.ID);
             });
@@ -559,7 +525,7 @@ async function deleteRelation(relationId) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -575,11 +541,11 @@ async function deleteRelation(relationId) {
         if (response.ok) {
             fetchRelations(currentChildId, currentGroupId);
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while deleting the relation');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la ștergerea relației');
     }
 }
 

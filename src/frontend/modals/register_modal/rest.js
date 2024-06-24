@@ -27,7 +27,6 @@ confirm_register_bttn.addEventListener('click', () => {
   };
 
   fetch(`${config.apiUrl}/api/register`, {
-    mode: 'no-cors',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -43,21 +42,25 @@ confirm_register_bttn.addEventListener('click', () => {
   .then(data => {
     switch(data['RegisterResponse'])
     {
-      case 102:
-        register_response.style.color = 'red';
-        register_response.innerHTML = "Există deja un cont inregistrat cu aceast email.";
-        break;
-      case 101:
-        register_response.style.color = 'red';
-        register_response.innerHTML = "Parolele nu coincid.";
-        break;
       case 100:
         register_response.style.color = 'green';
         register_response.innerHTML = "Înregistrat cu succes! Confirmă pe email!";
         break;
+      case 101:
+        register_response.style.color = 'red';
+        register_response.innerHTML = "Există deja un cont inregistrat cu aceast email.";
+        break;
+      case 102:
+        register_response.style.color = 'red';
+        register_response.innerHTML = "Parolele nu coincid.";
+        break;
+      case 103:
+        register_response.style.color = 'red';
+        register_response.innerHTML = "Toate câmpurile sunt obligatorii.";
+        break;
     }
   })
   .catch(error => {
-    console.error('Request failed', error);
+    console.error('Cerere eșuată', error);
   });
 });

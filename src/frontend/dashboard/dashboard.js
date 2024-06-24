@@ -17,8 +17,8 @@ import {deleteCookie, getCookie} from './../workers/cookie_worker.js';
 (function() {
     const jwt = getCookie('JWT');
     if (!jwt) {
-        console.error('JWT token not found');
-        window.location.href = '/childcare-manager-web/src/frontend/modals/login_modal/login.html';
+        console.error('Tokenul JWT nu a fost găsit');
+        window.location.href = '/src/frontend/modals/login_modal/login.html';
         return;
     } else {
 
@@ -80,6 +80,10 @@ function addEventListeners() {
     
 
     document.getElementById('add-entry-bttn').addEventListener('click', () => {
+        if (getCurrentSelectedChild() === null) {
+            alert("Vă rugăm să selectați mai întâi un copil.");
+            return;
+        }
         if (currentSelectedAttribute.id === 'feeding-bttn') {
             resetMealForm();
             openMealModal('Adaugă o nouă masă', 'Adaugă', addMeal);
@@ -91,7 +95,7 @@ function addEventListeners() {
 
     document.getElementById('edit-entry-bttn').addEventListener('click', () => {
         if (!selectedEntryId) {
-            alert("Please select an entry first.");
+            alert("Vă rugăm să selectați mai întâi o intrare.");
             return;
         }
 
@@ -106,7 +110,7 @@ function addEventListeners() {
 
     document.getElementById('delete-entry-bttn').addEventListener('click', () => {
         if (!selectedEntryId) {
-            alert("Please select an entry first.");
+            alert("Vă rugăm să selectați mai întâi o intrare.");
             return;
         }
 
@@ -127,10 +131,18 @@ function addEventListeners() {
     });
 
     document.getElementById('addButton').addEventListener('click', () => {
+        if (getCurrentSelectedChild() === null) {
+            alert("Vă rugăm să selectați mai întâi un copil.");
+            return;
+        }
         showModal('addModal');
     });
 
     document.getElementById('add-photo-bttn').addEventListener('click', () => {
+        if (getCurrentSelectedChild() === null) {
+            alert("Vă rugăm să selectați mai întâi un copil.");
+            return;
+        }
         resetMediaForm();
         showModal('add-photo-modal');
     });
@@ -264,7 +276,7 @@ document.getElementById('casatorit').addEventListener('change', function () {
 
 document.getElementById('logout_bttn').addEventListener('click', function () {
     deleteCookie('JWT');
-    window.location.href = "/childcare-manager-web/src/frontend/modals/login_modal/login.html";
+    window.location.href = "/src/frontend/modals/login_modal/login.html";
 });
 
 document.addEventListener('DOMContentLoaded', async function () {

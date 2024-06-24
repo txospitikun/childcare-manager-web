@@ -7,8 +7,8 @@ export function fetchFeedingEntries(date, childID) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -38,7 +38,7 @@ export function fetchFeedingEntries(date, childID) {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Eroare:', error);
             displayFeedingEntries([]);
         });
 }
@@ -80,7 +80,7 @@ export async function addMeal(e) {
     e.preventDefault();
 
     if (getCurrentSelectedChild() === null) {
-        alert("Please select a child first.");
+        alert("Vă rugăm să selectați mai întâi un copil.");
         return;
     }
 
@@ -119,8 +119,8 @@ export async function addMeal(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -140,11 +140,11 @@ export async function addMeal(e) {
             fetchFeedingEntries(selectedDate, selectedChildId);
             document.getElementById('meal-modal').style.display = 'none';
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error (addMeal):', error);
-        alert('An error occurred while adding the meal.');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la adăugarea mesei');
     }
 }
 
@@ -152,7 +152,7 @@ export async function editMeal(e) {
     e.preventDefault();
 
     if (getCurrentSelectedChild() === null) {
-        alert("Please select a child first.");
+        alert("Vă rugăm să selectați mai întâi un copil.");
         return;
     }
 
@@ -162,7 +162,11 @@ export async function editMeal(e) {
     let date, time;
 
     if (useCurrentDateTime) {
-        date = getLocalISOString().split(' ')[0];
+        const selectedDateObj = new Date(selectedDate);
+        const year = selectedDateObj.getFullYear();
+        const month = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(selectedDateObj.getDate()).padStart(2, '0');
+        date = `${year}-${month}-${day}`;
         time = getLocalISOString().split(' ')[1];
     } else {
         date = document.getElementById('data_meal').value;
@@ -187,8 +191,8 @@ export async function editMeal(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -208,11 +212,11 @@ export async function editMeal(e) {
             fetchFeedingEntries(selectedDate, selectedChildId);
             document.getElementById('meal-modal').style.display = 'none';
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error (editMeal):', error);
-        alert('An error occurred while updating the meal.');
+        console.error('Eroare: ', error);
+        alert('A apărut o eroare la actualizarea mesei.');
     }
 }
 
@@ -221,7 +225,7 @@ export function fetchFeedingEntryData() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -241,12 +245,12 @@ export function fetchFeedingEntryData() {
             if (result.feedingEntry) {
                 autoCompleteFeedingForm(result.feedingEntry);
             } else {
-                alert('Feeding entry not found');
+                alert('Intrarea de masă nu a fost găsită');
             }
         })
         .catch(error => {
-            console.error('Error fetching entry details:', error);
-            alert('An error occurred while fetching the entry details.');
+            console.error('Eroare la preluarea datelor intrării:', error);
+            alert('A apărut o eroare la preluarea detaliilor intrării');
         });
 }
 
@@ -255,8 +259,8 @@ export async function deleteFeedingEntry() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        console.error('JWT token not found');
-        alert('JWT token not found');
+        console.error('Tokenul JWT nu a fost găsit');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -274,10 +278,10 @@ export async function deleteFeedingEntry() {
             const selectedChildId = getCurrentSelectedChild().dataset.childId;
             fetchFeedingEntries(selectedDate, selectedChildId);
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        alert('An error occurred while deleting the feeding entry.');
+        alert('A apărut o eroare la ștergerea mesei.');
     }
 }
 

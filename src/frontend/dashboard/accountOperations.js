@@ -3,7 +3,7 @@ export async function fetchAccountData() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return null;
     }
 
@@ -22,24 +22,24 @@ export async function fetchAccountData() {
             document.getElementById('white-panel').style="display: none";
             return data.user;
         } else {
-            alert('Error fetching account data');
+            alert('Eroare la preluarea datelor contului');
             return null;
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while fetching account data');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la preluarea datelor contului');
         return null;
     }
 }
 
 export function populateProfileData(userData) {
-    const fullName = `${userData.FirstName} ${userData.LastName}`;
-    const email = `Email: ${userData.Email}`;
-    const phoneNo = `Telefon: ${userData.PhoneNo}`;
+    const fullName = `${userData.FirstName || 'N/A'} ${userData.LastName || 'N/A'}`;
+    const email = `Email: ${userData.Email || 'N/A'}`;
+    const phoneNo = `Telefon: ${userData.PhoneNo || 'N/A'}`;
     const maritalStatus = `Căsătorit: ${userData.CivilState === 1 ? 'Da' : 'Nu'}`;
-    const location = `Localizare: ${userData.Location}`;
-    const language = `Limbă: ${userData.Language}`;
-    const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType)}`;
+    const location = `Localizare: ${userData.Location || 'N/A'}`;
+    const language = `Limbă: ${userData.Language || 'N/A'}`;
+    const accountType = `Tipul contului: ${mapAccountTypeToString(userData.AccountType) || 'N/A'}`;
     const profilePhoto = userData.PictureRef ? `http://localhost:5000/api/src/${userData.PictureRef}` : 'default-profile-photo-url.jpg';
 
     document.querySelector('.profile-settings-container h1').textContent = fullName;
@@ -61,6 +61,7 @@ export function populateProfileData(userData) {
         document.getElementById('dashboard_admin_bttn').style.display = 'block';
     }
 }
+
 
 export function fillFormData(data) {
     const userData = data.user;
@@ -106,7 +107,7 @@ export async function updateAccount(e) {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return;
     }
 
@@ -122,13 +123,13 @@ export async function updateAccount(e) {
         const result = await response.json();
 
         if (response.ok) {
-            alert('Account updated successfully');
+            alert('Contul a fost actualizat cu succes');
         } else {
-            alert(`Error: ${result.message}`);
+            alert(`Eroare: ${result.message}`);
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while updating the account');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la actualizarea contului');
     }
 }
 
@@ -151,7 +152,7 @@ export async function logout() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return null;
     }
 
@@ -170,8 +171,8 @@ export async function logout() {
             return null;
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while logging out.');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la deconectare.');
         return null;
     }
 }

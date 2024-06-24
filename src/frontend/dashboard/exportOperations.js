@@ -24,7 +24,7 @@ export async function exportChildrens() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return null;
     }
 
@@ -40,12 +40,12 @@ export async function exportChildrens() {
             const data = await response.json();
             saveToFile(data, 'childrens.json');
         } else {
-            alert('Error exporting children data');
+            alert('Eroare la exportarea datelor copiilor');
             return null;
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while exporting children data');
+        console.error('Eroare:', error);
+        alert('Eroare la exportarea datelor copiilor');
         return null;
     }
 }
@@ -55,7 +55,7 @@ export async function exportMedia() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return null;
     }
     let userChildren = null;
@@ -70,12 +70,12 @@ export async function exportMedia() {
         if (response.ok) {
             userChildren = await response.json();
         } else {
-            alert('Error exporting children data');
+            alert('Eroare la exportarea datelor copiilor');
             return null;
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while exporting children data');
+        console.error('Eroare:', error);
+        alert('Eroare la exportarea datelor copiilor');
         return null;
     }
     let result = [];
@@ -94,12 +94,12 @@ export async function exportMedia() {
                 childmedia = await response.json();
 
             } else {
-                alert('Error exporting media data');
+                alert('Eroare la exportarea datelor media');
                 null;
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while exporting media data');
+            console.error('Eroare:', error);
+            alert('Eroare la exportarea datelor media');
 
         }
         result.push(childmedia);
@@ -113,7 +113,7 @@ export async function exportGroups() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return null;
     }
 
@@ -129,12 +129,12 @@ export async function exportGroups() {
             const data = await response.json();
             saveToFile(data, 'groups.json');
         } else {
-            alert('Error exporting groups data');
+            alert('Eroare la exportarea datelor grupurilor');
             return null;
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while exporting groups data');
+        console.error('Eroare:', error);
+        alert('Eroare la exportarea datelor grupurilor');
         return null;
     }
 }
@@ -144,7 +144,7 @@ export async function exportProfile() {
     const token = cookieString.substring(4);
 
     if (!token) {
-        alert('JWT token not found');
+        alert('Tokenul JWT nu a fost găsit');
         return null;
     }
 
@@ -160,12 +160,12 @@ export async function exportProfile() {
             const data = await response.json();
             saveToFile(data, 'profile.json');
         } else {
-            alert('Error exporting account data');
+            alert('Eroare la exportarea datelor contului');
             return null;
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while exporting account data');
+        console.error('Eroare:', error);
+        alert('A apărut o eroare la exportul datelor contului');
         return null;
     }
 }
