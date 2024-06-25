@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>Document</title>
+    <link rel="stylesheet" href="login.css" >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="login">
+        <div class="left">
+            <img src="assets/icon.svg" class="icon" alt="childbook" >
+            <h2>Creează propria carte a copilului tau cu Childbook</h2>
+            <img src="assets/illustration.svg" class="art" alt="art" >
+        </div>
+
+        <div class="right">
+            <h1>Loghează-te cu contul tău Childbook</h1>
+            <form id="loginFormId">
+                <div class="input">
+                    <label for="login_email" class="input-label">Email</label>
+                    <input type="email" id="login_email" >
+                </div>
+                <div class="input">
+                    <label for="login_password" class="input-label">Parola</label>
+                    <input type="password" id="login_password" >
+                </div>
+                <h3 id="login_response"></h3>
+                <button type="submit" class="submit-button" id="confirm_login">Loghează-te</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <script type="module" src="rest.js"></script>
+
+</body>
+
+</html>

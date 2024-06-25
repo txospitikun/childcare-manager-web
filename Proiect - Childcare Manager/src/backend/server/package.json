@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "formidable": "^3.5.1",
+    "mysql2": "^3.10.1",
+    "pg": "^8.11.5"
+  }
+}

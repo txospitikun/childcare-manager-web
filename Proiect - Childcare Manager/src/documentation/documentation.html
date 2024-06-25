@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Childbook Scholarly HTML Report</title>
+    <link rel="stylesheet" href="https://w3c.github.io/scholarly-html/css/scholarly.min.css">
+    <script src="https://w3c.github.io/scholarly-html/js/scholarly.min.js"></script>
+</head>
+<body>
+    <header>
+        <img style="width:100%" src="./assets/logo.svg" width="227" height="50" alt="logo">
+        <h1>Childbook Raport - Scholarly HTML</h1>
+    </header>
+
+    <div role="contentinfo">
+        <dl>
+            <dt>Autori</dt>
+            <dd>
+                <a href="https://github.com/dumbchinese" target="_blank">Nita Dennis-Alexandru</a>,
+                <a href="https://github.com/Mareantz" target="_blank">Ciotir Marian-Augustin</a>
+            </dd>
+        </dl>
+    </div>
+    <section typeof="sa:Abstract" id="abstract" role="doc-abstract">
+        <h2>Abstract</h2>
+        <p>
+            Acest document cuprinde aspectele tehnice și interacțiunea cu utilizatorul ale proiectului Childbook pentru
+            Tehnologii Web, realizat în colaborare de
+            <a href="https://github.com/txospitikun">Nita Dennis-Alexandru</a> și
+            <a href="https://github.com/Mareantz">Ciotir Marian-Augustin</a>.
+            <br><br>
+            <i>Universitatea Alexandru Ioan Cuza din Iași, Facultatea de Informatică</i>
+        </p>
+    </section>
+    
+    <section id="introduction" role="doc-introduction">
+        <h2>Introducere</h2>
+        
+        <section id="purpose">
+            <h3>Scop</h3>
+            <p>
+                Aplicația web Childbook își propune să ofere un spațiu virtual dedicat gestionării eficiente a resurselor necesare îngrijirii copiilor. Aceasta se adresează părinților și tutorilor legali, oferind un set complet de instrumente pentru a urmări și gestiona diferite aspecte ale vieții copiilor, de la nou-născuți până la adolescenți, chiar și adulți care se află în grija acestora. Childbook vizează multiple domenii ale îngrijirii copiilor, incluzând:
+            </p>
+            <ul>
+                <li><strong>Calendarul hrănirii:</strong> Utilizatorii pot planifica și înregistra mesele copiilor, urmărind obiceiurile alimentare și asigurându-se că copiii primesc o nutriție adecvată.</li>
+                <li><strong>Orele de somn:</strong> Monitorizarea programului de somn al copiilor pentru a se asigura că aceștia dorm suficient și la orele potrivite.</li>
+                <li><strong>Resurse multimedia:</strong> Stocarea și partajarea fotografiilor, videoclipurilor și înregistrărilor audio care documentează momentele importante din viața copiilor.</li>
+                <li><strong>Timeline (Cronologie):</strong> Aplicația oferă o vedere cronologică a celor mai importante momente din viața fiecărui copil alese de utilizator, și organizate in mod cronologic. </li>
+                <li><strong>Istoricul medical:</strong> Păstrarea evidenței vizitelor medicale, vaccinărilor, diagnosticului și tratamentelor, asigurând astfel o monitorizare completă a sănătății copiilor.</li>
+                <li><strong>Relaționarea cu alți copii:</strong> Urmărirea interacțiunilor cu prietenii, colegii de școală și membrii familiei extinse, facilitând o rețea de sprijin și socializare.</li>
+            </ul>
+        </section>
+        
+        <section id="intended-audience">
+            <h3>Public țintă</h3>
+            <p>
+                Childbook se adresează unei game largi de utilizatori, incluzând:
+            </p>
+            <ul>
+                <li><strong>Familii:</strong> Părinții pot folosi aplicația pentru a urmări și gestiona toate aspectele legate de creșterea copiilor lor, asigurându-se că fiecare detaliu este monitorizat și organizat.</li>
+                <li><strong>Cupluri:</strong> Cuplurile care împărtășesc responsabilitatea îngrijirii copiilor pot folosi Childbook pentru a colabora eficient și pentru a se asigura că toate nevoile copiilor sunt îndeplinite.</li>
+                <li><strong>Case de copii și orfelinate:</strong> Personalul acestor instituții poate utiliza aplicația pentru a gestiona informațiile despre mai mulți copii, asigurând o îngrijire adecvată și documentată pentru fiecare copil în parte.</li>
+                <li><strong>Îngrijitori și bone:</strong> Profesioniștii în îngrijirea copiilor pot folosi Childbook pentru a ține evidența activităților zilnice și a cerințelor de îngrijire, comunicând eficient cu părinții.</li>
+            </ul>
+        </section>
+        
+        <section id="scope">
+            <h3>Viziune</h3>
+            <p>
+                Viziunea Childbook este de a deveni partenerul de încredere al părinților și îngrijitorilor în gestionarea și monitorizarea îngrijirii copiilor lor. Aplicația își propune să creeze un mediu digital sigur și intuitiv, care să faciliteze documentarea și partajarea momentelor semnificative din viața copiilor. Printre obiectivele sale se numără:
+            </p>
+            <ul>
+                <li><strong>Siguranță și confidențialitate:</strong> Asigurarea că toate datele și informațiile personale sunt protejate prin măsuri de securitate avansate.</li>
+                <li><strong>Intuitivitate și ușurință în utilizare:</strong> Dezvoltarea unei interfețe prietenoase și intuitive, care să fie ușor de utilizat de către toate categoriile de utilizatori.</li>
+                <li><strong>Integrare și compatibilitate:</strong> Facilitarea integrării cu alte platforme și aplicații pentru a oferi o experiență de utilizare unitară și coerentă.</li>
+            </ul>
+        </section>
+    </section>
+
+    <section id="description" role="doc-introduction">
+        <h2>Descriere</h2>
+
+        <section id="perspective">
+            <h3>Perspectiva</h3>
+            <p>
+                Aplicația Childbook este concepută pentru a oferi o perspectivă completă și integrată asupra îngrijirii copiilor, abordând fiecare aspect al dezvoltării și creșterii acestora. Aplicația centralizează toate informațiile relevante într-un singur loc, permițând părinților și tutorilor să monitorizeze și să gestioneze eficient activitățile zilnice, starea de sănătate și momentele importante din viața copiilor. 
+            </p>
+            <p>
+                În plus, aplicația facilitează colaborarea între toți membrii familiei și alte persoane implicate în îngrijirea copiilor, asigurând un flux de informații constant și coerent. Childbook se distinge prin capacitatea sa de a combina funcționalitățile de gestionare a activităților zilnice cu cele de documentare și partajare a momentelor speciale, oferind astfel un instrument complet și indispensabil pentru îngrijirea copiilor.
+            </p>
+        </section>
+
+        <section id="functions">
+            <h3>Funcțiile Produsului</h3>
+            <p>
+                Childbook integrează o gamă variată de funcționalități, fiecare proiectată pentru a răspunde unor nevoi specifice ale utilizatorilor. Principalele funcționalități includ:
+            </p>
+            <ul>
+                <li><strong>Crearea unui cont și înregistrarea unui utilizator:</strong>
+                    <p>
+                        Aplicația permite utilizatorilor să creeze un cont personalizat unde pot stoca și gestiona toate informațiile legate de copiii lor. Procesul de înregistrare implică furnizarea unor informații de bază, cum ar fi numele, adresa de email și o parolă securizată. După înregistrare, utilizatorii pot personaliza profilul lor și al copiilor pentru a reflecta nevoile și preferințele individuale.
+                    </p>
+                </li>
+                <li><strong>Tipurile de utilizator:</strong>
+                    <p>
+                        Childbook recunoaște diversitatea structurilor familiale și oferă opțiuni pentru diferite tipuri de conturi, inclusiv pentru familii, cupluri, case de copii și orfelinate.
+                    </p>
+                </li>
+                <li><strong>Gestionarea calendarului pentru programarea hrănirii și a orelor de somn:</strong>
+                    <p>
+                        Calendarul integrat permite utilizatorilor să programeze și să urmărească mesele și orele de somn ale copiilor. Datele pot fi vizualizate și analizate pentru a identifica eventualele probleme sau pentru a optimiza programul zilnic al copilului.
+                    </p>
+                </li>
+                <li><strong>Partajarea resurselor multimedia relevante pentru evoluția copilului:</strong>
+                    <p>
+                        Utilizatorii pot încărca și organiza fotografii, videoclipuri și înregistrări audio care documentează momente importante din viața copiilor. Aplicația oferă, de asemenea, opțiunea de partajare pe platforma Facebook (în viitor și pe alte platforme și fluxuri de știri RSS), permițând familiilor să împărtășească aceste momente cu prietenii și rudele.
+                    </p>
+                </li>
+                <li><strong>Înregistrarea și gestionarea istoricului medical al copilului:</strong>
+                    <p>
+                        Childbook include o secțiune dedicată pentru istoricul medical al copiilor, unde părinții pot înregistra vizitele la medic, vaccinările, diagnosticele și tratamentele primite. Aceasta permite o monitorizare atentă a stării de sănătate a copilului și oferă un istoric complet care poate fi accesat rapid în cazul unei urgențe medicale. 
+                    </p>
+                </li>
+                <li><strong>Vederea cronologică a momentelor importante din viața copilului:</strong>
+                    <p>
+                        Aplicația oferă o funcționalitate de cronologie (timeline) care permite utilizatorilor să vizualizeze evenimentele și momentele importante într-o ordine cronologică. Aceasta include atât activitățile zilnice, cât și momentele speciale documentate prin resursele multimedia încărcate. Cronologia oferă o perspectivă clară asupra evoluției copilului și ajută la identificarea etapelor importante din viața acestuia.
+                    </p>
+                </li>
+            </ul>
+        </section>
+
+        <section id="operating-environment">
+            <h3>Mediul de operare</h3>
+            <p>
+                Childbook este o aplicație web, ceea ce înseamnă că este accesibilă prin intermediul unui browser web de pe o gamă largă de dispozitive. Acest lucru include:
+            </p>
+            <ul>
+                <li><strong>Computere desktop și laptopuri:</strong> Utilizatorii pot accesa aplicația de pe orice computer sau laptop cu un browser web modern. Aceasta oferă o experiență de utilizare completă, cu toate funcționalitățile disponibile pe ecrane mari.</li>
+                <li><strong>Tablete:</strong> Aplicația este optimizată pentru utilizare pe tablete, oferind o interfață prietenoasă pentru ecrane tactile și asigurând o navigare ușoară și intuitivă.</li>
+                <li><strong>Telefoane mobile:</strong> Childbook este complet responsivă, adaptându-se automat la dimensiunea ecranului dispozitivelor mobile. Acest lucru permite utilizatorilor să acceseze și să gestioneze informațiile despre copii chiar și atunci când sunt în mișcare.</li>
+            </ul>
+            <p>
+                Aplicația este compatibilă cu majoritatea sistemelor de operare, inclusiv Android, iOS, Windows, macOS și Linux, atât timp cât dispozitivul are un browser web compatibil, cum ar fi Chrome, Firefox, Safari sau Edge.
+            </p>
+        </section>
+
+        <section id="constraints">
+            <h3>Constrângeri</h3>
+            <p>
+                În dezvoltarea și operarea aplicației Childbook, există câteva constrângeri și provocări semnificative care trebuie abordate:
+            </p>
+            <ul>
+                <li><strong>Securitatea și confidențialitatea datelor:</strong>
+                    <p>
+                        Deoarece aplicația gestionează informații sensibile despre copii și familii, este esențial să se asigure că datele sunt protejate împotriva accesului neautorizat și a breșelor de securitate. Aceasta include utilizarea criptării pentru stocarea și transmiterea datelor, implementarea de măsuri de autentificare și autorizare riguroase și monitorizarea continuă a securității sistemului.
+                    </p>
+                </li>
+                <li><strong>Compatibilitatea cu alte platforme și sisteme:</strong>
+                    <p>
+                        Childbook trebuie să fie compatibilă cu o varietate de dispozitive și sisteme de operare, ceea ce implică testarea extensivă pe multiple platforme și browsere pentru a asigura o experiență de utilizare consistentă. De asemenea, integrarea cu alte aplicații și platforme de social media pentru partajarea momentelor speciale poate prezenta provocări de compatibilitate.
+                    </p>
+                </li>
+                <li><strong>Scalabilitatea și performanța:</strong>
+                    <p>
+                        Pe măsură ce numărul utilizatorilor și volumul de date crește, aplicația trebuie să fie capabilă să gestioneze încărcarea suplimentară fără a compromite performanța. Aceasta necesită o arhitectură robustă și scalabilă, capabilă să suporte creșterea numărului de utilizatori și să mențină timpi de răspuns rapizi.
+                    </p>
+                </li>
+                <li><strong>Gestionarea actualizărilor și a mentenanței:</strong>
+                    <p>
+                        Aplicația va necesita actualizări periodice pentru a adăuga noi funcționalități, a remedia probleme de securitate și a îmbunătăți performanța. Este esențial să se asigure un proces eficient de gestionare a actualizărilor și a mentenanței, minimizând întreruperile pentru utilizatori.
+                    </p>
+                </li>
+            </ul>
+        </section>
+    </section>
+    
+    <section id="interfaces">
+        <h2>Interfețe externe</h2>
+        
+        <section id="user-interfaces">
+            <h3>Interfața pentru utilizator</h3>
+            <p>
+                Aplicația Childbook oferă o interfață modernă, intuitivă și accesibilă, concepută pentru a îmbunătăți experiența utilizatorului și pentru a facilita gestionarea resurselor necesare îngrijirii copiilor. Interfața este adaptată pentru a funcționa eficient pe diverse dispozitive, de la computere desktop și laptopuri până la tablete și telefoane mobile, asigurând o experiență consistentă și plăcută pe toate platformele.
+            </p>
+            <h3>Principalele componente ale interfeței pentru utilizator includ:</h3>
+            <ul>
+                <li><strong>Dashboard (Panou de control):</strong>
+                    <p>
+                        Dashboard-ul include o privire de ansamblu asupra tuturor activităților și informațiilor relevante pentru îngrijirea copiilor, cum ar fi hrănirea, somnul, istoricul medical și resursele multimedia, toate organizate într-un mod logic și ușor de navigat.
+                    </p>
+                </li>
+                <li><strong>Calendar:</strong>
+                    <p>
+                        Calendarul include programarea și urmărirea activităților zilnice ale copiilor, cum ar fi mesele, orele de somn și alte evenimente importante.
+                    </p>
+                </li>
+                <li><strong>Secțiunea Multimedia:</strong>
+                    <p>
+                        Această secțiune include funcționalități pentru încărcarea, organizarea și partajarea fotografiilor, videoclipurilor și înregistrărilor audio care documentează momentele importante din viața copiilor.
+                    </p>
+                </li>
+                <li><strong>Timeline (Cronologie):</strong>
+                    <p>
+                        Secțiunea Timeline include o vedere cronologică a celor mai importante momente din viața fiecărui copil, organizate după data evenimentului, și resurse multimedia adăugate de utilizatori, precum fotografii, videoclipuri și înregistrări audio.
+                    </p>
+                </li>
+                <li><strong>Istoric medical:</strong>
+                    <p>
+                        Secțiunea Istoric medical include evidența detaliată a vizitelor la medic, vaccinărilor, diagnosticelor și tratamentelor, oferind o monitorizare completă a sănătății copiilor.
+                    </p>
+                </li>
+                <li><strong>Setările contului:</strong>
+                    <p>
+                        Setările contului includ opțiuni pentru accesarea și modificarea informațiilor personale ale utilizatorului, cum ar fi numele, adresa de email, parola și preferințele de notificare.
+                    </p>
+                </li>
+                <li><strong>Grupuri:</strong>
+                    <p>
+                        Secțiunea Grupuri include funcționalități pentru crearea și gestionarea grupurilor de copii. Grupurile pot include membri ai familiei, prieteni sau colegi de școală.
+                    </p>
+                </li>
+            </ul>
+            
+        </section>
+        
+        <section id="software-interfaces">
+            <h3>Interfețe software</h3>
+            <p>
+                Childbook utilizează o serie de interfețe software pentru a comunica eficient între frontend (interfața utilizatorului) și backend (serverul și baza de date). Aceste interfețe sunt esențiale pentru funcționarea corectă și eficientă a aplicației și includ API-uri REST, module de gestionare a sesiunilor și criptare pentru securitatea datelor.
+            </p>
+            
+            <h4>API-uri REST:</h4>
+            <p>
+                Aplicația utilizează API-uri REST pentru a facilita comunicarea între frontend și backend. Aceste API-uri sunt concepute pentru a fi ușor de utilizat și pentru a permite schimbul de date în mod securizat. Fiecare API are un set specific de endpoint-uri care corespund diferitelor funcționalități ale aplicației.
+            </p>
+            <ul>
+                <li><strong>Autentificare și autorizare:</strong>
+                    <p>
+                        Endpoint-urile pentru autentificare și autorizare gestionează procesele de login, logout și înregistrare a utilizatorilor. Acestea includ verificarea datelor de autentificare și generarea token-urilor JWT pentru sesiuni securizate.
+                    </p>
+                </li>
+                <li><strong>Gestionarea utilizatorilor:</strong>
+                    <p>
+                        API-urile pentru gestionarea utilizatorilor permit crearea, actualizarea și ștergerea profilurilor de utilizator. Acestea includ gestionarea setărilor contului, preferințelor de notificare și informațiilor de profil.
+                    </p>
+                </li>
+                <li><strong>Gestionarea copiilor:</strong>
+                    <p>
+                        Endpoint-urile pentru gestionarea copiilor permit adăugarea, actualizarea și ștergerea profilurilor copiilor. Acestea includ, de asemenea, gestionarea activităților zilnice, istoricul medical și resursele multimedia asociate.
+                    </p>
+                </li>
+                <li><strong>Calendar și programări:</strong>
+                    <p>
+                        API-urile pentru calendar permit utilizatorilor să creeze și să gestioneze programările pentru mesele, orele de somn și vizitele medicale ale copiilor. Acestea includ funcționalități pentru setarea notificărilor și mementourilor.
+                    </p>
+                </li>
+                <li><strong>Resurse multimedia:</strong>
+                    <p>
+                        Endpoint-urile pentru resurse multimedia permit încărcarea, organizarea și partajarea fotografiilor, videoclipurilor și înregistrărilor audio. Acestea includ funcționalități pentru clasificarea și etichetarea resurselor multimedia.
+                    </p>
+                </li>
+				<li><strong>Baza de date</strong>
+                    <p>
+                        Baza de date folosită este MySQL. Această asigură perfomanțe ridicate și o compatabilitate bună cu serverul.
+                    </p>
+                </li>
+				<li><strong>Backend</strong>
+                    <p>
+                        Pentru backend s-a folosit node.js și JBDC-ul MySQL2.
+                    </p>
+                </li>
+            </ul>
+            
+            <h4>Module de gestionare a sesiunilor:</h4>
+            <p>
+                Childbook utilizează module de gestionare a sesiunilor pentru a asigura că utilizatorii autentificați rămân logați în mod securizat pe durata utilizării aplicației. Aceste module includ:
+            </p>
+            <ul>
+                <li><strong>JWT (JSON Web Tokens):</strong>
+                    <p>
+                        Aplicația folosește JWT pentru a gestiona autentificarea utilizatorilor. Token-urile JWT sunt generate la autentificare și sunt folosite pentru a verifica identitatea utilizatorilor la fiecare cerere către API. Aceste token-uri sunt criptate pentru a asigura securitatea datelor.
+                    </p>
+                </li>
+                <li><strong>Cookies securizate:</strong>
+                    <p>
+                        Aplicația utilizează cookies securizate pentru a stoca token-urile JWT și alte informații de sesiune. Aceste cookies sunt configurate pentru a fi accesibile doar prin HTTP și sunt criptate pentru a preveni accesul neautorizat.
+                    </p>
+                </li>
+            </ul>
+            
+            <h4>Criptare și securitatea datelor:</h4>
+            <p>
+                Securitatea datelor este o componentă critică a aplicației Childbook. Aplicația folosește diverse tehnici de criptare pentru a proteja datele utilizatorilor, atât în tranzit, cât și în repaus.
+            </p>
+            <ul>
+                <li><strong>Criptare SSL/TLS:</strong>
+                    <p>
+                        Toate comunicările între client (browser) și server sunt criptate folosind SSL/TLS, asigurându-se că datele sunt protejate împotriva interceptării și manipulării.
+                    </p>
+                </li>
+                <li><strong>Criptare AES:</strong>
+                    <p>
+                        Datele sensibile stocate în baza de date, cum ar fi parolele utilizatorilor, sunt criptate folosind algoritmi de criptare SHA256. Aceasta asigură că datele sunt protejate chiar dacă baza de date este compromisă.
+                    </p>
+                </li>
+            </ul>
+        </section>
+    </section>
+
+    <section id="source-code">
+        <h2>Gestionarea Codului</h2>
+        <p>
+            Pentru genstionarea codului sursa a proiectului s-a folosit <a href="https://github.com" target="_blank">GitHub</a>.
+            Commiturile sunt realizate de ambii membrii ai echipei. Pentru ca fiecare membru a lucrat la feature-uri diferite,
+            nu a fost necesara folosirea de branch-uri multiple.
+        </p>
+        <p>
+            Codul sursa al proiectului va fi disponibil <a href="https://github.com/txospitikun/childcare-manager-web" target="_blank">aici</a>
+            atunci cand va fi facut public.
+        </p>
+    </section>
+    
+        <section id="system-features">
+            <h2>Funcționalități</h2>
+            
+            <section id="login">
+                <h3>Autentificarea</h3>
+                <p>
+                    Autentificarea utilizatorului în Childbook este esențială pentru asigurarea securității și confidențialității datelor. Procesul de autentificare este conceput pentru a fi simplu și securizat, folosind tehnologii moderne pentru a proteja informațiile utilizatorilor.
+                </p>
+                <p>
+                    <strong>Procesul de autentificare:</strong>
+                    <ul>
+                        <li><strong>Formular de login:</strong> Utilizatorii introduc adresa de email și parola într-un formular de autentificare securizat. Parola este mascată pentru a proteja confidențialitatea.</li>
+                        <li><strong>Verificarea datelor:</strong> La trimiterea formularului, datele de autentificare sunt trimise către server printr-o conexiune HTTPS securizată.</li>
+                        <li><strong>Generarea token-ului JWT:</strong> Dacă autentificarea este reușită, serverul generează un token JWT (JSON Web Token), care este trimis înapoi la client și stocat într-un cookie securizat. Acest token este folosit pentru a autentifica cererile ulterioare ale utilizatorului.</li>
+                        <li><strong>Gestiunea sesiunii:</strong> Token-ul JWT include informații despre utilizator și perioada de valabilitate a sesiunii. Utilizatorul rămâne autentificat până la expirarea token-ului sau până când decide să se deconecteze.</li>
+                    </ul>
+                </p>
+                <p>
+                    <strong>Tehnologii folosite:</strong>
+                    <ul>
+                        <li>HTTP pentru comunicații securizate</li>
+                        <li>JWT pentru gestionarea sesiunilor</li>
+                        <li>Hashing și criptare pentru protejarea parolelor</li>
+                    </ul>
+                </p>
+            </section>
+            
+            <section id="register">
+                <h3>Înregistrarea</h3>
+                <p>
+                    Procesul de înregistrare permite utilizatorilor să creeze un cont nou în Childbook. Este important ca acest proces să fie cât mai simplu și intuitiv pentru a încuraja utilizatorii să se înregistreze și să utilizeze aplicația.
+                </p>
+                <p>
+                    <strong>Procesul de înregistrare:</strong>
+                    <ul>
+                        <li><strong>Formular de înregistrare:</strong> Utilizatorii completează un formular de înregistrare care include câmpuri pentru nume, prenume, adresa de email, parola și confirmarea parolei. Formularul este validat pentru a se asigura că toate câmpurile sunt completate corect.</li>
+                        <li><strong>Validarea datelor:</strong> Datele introduse sunt trimise la server pentru validare. Serverul verifică dacă adresa de email este validă și dacă parola îndeplinește criteriile de securitate.</li>
+                        <li><strong>Crearea contului:</strong> Dacă datele sunt valide, serverul creează un nou cont de utilizator în baza de date. Parola este criptată (printr-un hash) și stocată în siguranță.</li>
+                    </ul>
+                </p>
+            </section>
+        
+            <section id="calendar-visualization">
+                <h3>Gestionarea copilului</h3>
+                <p>
+                    Childbook oferă funcționalități avansate pentru gestionarea informațiilor despre copii, permițând părinților și tutorilor să monitorizeze și să organizeze toate aspectele legate de creșterea și dezvoltarea acestora.
+                </p>
+                <p>
+                    <strong>Funcționalități principale:</strong>
+                    <ul>
+                        <li><strong>Administrarea unui copil:</strong> Utilizatorii pot adăuga un copil în contul lor prin completarea unui formular cu informații precum numele, data nașterii și sexul copilului. De asemenea, profilul copilului poate fi personalizat și cu o fotografie pentru a facilitate distingerea dintre aceștia. Utilizatorul mai dispune și de operațiunile de ștergere și modificare pentru fiecare copil.</li>
+                        <li><strong>Monitorizarea meselor și a somnului copilului:</strong> Aplicația permite adăugarea, modificarea și stergerea atât a meselor, cât și a somnului fiecărui copil.</li>
+                        <li><strong>Calendar pentru activități:</strong> Utilizatorul dispune de un calendar pentru a urmări în detaliu parcursul copilului din punct de vedere al somnului și al alimentației sale zilnice.
+                        <li><strong>Istoricul medical:</strong> Părinții pot înregistra și gestiona istoricul medical al copilului, incluzând vaccinările, diagnosticele și tratamentele. Aceasta permite o monitorizare completă a stării de sănătate a copilului și oferă un istoric complet care poate fi accesat rapid în cazul unei urgențe medicale.</li>
+                        <li><strong>Resurse multimedia:</strong> Utilizatorii pot încărca și organiza fotografii, videoclipuri și înregistrări audio care documentează momentele importante din viața copiilor. Aceste resurse pot fi adăugate la cronologie pentru a selecta cele mai speciale momente.</li>
+                        <li><strong>Cronologie (timeline):</strong> Utilizatorii, la adăugarea resurselor multimedia menționate anterior, au opțiunea de a adăuga acea resursă și la timeline. Timeline-ul va afișa într-o manieră mai sugestivă aceste elemente-cheie din viața copilului.</li>
+                        <li><strong>Administrarea grupurilor:</strong> Utilizatorii pot forma grupuri împreună cu alți utilizatori în care își pot adăuga proprii copii, dar și copii altor utilizatori dacă aceștia le oferă ID-ul copilor. De asemenea, utilizatorii își pot șterge doar proprii lor copii din grupuri.</li>
+                        <li><strong>Administrarea relațiilor:</strong> Utilizatorii pot adăuga relații la copii proprii din grupurile lor, prin selectarea copilului și adăugarea ID-ului copilului cu care se doreste a forma o relație. De asemenea, în cazul in care există o relație intre copii a două conturi, ambele conturi vor vedea relația și vor avea posibilitatea de a șterge relația dintre cei 2.</li>
+                    </ul>
+                </p>
+            </section>
+        
+            <section id="moments-share">
+                <h3>Partajarea momentelor</h3>
+                <p>
+                    Childbook permite utilizatorilor să partajeze momentele importante din viața copiilor cu prietenii și familia, facilitând comunicarea și crearea de amintiri împărtășite.
+                </p>
+                <p>
+                    <strong>Funcționalități principale:</strong>
+                    <ul>
+                        <li><strong>Partajare pe rețelele sociale:</strong> Utilizatorii pot partaja fotografii, videoclipuri și evenimente pe platformele de social media preferate, cum ar fi Facebook. (Singura implementată momentan.) Aceasta facilitează comunicarea și permite prietenilor și familiei să rămână la curent cu evoluția copiilor.</li>
+                    </ul>
+                </p>
+            </section>
+        
+            <section id="user-settings">
+                <h3>Setările Utilizatorului</h3>
+                <p>
+                    Childbook oferă utilizatorilor opțiuni detaliate pentru personalizarea contului și gestionarea setărilor personale, asigurându-se că fiecare utilizator poate adapta aplicația nevoilor și preferințelor sale.
+                </p>
+                <p>
+                    <strong>Funcționalități principale:</strong>
+                    <ul>
+                        <li><strong>Informații personale:</strong> Utilizatorii pot actualiza informațiile personale, cum ar fi numele, adresa de email, numărul de telefon și adresa. Aceste informații sunt utilizate pentru personalizarea experienței utilizatorului și pentru comunicările de la aplicație.</li>
+                        <li><strong>Schimbarea parolei:</strong> Utilizatorii pot schimba parola contului lor în orice moment. Aplicația include măsuri de securitate pentru a se asigura că parolele noi respectă criteriile de complexitate și că sunt protejate prin hashing.</li>
+                        <li><strong>Schimbarea informațiilor de pe cont:</strong> Utilizatorii pot actualiza diferite informații de pe contul lor, precum starea civilă, limba vorbită sau locația actuală.</li>
+                    </ul>
+                </p>
+            </section>
+
+            <section id="used-technologies">
+                <h3>Tehnologii folosite:</h3>
+                <ul>
+                    <li><strong>HTTP</strong> pentru comunicarea securizată</li>
+                    <li><strong>JWT</strong> pentru gestionarea sesiunilor</li>
+                    <li><strong>Hashing și criptare</strong> pentru protejarea datelor</li>
+                    <li><strong>API</strong> pentru integrarea cu platformele de social media</li>
+                </ul>
+
+            </section>
+        </section>
+    
+     <section id="user-interface" role="doc-introduction">
+        <h2>Interfață și Motivație</h2>
+        <p>
+            Interfața aplicației Childbook este concepută pentru a fi atât atractivă din punct de vedere vizual, cât și extrem de funcțională, asigurând o experiență de utilizare plăcută și eficientă. Designul interfeței urmează principiile de design modern, utilizând elemente vizuale curente și tehnologii de ultimă oră pentru a crea un mediu digital intuitiv și ușor de navigat.
+        </p>
+
+        <h3>Principii de Design</h3>
+        <p>
+            Designul interfeței utilizatorului Childbook este ghidat de următoarele principii:
+        </p>
+        <ul>
+            <li><strong>Simplitate și claritate:</strong>
+                <p>
+                    Interfața este concepută pentru a fi simplă și clară, evitând aglomerația vizuală și oferind utilizatorilor o experiență ușor de înțeles și de navigat. Elementele de design sunt utilizate pentru a ghida atenția utilizatorului și pentru a facilita găsirea rapidă a informațiilor necesare.
+                </p>
+            </li>
+            <li><strong>Consistență:</strong>
+                <p>
+                    Consistența în design este esențială pentru a oferi utilizatorilor o experiență unitară și previzibilă. Toate elementele interfeței, de la butoane și meniuri până la fonturi și culori, sunt aliniate la un set de reguli de design coerente.
+                </p>
+            </li>
+            <li><strong>Feedback vizual:</strong>
+                <p>
+                    Aplicația oferă feedback vizual imediat pentru acțiunile utilizatorului, asigurându-se că acesta este informat despre starea curentă a aplicației și rezultatul acțiunilor sale. De exemplu, butoanele și linkurile se schimbă de culoare la hover, iar notificările apar pentru a confirma acțiunile efectuate.
+                </p>
+            </li>
+            <li><strong>Responsivitate:</strong>
+                <p>
+                    Interfața este proiectată pentru a fi complet responsivă, adaptându-se automat la diferite dimensiuni de ecran și rezoluții. Aceasta asigură o experiență optimă de utilizare pe toate dispozitivele, de la computere desktop la tablete și telefoane mobile.
+                </p>
+            </li>
+        </ul>
+
+        <h3>Design Responsiv</h3>
+        <p>
+            Designul responsiv este o componentă esențială a interfeței Childbook, asigurând o experiență de utilizare optimă pe toate dispozitivele, indiferent de dimensiunea ecranului. Interfața se adaptează automat pentru a oferi o navigare ușoară și accesibilă pe ecrane mari și mici, inclusiv pe computere desktop, laptopuri, tablete și telefoane mobile.
+        </p>
+        <p>
+            <strong>Tehnici de design responsiv utilizate:</strong>
+            <ul>
+                <li><strong>Flexbox și Grid:</strong> Aceste tehnologii CSS sunt utilizate pentru a crea layout-uri flexibile și adaptabile. Flexbox permite aranjarea elementelor într-o singură direcție, fie pe orizontală, fie pe verticală, în timp ce Grid oferă un sistem de grile bidirecțional pentru o flexibilitate maximă.</li>
+                <li><strong>Media Queries:</strong> Media queries sunt folosite pentru a aplica stiluri CSS diferite în funcție de dimensiunea ecranului. Acest lucru permite ajustarea fonturilor, dimensiunilor elementelor și layout-ului general pentru a se potrivi perfect pe toate dispozitivele.</li>
+                <li><strong>Imagini responsive:</strong> Imaginile sunt redimensionate și ajustate automat pentru a se potrivi în layout-ul paginii fără a compromite calitatea vizuală. Tehnici precum srcset și elementul picture sunt folosite pentru a livra imagini optimizate pentru diferite rezoluții.</li>
+            </ul>
+        </p>
+
+        <h3>Feedback și Interacțiune</h3>
+        <p>
+            Childbook oferă un feedback vizual imediat pentru acțiunile utilizatorului, asigurând o interacțiune fluentă și intuitivă. Feedback-ul vizual ajută utilizatorii să înțeleagă rezultatul acțiunilor lor și să navigheze mai eficient prin interfață.
+        </p>
+        <p>
+            <strong>Exemple de feedback vizual:</strong>
+            <ul>
+                <li><strong>Butonul Hover:</strong> Butoanele și linkurile se schimbă de culoare atunci când utilizatorul trece cursorul peste ele, indicând că sunt interactive și pot fi clicuite.</li>
+                <li><strong>Animări și tranziții:</strong> Animările subtile și tranzițiile sunt folosite pentru a îmbunătăți experiența vizuală și a ghida atenția utilizatorului. De exemplu, ferestrele modal apar cu o tranziție lină, iar elementele interactive au efecte de animare la clic.</li>
+            </ul>
+        </p>
+    </section>
+    
+       <section id="admin-page">
+        <h2>Pagina Administratorului</h2>
+        <p>
+            Pagina Administratorului în Childbook este concepută pentru a oferi utilizatorilor cu drepturi de administrare un control complet asupra gestionării și monitorizării informațiilor și activităților legate de copii. Aceasta include funcționalități avansate pentru gestionarea utilizatorilor, copiilor și resurselor asociate, asigurându-se că toate datele sunt organizate și securizate corespunzător.
+        </p>
+
+        <h3>Funcționalități Principale</h3>
+        <p>
+            Pagina Administratorului include o serie de funcționalități esențiale pentru administrarea eficientă a aplicației:
+        </p>
+        <ul>
+            <li><strong>Gestionarea Utilizatorilor:</strong>
+                <p>
+                    Administratorii pot vizualiza, adăuga, modifica și șterge utilizatori. Aceasta include gestionarea informațiilor de profil, setările contului și permisiunile de acces. Administratorii pot, de asemenea, să activeze sau să dezactiveze conturile utilizatorilor, asigurându-se că numai utilizatorii autorizați au acces la aplicație.
+                </p>
+                <ul>
+                    <li><strong>Vizualizarea utilizatorilor:</strong> Lista completă a utilizatorilor înregistrați, cu detalii despre fiecare utilizator, cum ar fi numele, adresa de email, data înregistrării și starea contului.</li>
+                    <li><strong>Adăugarea utilizatorilor:</strong> Formular de adăugare a unui nou utilizator, incluzând câmpuri pentru nume, email, parolă și rolul utilizatorului (ex. părinte, îngrijitor, administrator).</li>
+                    <li><strong>Modificarea utilizatorilor:</strong> Posibilitatea de a edita informațiile de profil și setările contului pentru utilizatorii existenți.</li>
+                    <li><strong>Ștergerea utilizatorilor:</strong> Opțiunea de a șterge conturile utilizatorilor care nu mai sunt active sau care au încălcat politicile aplicației.</li>
+                    <li><strong>Gestionarea permisiunilor:</strong> Setarea și modificarea permisiunilor de acces pentru utilizatori, asigurându-se că fiecare utilizator are acces doar la funcționalitățile relevante.</li>
+                </ul>
+            </li>
+            <li><strong>Gestionarea Copiilor:</strong>
+                <p>
+                    Administratorii pot gestiona profilurile copiilor, incluzând adăugarea, modificarea și ștergerea informațiilor despre copii. Aceasta include gestionarea detaliilor personale, istoricului medical și resurselor multimedia asociate fiecărui copil.
+                </p>
+                <ul>
+                    <li><strong>Adăugarea copiilor:</strong> Formular de adăugare a unui nou copil, incluzând câmpuri pentru nume, data nașterii, sex și alte informații relevante.</li>
+                    <li><strong>Modificarea copiilor:</strong> Posibilitatea de a edita informațiile personale și istoricul medical al copiilor existenți.</li>
+                    <li><strong>Ștergerea copiilor:</strong> Opțiunea de a șterge profilurile copiilor care nu mai sunt relevante sau care au fost adăugate din greșeală.</li>
+                    <li><strong>Gestionarea istoricului medical:</strong> Actualizarea și monitorizarea istoricului medical al copiilor, incluzând vaccinările, vizitele la medic și tratamentele primite.</li>
+                </ul>
+            </li>
+        </ul>
+
+        
+        <h3>Fluxul de Lucru al Administratorului</h3>
+        <p>
+            Fluxul de lucru al administratorului în Childbook este proiectat pentru a fi eficient și ușor de gestionat. Fiecare sarcină administrativă este organizată într-un mod logic și intuitiv, permițând administratorilor să își desfășoare activitatea rapid și eficient.
+        </p>
+        <p>
+            <strong>Exemplu de flux de lucru:</strong>
+            <ul>
+                <li><strong>Login:</strong> Administratorul se autentifică în aplicație folosind credențialele sale și dacă are privilegiul de administrator va putea vizualiza admin panel-ul.</li>
+                <li><strong>Gestionarea utilizatorilor:</strong> Administratorul accesează secțiunea de gestionare a utilizatorilor pentru a adăuga, modifica sau șterge conturi de utilizator.</li>
+                <li><strong>Gestionarea copiilor:</strong> Administratorul accesează secțiunea de gestionare a copiilor pentru a edita informațiile personale ale copiilor.</li>
+            </ul>
+        </p>
+    </section>
+
+    <section id="performance">
+        <h2>Performance</h2>
+        <p>
+            Deoarece performanța este importantă, aplicația a fost testata folosind <a href="https://chromewebstore.google.com/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk" target="_blank">Lighthouse</a> și a obținut un scor mediu de peste 90. Un screenshot este atașat mai jos.
+    
+            <img style="width: 100%" src="./assets/performance.png" alt="">
+    
+        </p>
+    </section>
+    
+    <section id="references">
+        <h2>Resurse Principale</h2>
+        <ul>
+            <li>https://dribbble.com/</li>
+            <li>https://www.freepik.com/</li>
+            <li>https://developer.mozilla.org/en-US/docs/Web/CSS</li>
+            <li>https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch</li>
+        </ul>
+    </section>
+    
+</body>
+</html>
