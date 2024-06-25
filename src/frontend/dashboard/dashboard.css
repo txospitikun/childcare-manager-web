@@ -250,7 +250,7 @@ textarea {
   width: 100%;
   padding: 0.5rem;
   height: 10%;
-  gap: 1rem;
+  gap: 0.5rem;
   box-shadow: 0px 0px 1vw 0px rgba(0, 0, 0, 0.15);
 }
 
